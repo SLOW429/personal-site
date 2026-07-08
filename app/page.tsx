@@ -20,7 +20,9 @@ const projects = [
 
 const socials = [
   { title: "GitHub", value: "@SLOW429", href: "https://github.com/SLOW429" },
-  { title: "Instagram", value: "@abdellatif_shaheen", href: "https://www.instagram.com/abdellatif_shaheen/" },
+  { title: "LinkedIn", value: "Abdellatif Gahen", href: "https://www.linkedin.com/in/abdellatif-gahen-1ba3b7389" },
+  { title: "X", value: "@SLOW_429", href: "https://x.com/SLOW_429" },
+  { title: "Instagram", value: "@m6.ydj", href: "https://www.instagram.com/m6.ydj/" },
   { title: "Spotify", value: "My Spotify", href: "https://open.spotify.com/user/31pmd7jyoxhubdtasmvo3heuqpje?si=6e9e2fbbb98b4af7" },
   { title: "PayPal", value: "Support Me", href: "https://www.paypal.com/paypalme/abdellatifeg" },
   { title: "Discord", value: "Join Server", href: "https://discord.gg/3pjA9tS8vF" },
@@ -167,6 +169,8 @@ export default function Home() {
           <p className="mt-2">SLOW429 — Developer, Creator, Voiceover Artist</p>
           <p className="mt-4 text-zinc-500">$ status</p>
           <p className="mt-2">Building cinematic AI, automation, and digital systems...</p>
+          <p className="mt-4 text-zinc-500">$ whereami</p>
+          <p className="mt-2">Q-SMART TECHNOLOGY — Qatar</p>
         </div>
       </section>
 
