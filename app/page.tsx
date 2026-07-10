@@ -1,9 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { Moon, Sun, Bot, X } from "lucide-react";
+import { Moon, Sun, Bot, X, Eye, Send, Loader2 } from "lucide-react";
 
 const GitHubCalendar = dynamic(
   () => import("react-github-calendar").then((mod) => mod.GitHubCalendar),
@@ -11,6 +11,12 @@ const GitHubCalendar = dynamic(
 );
 
 const DISCORD_ID = "680035752461205524";
+const COUNTER_KEY = "slows-dev-abdellatif-shaheen-visits";
+
+const calendarTheme = {
+  light: ["#f0e6c8", "#d9c37a", "#a9791a", "#8a6412", "#6b4d10"],
+  dark: ["#14100a", "#4a3a15", "#8a6a1f", "#d4af37", "#f2d98a"],
+};
 
 const projects = [
   { title: "HR-BOT", desc: "Advanced Highrise music & automation bot with streaming systems.", tech: "Python • Docker • Coolify", link: "https://github.com/SLOW429/HR-BOT" },
@@ -28,6 +34,29 @@ const socials = [
   { title: "Discord", value: "Join Server", href: "https://discord.gg/3pjA9tS8vF" },
 ];
 
+function VisitorBadge() {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`)
+      .then((res) => res.json())
+      .then((json) => setCount(json?.value ?? null))
+      .catch(() => setCount(null));
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      className="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-5 py-2 text-sm text-[var(--gold-light)] shadow-[0_0_30px_rgba(212,175,55,0.15)] backdrop-blur-xl"
+    >
+      <Eye size={16} className="text-[var(--gold)]" />
+      <span className="font-mono tabular-nums">{count !== null ? count.toLocaleString() : "···"}</span>
+      <span className="text-[var(--muted)]">visitors</span>
+    </motion.div>
+  );
+}
+
 function DiscordCard() {
   const [data, setData] = useState<any>(null);
 
@@ -42,33 +71,139 @@ function DiscordCard() {
   const activity = data?.activities?.find((a: any) => a.type === 0);
 
   return (
-    <section className="relative z-10 flex min-h-screen items-center justify-center px-6 pt-24">
-      <motion.div initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} className="w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-black/50 shadow-[0_0_120px_rgba(0,183,255,0.16)] backdrop-blur-xl">
-        <div className="h-28 bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-300" />
+    <section className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 pt-24">
+      <motion.div initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} className="w-full max-w-5xl overflow-hidden rounded-[2rem] border border-[var(--card-border-strong)] bg-[var(--card-bg)] shadow-[0_0_120px_rgba(212,175,55,0.14)] backdrop-blur-xl">
+        <div className="relative h-36 md:h-44 overflow-hidden">
+          <video
+            src="/banner.mp4"
+            poster="/banner-poster.jpg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+        </div>
         <div className="p-8">
-          <div className="-mt-20 flex items-end gap-5">
-            <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-black bg-zinc-900">
-              <img src={data?.discord_user?.avatar ? `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${data.discord_user.avatar}.png?size=256` : "https://github.com/SLOW429.png"} className="h-full w-full object-cover" alt="Discord Avatar" />
-              <span className={`absolute bottom-2 right-2 h-5 w-5 rounded-full border-4 border-black ${status === "online" ? "bg-green-500" : status === "idle" ? "bg-yellow-500" : status === "dnd" ? "bg-red-500" : "bg-zinc-500"}`} />
+          <div className="-mt-24 flex items-end gap-5">
+            <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-[var(--ring-offset)] shadow-[0_0_40px_rgba(212,175,55,0.35)]">
+              <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,var(--gold-light),var(--ember),var(--gold),var(--gold-light))] animate-[spin_6s_linear_infinite]" style={{ padding: "3px" }} />
+              <div className="absolute inset-[3px] overflow-hidden rounded-full bg-zinc-900">
+                <video src="/avatar.mp4" poster="/avatar-poster.jpg" autoPlay muted loop playsInline className="h-full w-full object-cover" />
+              </div>
+              <span className={`absolute bottom-1 right-1 z-10 h-5 w-5 rounded-full border-4 border-[var(--ring-offset)] ${status === "online" ? "bg-emerald-500" : status === "idle" ? "bg-amber-400" : status === "dnd" ? "bg-red-500" : "bg-zinc-500"}`} />
             </div>
             <div>
-              <h1 className="text-4xl font-black">SLOW429</h1>
-              <p className="text-zinc-400">Discord • {status}</p>
+              <h1 className="font-display text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[var(--gold-light)] via-[var(--gold)] to-[var(--ember)]">SLOW429</h1>
+              <p className="text-[var(--muted)]">Discord • {status}</p>
             </div>
           </div>
 
-          <div className="mt-10 rounded-2xl border border-white/10 bg-black/30 p-6">
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Current Activity</p>
+          <div className="mt-10 rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg)] p-6">
+            <p className="text-sm uppercase tracking-[0.35em] text-[var(--gold)]">Current Activity</p>
             <p className="mt-4 text-2xl font-bold">{activity ? activity.name : "Not doing anything right now."}</p>
-            {activity?.details && <p className="mt-2 text-zinc-400">{activity.details}</p>}
+            {activity?.details && <p className="mt-2 text-[var(--muted)]">{activity.details}</p>}
           </div>
 
-          <a href="https://discord.gg/3pjA9tS8vF" target="_blank" className="mt-8 inline-flex rounded-2xl bg-cyan-300 px-7 py-4 font-bold text-black transition hover:scale-105">
+          <a href="https://discord.gg/3pjA9tS8vF" target="_blank" className="mt-8 inline-flex rounded-2xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] px-7 py-4 font-bold text-[#1a1206] transition hover:scale-105 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]">
             Join Discord
           </a>
         </div>
       </motion.div>
+
+      <VisitorBadge />
     </section>
+  );
+}
+
+type ChatMessage = { role: "user" | "assistant"; content: string };
+
+function AiAssistant({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { role: "assistant", content: "Hey! I'm SLOW's assistant. Ask me anything about his work, projects, or how to get in touch." },
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, loading]);
+
+  async function sendMessage() {
+    const text = input.trim();
+    if (!text || loading) return;
+
+    const next = [...messages, { role: "user" as const, content: text }];
+    setMessages(next);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: next }),
+      });
+      const data = await res.json();
+      setMessages((m) => [...m, { role: "assistant", content: data.text || data.error || "Something went wrong." }]);
+    } catch {
+      setMessages((m) => [...m, { role: "assistant", content: "Couldn't reach the assistant right now. Try again in a bit." }]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 40, scale: 0.95 }}
+          className="fixed bottom-24 right-6 z-[999] flex h-[min(520px,70vh)] w-[min(380px,90vw)] flex-col rounded-3xl border border-[var(--card-border-strong)] bg-[var(--panel-bg-heavy)] text-[var(--foreground)] backdrop-blur-xl"
+        >
+          <div className="flex items-center justify-between border-b border-[var(--card-border)] p-5">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">AI Assistant</p>
+              <h3 className="font-display text-xl font-bold">SLOW Interface</h3>
+            </div>
+            <button onClick={onClose} className="text-[var(--muted)] hover:text-[var(--foreground)]"><X size={20} /></button>
+          </div>
+
+          <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-5">
+            {messages.map((m, i) => (
+              <div key={i} className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-6 ${m.role === "user" ? "ml-auto bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] text-[#1a1206]" : "bg-[var(--card-bg)] border border-[var(--card-border)]"}`}>
+                {m.content}
+              </div>
+            ))}
+            {loading && (
+              <div className="flex w-fit items-center gap-2 rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)] px-4 py-2.5 text-sm text-[var(--muted)]">
+                <Loader2 size={14} className="animate-spin" /> thinking...
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 border-t border-[var(--card-border)] p-4">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              placeholder="Ask something..."
+              className="flex-1 rounded-xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-4 py-2.5 text-sm outline-none placeholder:text-[var(--muted)] focus-visible:border-[var(--gold)]"
+            />
+            <button
+              onClick={sendMessage}
+              disabled={loading || !input.trim()}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] text-[#1a1206] disabled:opacity-40"
+            >
+              <Send size={16} />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -98,53 +233,53 @@ export default function Home() {
   };
 
   return (
-    <main className={`min-h-screen overflow-hidden transition-colors duration-1000 ${light ? "bg-[#07111f] text-white" : "bg-[#030712] text-white"}`}>
+    <main className={`min-h-screen overflow-hidden font-sans transition-colors duration-1000 bg-[var(--background)] text-[var(--foreground)] ${light ? "light" : ""}`}>
       <AnimatePresence>
         {loading && (
-          <motion.div className="fixed inset-0 z-[999] flex items-center justify-center bg-[#030712]" exit={{ opacity: 0 }} transition={{ duration: 0.9 }}>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,183,255,0.24),transparent_35%)]" />
+          <motion.div className="fixed inset-0 z-[999] flex items-center justify-center bg-[#0a0704]" exit={{ opacity: 0 }} transition={{ duration: 0.9 }}>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.18),transparent_35%)]" />
             <div className="text-center">
-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="mx-auto mb-8 h-28 w-28 rounded-full border border-cyan-300/20 border-t-cyan-300 shadow-[0_0_100px_rgba(0,183,255,0.35)]" />
-              <p className="text-xs uppercase tracking-[0.8em] text-cyan-300">SLOW</p>
-              <h1 className="mt-5 bg-gradient-to-r from-white via-cyan-200 to-blue-400 bg-clip-text text-5xl font-black text-transparent">Initializing</h1>
-              <div className="mt-10 h-3 w-[min(520px,90vw)] overflow-hidden rounded-full border border-white/10 bg-white/5">
-                <motion.div className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-blue-400 to-cyan-200" initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 3.2, ease: "easeInOut" }} />
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="mx-auto mb-8 h-28 w-28 rounded-full border border-[#d4af37]/20 border-t-[#d4af37] shadow-[0_0_100px_rgba(212,175,55,0.3)]" />
+              <p className="text-xs uppercase tracking-[0.8em] text-[#d4af37]">SLOW</p>
+              <h1 className="mt-5 font-display bg-gradient-to-r from-[#f2d98a] via-[#d4af37] to-[#ff8a5c] bg-clip-text text-5xl font-black text-transparent">Initializing</h1>
+              <div className="mt-10 h-3 w-[min(520px,90vw)] overflow-hidden rounded-full border border-[#d4af37]/15 bg-white/5">
+                <motion.div className="h-full rounded-full bg-gradient-to-r from-[#f2d98a] via-[#d4af37] to-[#ff8a5c]" initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 3.2, ease: "easeInOut" }} />
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <motion.div className="pointer-events-none fixed z-[998] h-[180vmax] w-[180vmax] rounded-full bg-cyan-300" initial={false} animate={blast ? { scale: 1, opacity: 0.95 } : { scale: 0, opacity: 0 }} transition={{ duration: 0.9, ease: "easeInOut" }} style={{ left: mouse.x, top: mouse.y, translateX: "-50%", translateY: "-50%" }} />
+      <motion.div className="pointer-events-none fixed z-[998] h-[180vmax] w-[180vmax] rounded-full bg-[var(--gold)]" initial={false} animate={blast ? { scale: 1, opacity: 0.9 } : { scale: 0, opacity: 0 }} transition={{ duration: 0.9, ease: "easeInOut" }} style={{ left: mouse.x, top: mouse.y, translateX: "-50%", translateY: "-50%" }} />
 
-      <motion.button onClick={toggleTheme} whileTap={{ scale: 0.85 }} className="fixed right-6 top-6 z-[999] flex h-16 w-16 items-center justify-center rounded-full border border-cyan-300/30 bg-black/40 text-cyan-300 shadow-[0_0_50px_rgba(0,183,255,0.35)] backdrop-blur-xl">
+      <motion.button onClick={toggleTheme} whileTap={{ scale: 0.85 }} className="fixed right-6 top-6 z-[999] flex h-16 w-16 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_50px_rgba(212,175,55,0.3)] backdrop-blur-xl">
         <motion.div key={light ? "sun" : "moon"} initial={{ rotate: -180, scale: 0 }} animate={{ rotate: 0, scale: 1 }} transition={{ duration: 0.5 }}>
           {light ? <Sun size={26} /> : <Moon size={26} />}
         </motion.div>
       </motion.button>
 
-      <div className={`fixed inset-0 transition-opacity duration-1000 ${light ? "opacity-40" : "opacity-100"} bg-[radial-gradient(circle_at_top,rgba(0,183,255,0.18),transparent_35%),radial-gradient(circle_at_bottom,rgba(59,130,246,0.16),transparent_30%)]`} />
-      <div className="fixed inset-0 opacity-[0.06] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:70px_70px]" />
+      <div className="fixed inset-0 transition-opacity duration-1000 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.14),transparent_35%),radial-gradient(circle_at_bottom,rgba(255,138,92,0.10),transparent_30%)]" />
+      <div className="fixed inset-0 opacity-100 bg-[linear-gradient(to_right,var(--grid-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--grid-line)_1px,transparent_1px)] bg-[size:70px_70px]" />
 
       <div className="pointer-events-none fixed inset-0 z-0">
         {[...Array(38)].map((_, i) => (
-          <motion.span key={i} className="absolute h-1 w-1 rounded-full bg-cyan-300/70" style={{ left: `${(i * 37) % 100}%`, top: `${(i * 19) % 100}%` }} animate={{ y: [0, -18, 0], opacity: [0.2, 1, 0.2] }} transition={{ duration: 2 + (i % 5), repeat: Infinity }} />
+          <motion.span key={i} className="absolute h-1 w-1 rounded-full bg-[var(--gold)]/60" style={{ left: `${(i * 37) % 100}%`, top: `${(i * 19) % 100}%` }} animate={{ y: [0, -18, 0], opacity: [0.15, 0.9, 0.15] }} transition={{ duration: 2 + (i % 5), repeat: Infinity }} />
         ))}
       </div>
 
-      <motion.div className="pointer-events-none fixed z-50 h-72 w-72 rounded-full bg-cyan-300/10 blur-3xl" animate={{ x: mouse.x - 144, y: mouse.y - 144 }} transition={{ type: "spring", stiffness: 60, damping: 20 }} />
+      <motion.div className="pointer-events-none fixed z-50 h-72 w-72 rounded-full bg-[var(--gold)]/10 blur-3xl" animate={{ x: mouse.x - 144, y: mouse.y - 144 }} transition={{ type: "spring", stiffness: 60, damping: 20 }} />
 
       <DiscordCard />
 
       <section className="relative z-10 mx-auto max-w-6xl px-6 pb-28">
-        <p className="text-sm uppercase tracking-[0.4em] text-cyan-400">Projects</p>
-        <h2 className="mt-3 text-4xl font-black">Featured Work</h2>
+        <p className="text-sm uppercase tracking-[0.4em] text-[var(--gold)]">Projects</p>
+        <h2 className="mt-3 font-display text-4xl font-bold">Featured Work</h2>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {projects.map((project, index) => (
-            <motion.a key={index} href={project.link} target="_blank" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="group rounded-3xl border border-white/10 bg-white/5 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-400/40 hover:bg-white/10">
+            <motion.a key={index} href={project.link} target="_blank" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="group rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-[var(--card-border-strong)] hover:bg-[var(--card-bg-hover)]">
               <div className="mb-5 flex items-center justify-between">
                 <div className="text-lg font-bold">{project.title}</div>
-                <div className="text-cyan-300">→</div>
+                <div className="text-[var(--gold)]">→</div>
               </div>
               <p className="text-sm leading-7 opacity-70">{project.desc}</p>
               <p className="mt-6 text-xs uppercase tracking-[0.3em] opacity-50">{project.tech}</p>
@@ -154,32 +289,32 @@ export default function Home() {
       </section>
 
       <section className="relative z-10 mx-auto max-w-6xl px-6 pb-28">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
-          <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Activity</p>
-          <h2 className="mt-2 text-3xl font-bold">GitHub Contributions</h2>
+        <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-8 backdrop-blur-xl">
+          <p className="text-sm uppercase tracking-[0.3em] text-[var(--gold)]">Activity</p>
+          <h2 className="mt-2 font-display text-3xl font-bold">GitHub Contributions</h2>
           <div className="mt-8 overflow-x-auto">
-            <GitHubCalendar username="SLOW429" colorScheme="dark" fontSize={14} blockSize={14} blockMargin={5} />
+            <GitHubCalendar username="SLOW429" colorScheme={light ? "light" : "dark"} theme={calendarTheme} fontSize={14} blockSize={14} blockMargin={5} />
           </div>
         </div>
       </section>
 
       <section className="relative z-10 mx-auto max-w-6xl px-6 pb-28">
-        <div className="rounded-3xl border border-white/10 bg-black/40 p-6 font-mono text-sm text-cyan-200 shadow-[0_0_80px_rgba(0,183,255,0.12)] backdrop-blur-xl">
-          <p className="text-zinc-500">$ whoami</p>
+        <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--panel-bg-strong)] p-6 font-mono text-sm text-[var(--gold-light)] shadow-[0_0_80px_rgba(212,175,55,0.1)] backdrop-blur-xl">
+          <p className="text-[var(--muted)]">$ whoami</p>
           <p className="mt-2">SLOW429 — Developer, Creator, Voiceover Artist</p>
-          <p className="mt-4 text-zinc-500">$ status</p>
+          <p className="mt-4 text-[var(--muted)]">$ status</p>
           <p className="mt-2">Building cinematic AI, automation, and digital systems...</p>
-          <p className="mt-4 text-zinc-500">$ whereami</p>
+          <p className="mt-4 text-[var(--muted)]">$ whereami</p>
           <p className="mt-2">Q-SMART TECHNOLOGY — Qatar</p>
         </div>
       </section>
 
       <section className="relative z-10 mx-auto max-w-6xl px-6 pb-28">
-        <p className="text-sm uppercase tracking-[0.4em] text-cyan-400">Socials</p>
-        <h2 className="mt-3 text-4xl font-black">Connect</h2>
+        <p className="text-sm uppercase tracking-[0.4em] text-[var(--gold)]">Socials</p>
+        <h2 className="mt-3 font-display text-4xl font-bold">Connect</h2>
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           {socials.map((social, index) => (
-            <a key={index} href={social.href} target="_blank" className="rounded-3xl border border-white/10 bg-white/5 p-7 backdrop-blur-xl transition hover:border-cyan-400/40 hover:bg-white/10">
+            <a key={index} href={social.href} target="_blank" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 backdrop-blur-xl transition hover:border-[var(--card-border-strong)] hover:bg-[var(--card-bg-hover)]">
               <p className="text-sm uppercase tracking-[0.3em] opacity-50">{social.title}</p>
               <h3 className="mt-4 text-2xl font-bold">{social.value}</h3>
             </a>
@@ -188,10 +323,10 @@ export default function Home() {
       </section>
 
       <section className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 text-center">
-        <p className="mb-6 text-xs uppercase tracking-[0.5em] text-cyan-300">SLOW</p>
-        <h1 className="text-6xl font-black leading-none tracking-tight md:text-8xl">
+        <p className="mb-6 text-xs uppercase tracking-[0.5em] text-[var(--gold)]">SLOW</p>
+        <h1 className="font-display text-6xl font-black leading-none tracking-tight md:text-8xl">
           Abdellatif
-          <span className="block bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent">Shaheen</span>
+          <span className="block bg-gradient-to-r from-[var(--gold-light)] via-[var(--gold)] to-[var(--ember)] bg-clip-text text-transparent">Shaheen</span>
         </h1>
         <p className="mx-auto mt-8 max-w-3xl text-lg opacity-70 md:text-2xl">Developer • Creator • Voiceover Artist</p>
       </section>
@@ -216,25 +351,16 @@ export default function Home() {
             setMusicOn(true);
           }
         }}
-        className="fixed bottom-6 left-6 z-[999] rounded-full border border-cyan-300/30 bg-black/60 px-5 py-4 text-sm font-bold text-cyan-300 shadow-[0_0_50px_rgba(0,183,255,0.25)] backdrop-blur-xl"
+        className="fixed bottom-6 left-6 z-[999] rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-5 py-4 text-sm font-bold text-[var(--gold)] shadow-[0_0_50px_rgba(212,175,55,0.2)] backdrop-blur-xl"
       >
         {musicOn ? "Music ON" : "Music OFF"}
       </motion.button>
 
-      <motion.button onClick={() => setAiOpen(true)} className="fixed bottom-6 right-6 z-[999] rounded-full bg-cyan-300 p-5 text-black shadow-[0_0_60px_rgba(0,183,255,0.45)]">
+      <motion.button onClick={() => setAiOpen(true)} className="fixed bottom-6 right-6 z-[999] rounded-full bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] p-5 text-[#1a1206] shadow-[0_0_60px_rgba(212,175,55,0.4)]">
         <Bot />
       </motion.button>
 
-      <AnimatePresence>
-        {aiOpen && (
-          <motion.div initial={{ opacity: 0, y: 40, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 40, scale: 0.95 }} className="fixed bottom-24 right-6 z-[999] w-[min(380px,90vw)] rounded-3xl border border-white/10 bg-black/80 p-6 text-white backdrop-blur-xl">
-            <button onClick={() => setAiOpen(false)} className="absolute right-4 top-4 text-zinc-400"><X /></button>
-            <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">AI Assistant</p>
-            <h3 className="mt-3 text-2xl font-black">SLOW Interface</h3>
-            <p className="mt-4 text-zinc-400">This assistant section is ready to connect later with a real AI backend.</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <AiAssistant open={aiOpen} onClose={() => setAiOpen(false)} />
     </main>
   );
 }
