@@ -1,49 +1,49 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0704;
-  --foreground: #f5ecd8;
+  --background: #060a13;
+  --foreground: #eaf3fb;
 
-  --gold: #d4af37;
-  --gold-light: #f2d98a;
-  --gold-deep: #8a6a1f;
-  --ember: #ff8a5c;
-  --muted: #a3927a;
-  --surface: #14100a;
+  --gold: #7ec4ff;
+  --gold-light: #d9edff;
+  --gold-deep: #3a6a99;
+  --ember: #a78bfa;
+  --muted: #8fa3b8;
+  --surface: #0d1420;
 
-  --card-bg: rgba(0, 0, 0, 0.45);
-  --card-bg-soft: rgba(255, 255, 255, 0.03);
-  --card-bg-hover: rgba(255, 255, 255, 0.06);
-  --card-border: rgba(212, 175, 55, 0.15);
-  --card-border-strong: rgba(212, 175, 55, 0.3);
-  --panel-bg: rgba(0, 0, 0, 0.3);
-  --panel-bg-strong: rgba(0, 0, 0, 0.5);
-  --panel-bg-heavy: rgba(0, 0, 0, 0.8);
-  --ring-offset: #0a0704;
-  --grid-line: rgba(242, 217, 138, 0.08);
+  --card-bg: rgba(6, 12, 24, 0.55);
+  --card-bg-soft: rgba(255, 255, 255, 0.04);
+  --card-bg-hover: rgba(255, 255, 255, 0.07);
+  --card-border: rgba(126, 196, 255, 0.15);
+  --card-border-strong: rgba(126, 196, 255, 0.32);
+  --panel-bg: rgba(6, 12, 24, 0.35);
+  --panel-bg-strong: rgba(6, 12, 24, 0.55);
+  --panel-bg-heavy: rgba(6, 12, 24, 0.85);
+  --ring-offset: #060a13;
+  --grid-line: rgba(217, 237, 255, 0.08);
 }
 
 .light {
-  --background: #f6ecd3;
-  --foreground: #2a1d0d;
+  --background: #eef5fc;
+  --foreground: #0d1b2a;
 
-  --gold: #a9791a;
-  --gold-light: #8a6412;
-  --gold-deep: #6b4d10;
-  --ember: #c9581f;
-  --muted: #6b5a3f;
+  --gold: #2f7cc4;
+  --gold-light: #1f5c94;
+  --gold-deep: #163f66;
+  --ember: #6f5fc9;
+  --muted: #52708a;
   --surface: #ffffff;
 
-  --card-bg: rgba(255, 255, 255, 0.55);
-  --card-bg-soft: rgba(255, 255, 255, 0.45);
-  --card-bg-hover: rgba(255, 255, 255, 0.7);
-  --card-border: rgba(138, 106, 31, 0.25);
-  --card-border-strong: rgba(138, 106, 31, 0.4);
+  --card-bg: rgba(255, 255, 255, 0.6);
+  --card-bg-soft: rgba(255, 255, 255, 0.5);
+  --card-bg-hover: rgba(255, 255, 255, 0.75);
+  --card-border: rgba(47, 124, 196, 0.22);
+  --card-border-strong: rgba(47, 124, 196, 0.4);
   --panel-bg: rgba(255, 255, 255, 0.4);
   --panel-bg-strong: rgba(255, 255, 255, 0.6);
   --panel-bg-heavy: rgba(255, 255, 255, 0.85);
-  --ring-offset: #f6ecd3;
-  --grid-line: rgba(138, 106, 31, 0.1);
+  --ring-offset: #eef5fc;
+  --grid-line: rgba(47, 124, 196, 0.1);
 }
 
 @theme inline {
@@ -77,7 +77,7 @@
 
 ::selection {
   background: var(--gold);
-  color: #0a0704;
+  color: #060a13;
 }
 
 body {

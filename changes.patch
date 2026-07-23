@@ -1,0 +1,368 @@
+diff --git a/app/globals.css b/app/globals.css
+index beca3bd..3c55f39 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1,49 +1,49 @@
+ @import "tailwindcss";
+ 
+ :root {
+-  --background: #0a0704;
+-  --foreground: #f5ecd8;
++  --background: #060a13;
++  --foreground: #eaf3fb;
+ 
+-  --gold: #d4af37;
+-  --gold-light: #f2d98a;
+-  --gold-deep: #8a6a1f;
+-  --ember: #ff8a5c;
+-  --muted: #a3927a;
+-  --surface: #14100a;
++  --gold: #7ec4ff;
++  --gold-light: #d9edff;
++  --gold-deep: #3a6a99;
++  --ember: #a78bfa;
++  --muted: #8fa3b8;
++  --surface: #0d1420;
+ 
+-  --card-bg: rgba(0, 0, 0, 0.45);
+-  --card-bg-soft: rgba(255, 255, 255, 0.03);
+-  --card-bg-hover: rgba(255, 255, 255, 0.06);
+-  --card-border: rgba(212, 175, 55, 0.15);
+-  --card-border-strong: rgba(212, 175, 55, 0.3);
+-  --panel-bg: rgba(0, 0, 0, 0.3);
+-  --panel-bg-strong: rgba(0, 0, 0, 0.5);
+-  --panel-bg-heavy: rgba(0, 0, 0, 0.8);
+-  --ring-offset: #0a0704;
+-  --grid-line: rgba(242, 217, 138, 0.08);
++  --card-bg: rgba(6, 12, 24, 0.55);
++  --card-bg-soft: rgba(255, 255, 255, 0.04);
++  --card-bg-hover: rgba(255, 255, 255, 0.07);
++  --card-border: rgba(126, 196, 255, 0.15);
++  --card-border-strong: rgba(126, 196, 255, 0.32);
++  --panel-bg: rgba(6, 12, 24, 0.35);
++  --panel-bg-strong: rgba(6, 12, 24, 0.55);
++  --panel-bg-heavy: rgba(6, 12, 24, 0.85);
++  --ring-offset: #060a13;
++  --grid-line: rgba(217, 237, 255, 0.08);
+ }
+ 
+ .light {
+-  --background: #f6ecd3;
+-  --foreground: #2a1d0d;
++  --background: #eef5fc;
++  --foreground: #0d1b2a;
+ 
+-  --gold: #a9791a;
+-  --gold-light: #8a6412;
+-  --gold-deep: #6b4d10;
+-  --ember: #c9581f;
+-  --muted: #6b5a3f;
++  --gold: #2f7cc4;
++  --gold-light: #1f5c94;
++  --gold-deep: #163f66;
++  --ember: #6f5fc9;
++  --muted: #52708a;
+   --surface: #ffffff;
+ 
+-  --card-bg: rgba(255, 255, 255, 0.55);
+-  --card-bg-soft: rgba(255, 255, 255, 0.45);
+-  --card-bg-hover: rgba(255, 255, 255, 0.7);
+-  --card-border: rgba(138, 106, 31, 0.25);
+-  --card-border-strong: rgba(138, 106, 31, 0.4);
++  --card-bg: rgba(255, 255, 255, 0.6);
++  --card-bg-soft: rgba(255, 255, 255, 0.5);
++  --card-bg-hover: rgba(255, 255, 255, 0.75);
++  --card-border: rgba(47, 124, 196, 0.22);
++  --card-border-strong: rgba(47, 124, 196, 0.4);
+   --panel-bg: rgba(255, 255, 255, 0.4);
+   --panel-bg-strong: rgba(255, 255, 255, 0.6);
+   --panel-bg-heavy: rgba(255, 255, 255, 0.85);
+-  --ring-offset: #f6ecd3;
+-  --grid-line: rgba(138, 106, 31, 0.1);
++  --ring-offset: #eef5fc;
++  --grid-line: rgba(47, 124, 196, 0.1);
+ }
+ 
+ @theme inline {
+@@ -77,7 +77,7 @@
+ 
+ ::selection {
+   background: var(--gold);
+-  color: #0a0704;
++  color: #060a13;
+ }
+ 
+ body {
+diff --git a/app/layout.tsx b/app/layout.tsx
+index f88d0ec..8961bda 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -47,7 +47,7 @@ export const metadata: Metadata = {
+ };
+ 
+ export const viewport = {
+-  themeColor: "#0a0704",
++  themeColor: "#060a13",
+ };
+ 
+ export default function RootLayout({
+diff --git a/app/page.tsx b/app/page.tsx
+index 361d780..774c305 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
+ import { useEffect, useRef, useState } from "react";
+ import dynamic from "next/dynamic";
+ import { Moon, Sun, Bot, X, Eye, Send, Loader2 } from "lucide-react";
++import { SiGithub, SiX, SiInstagram, SiSpotify, SiPaypal, SiDiscord } from "react-icons/si";
++import { FaLinkedin } from "react-icons/fa";
+ 
+ const GitHubCalendar = dynamic(
+   () => import("react-github-calendar").then((mod) => mod.GitHubCalendar),
+@@ -14,8 +16,8 @@ const DISCORD_ID = "680035752461205524";
+ const COUNTER_KEY = "slows-dev-abdellatif-shaheen-visits";
+ 
+ const calendarTheme = {
+-  light: ["#f0e6c8", "#d9c37a", "#a9791a", "#8a6412", "#6b4d10"],
+-  dark: ["#14100a", "#4a3a15", "#8a6a1f", "#d4af37", "#f2d98a"],
++  light: ["#e3eefb", "#a9d0f5", "#5fa3e0", "#2f7cc4", "#163f66"],
++  dark: ["#0d1420", "#1c3550", "#3a6a99", "#7ec4ff", "#d9edff"],
+ };
+ 
+ const projects = [
+@@ -25,13 +27,13 @@ const projects = [
+ ];
+ 
+ const socials = [
+-  { title: "GitHub", value: "@SLOW429", href: "https://github.com/SLOW429" },
+-  { title: "LinkedIn", value: "Abdellatif Gahen", href: "https://www.linkedin.com/in/abdellatif-gahen-1ba3b7389" },
+-  { title: "X", value: "@SLOW_429", href: "https://x.com/SLOW_429" },
+-  { title: "Instagram", value: "@m6.ydj", href: "https://www.instagram.com/m6.ydj/" },
+-  { title: "Spotify", value: "My Spotify", href: "https://open.spotify.com/user/31pmd7jyoxhubdtasmvo3heuqpje?si=6e9e2fbbb98b4af7" },
+-  { title: "PayPal", value: "Support Me", href: "https://www.paypal.com/paypalme/abdellatifeg" },
+-  { title: "Discord", value: "Join Server", href: "https://discord.gg/3pjA9tS8vF" },
++  { title: "GitHub", value: "@SLOW429", href: "https://github.com/SLOW429", icon: SiGithub },
++  { title: "LinkedIn", value: "Abdellatif Gahen", href: "https://www.linkedin.com/in/abdellatif-gahen-1ba3b7389", icon: FaLinkedin },
++  { title: "X", value: "@SLOW_429", href: "https://x.com/SLOW_429", icon: SiX },
++  { title: "Instagram", value: "@m6.ydj", href: "https://www.instagram.com/m6.ydj/", icon: SiInstagram },
++  { title: "Spotify", value: "My Spotify", href: "https://open.spotify.com/user/31pmd7jyoxhubdtasmvo3heuqpje?si=6e9e2fbbb98b4af7", icon: SiSpotify },
++  { title: "PayPal", value: "Support Me", href: "https://www.paypal.com/paypalme/abdellatifeg", icon: SiPaypal },
++  { title: "Discord", value: "Join Server", href: "https://discord.gg/3pjA9tS8vF", icon: SiDiscord },
+ ];
+ 
+ function VisitorBadge() {
+@@ -48,7 +50,7 @@ function VisitorBadge() {
+     <motion.div
+       initial={{ opacity: 0, y: 10 }}
+       whileInView={{ opacity: 1, y: 0 }}
+-      className="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-5 py-2 text-sm text-[var(--gold-light)] shadow-[0_0_30px_rgba(212,175,55,0.15)] backdrop-blur-xl"
++      className="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-5 py-2 text-sm text-[var(--gold-light)] shadow-[0_0_30px_rgba(126, 196, 255,0.15)] backdrop-blur-xl"
+     >
+       <Eye size={16} className="text-[var(--gold)]" />
+       <span className="font-mono tabular-nums">{count !== null ? count.toLocaleString() : "···"}</span>
+@@ -72,7 +74,7 @@ function DiscordCard() {
+ 
+   return (
+     <section className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 pt-24">
+-      <motion.div initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} className="w-full max-w-5xl overflow-hidden rounded-[2rem] border border-[var(--card-border-strong)] bg-[var(--card-bg)] shadow-[0_0_120px_rgba(212,175,55,0.14)] backdrop-blur-xl">
++      <motion.div initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} className="w-full max-w-5xl overflow-hidden rounded-[2rem] border border-[var(--card-border-strong)] bg-[var(--card-bg)] shadow-[0_0_120px_rgba(126, 196, 255,0.14)] backdrop-blur-xl">
+         <div className="relative h-36 md:h-44 overflow-hidden">
+           <video
+             src="/banner.mp4"
+@@ -87,7 +89,7 @@ function DiscordCard() {
+         </div>
+         <div className="p-8">
+           <div className="-mt-24 flex items-end gap-5">
+-            <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-[var(--ring-offset)] shadow-[0_0_40px_rgba(212,175,55,0.35)]">
++            <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-[var(--ring-offset)] shadow-[0_0_40px_rgba(126, 196, 255,0.35)]">
+               <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,var(--gold-light),var(--ember),var(--gold),var(--gold-light))] animate-[spin_6s_linear_infinite]" style={{ padding: "3px" }} />
+               <div className="absolute inset-[3px] overflow-hidden rounded-full bg-zinc-900">
+                 <video src="/avatar.mp4" poster="/avatar-poster.jpg" autoPlay muted loop playsInline className="h-full w-full object-cover" />
+@@ -100,13 +102,27 @@ function DiscordCard() {
+             </div>
+           </div>
+ 
+-          <div className="mt-10 rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg)] p-6">
++          <div className="mt-6 flex flex-wrap gap-3">
++            {socials.map((social, index) => (
++              <a
++                key={index}
++                href={social.href}
++                target="_blank"
++                title={social.title}
++                className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--card-border)] bg-[var(--card-bg-soft)] text-[var(--gold)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[var(--card-border-strong)] hover:bg-[var(--card-bg-hover)] hover:text-[var(--gold-light)]"
++              >
++                <social.icon size={18} />
++              </a>
++            ))}
++          </div>
++
++          <div className="mt-8 rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg)] p-6">
+             <p className="text-sm uppercase tracking-[0.35em] text-[var(--gold)]">Current Activity</p>
+             <p className="mt-4 text-2xl font-bold">{activity ? activity.name : "Not doing anything right now."}</p>
+             {activity?.details && <p className="mt-2 text-[var(--muted)]">{activity.details}</p>}
+           </div>
+ 
+-          <a href="https://discord.gg/3pjA9tS8vF" target="_blank" className="mt-8 inline-flex rounded-2xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] px-7 py-4 font-bold text-[#1a1206] transition hover:scale-105 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]">
++          <a href="https://discord.gg/3pjA9tS8vF" target="_blank" className="mt-8 inline-flex rounded-2xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] px-7 py-4 font-bold text-[#071018] transition hover:scale-105 hover:shadow-[0_0_40px_rgba(126, 196, 255,0.4)]">
+             Join Discord
+           </a>
+         </div>
+@@ -174,7 +190,7 @@ function AiAssistant({ open, onClose }: { open: boolean; onClose: () => void })
+ 
+           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-5">
+             {messages.map((m, i) => (
+-              <div key={i} className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-6 ${m.role === "user" ? "ml-auto bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] text-[#1a1206]" : "bg-[var(--card-bg)] border border-[var(--card-border)]"}`}>
++              <div key={i} className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-6 ${m.role === "user" ? "ml-auto bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] text-[#071018]" : "bg-[var(--card-bg)] border border-[var(--card-border)]"}`}>
+                 {m.content}
+               </div>
+             ))}
+@@ -196,7 +212,7 @@ function AiAssistant({ open, onClose }: { open: boolean; onClose: () => void })
+             <button
+               onClick={sendMessage}
+               disabled={loading || !input.trim()}
+-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] text-[#1a1206] disabled:opacity-40"
++              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] text-[#071018] disabled:opacity-40"
+             >
+               <Send size={16} />
+             </button>
+@@ -236,14 +252,14 @@ export default function Home() {
+     <main className={`min-h-screen overflow-hidden font-sans transition-colors duration-1000 bg-[var(--background)] text-[var(--foreground)] ${light ? "light" : ""}`}>
+       <AnimatePresence>
+         {loading && (
+-          <motion.div className="fixed inset-0 z-[999] flex items-center justify-center bg-[#0a0704]" exit={{ opacity: 0 }} transition={{ duration: 0.9 }}>
+-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.18),transparent_35%)]" />
++          <motion.div className="fixed inset-0 z-[999] flex items-center justify-center bg-[#060a13]" exit={{ opacity: 0 }} transition={{ duration: 0.9 }}>
++            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(126, 196, 255,0.18),transparent_35%)]" />
+             <div className="text-center">
+-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="mx-auto mb-8 h-28 w-28 rounded-full border border-[#d4af37]/20 border-t-[#d4af37] shadow-[0_0_100px_rgba(212,175,55,0.3)]" />
+-              <p className="text-xs uppercase tracking-[0.8em] text-[#d4af37]">SLOW</p>
+-              <h1 className="mt-5 font-display bg-gradient-to-r from-[#f2d98a] via-[#d4af37] to-[#ff8a5c] bg-clip-text text-5xl font-black text-transparent">Initializing</h1>
+-              <div className="mt-10 h-3 w-[min(520px,90vw)] overflow-hidden rounded-full border border-[#d4af37]/15 bg-white/5">
+-                <motion.div className="h-full rounded-full bg-gradient-to-r from-[#f2d98a] via-[#d4af37] to-[#ff8a5c]" initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 3.2, ease: "easeInOut" }} />
++              <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="mx-auto mb-8 h-28 w-28 rounded-full border border-[#7ec4ff]/20 border-t-[#7ec4ff] shadow-[0_0_100px_rgba(126, 196, 255,0.3)]" />
++              <p className="text-xs uppercase tracking-[0.8em] text-[#7ec4ff]">SLOW</p>
++              <h1 className="mt-5 font-display bg-gradient-to-r from-[#d9edff] via-[#7ec4ff] to-[#a78bfa] bg-clip-text text-5xl font-black text-transparent">Initializing</h1>
++              <div className="mt-10 h-3 w-[min(520px,90vw)] overflow-hidden rounded-full border border-[#7ec4ff]/15 bg-white/5">
++                <motion.div className="h-full rounded-full bg-gradient-to-r from-[#d9edff] via-[#7ec4ff] to-[#a78bfa]" initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 3.2, ease: "easeInOut" }} />
+               </div>
+             </div>
+           </motion.div>
+@@ -252,13 +268,13 @@ export default function Home() {
+ 
+       <motion.div className="pointer-events-none fixed z-[998] h-[180vmax] w-[180vmax] rounded-full bg-[var(--gold)]" initial={false} animate={blast ? { scale: 1, opacity: 0.9 } : { scale: 0, opacity: 0 }} transition={{ duration: 0.9, ease: "easeInOut" }} style={{ left: mouse.x, top: mouse.y, translateX: "-50%", translateY: "-50%" }} />
+ 
+-      <motion.button onClick={toggleTheme} whileTap={{ scale: 0.85 }} className="fixed right-6 top-6 z-[999] flex h-16 w-16 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_50px_rgba(212,175,55,0.3)] backdrop-blur-xl">
++      <motion.button onClick={toggleTheme} whileTap={{ scale: 0.85 }} className="fixed right-6 top-6 z-[999] flex h-16 w-16 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_50px_rgba(126, 196, 255,0.3)] backdrop-blur-xl">
+         <motion.div key={light ? "sun" : "moon"} initial={{ rotate: -180, scale: 0 }} animate={{ rotate: 0, scale: 1 }} transition={{ duration: 0.5 }}>
+           {light ? <Sun size={26} /> : <Moon size={26} />}
+         </motion.div>
+       </motion.button>
+ 
+-      <div className="fixed inset-0 transition-opacity duration-1000 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.14),transparent_35%),radial-gradient(circle_at_bottom,rgba(255,138,92,0.10),transparent_30%)]" />
++      <div className="fixed inset-0 transition-opacity duration-1000 bg-[radial-gradient(circle_at_top,rgba(126, 196, 255,0.14),transparent_35%),radial-gradient(circle_at_bottom,rgba(255,138,92,0.10),transparent_30%)]" />
+       <div className="fixed inset-0 opacity-100 bg-[linear-gradient(to_right,var(--grid-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--grid-line)_1px,transparent_1px)] bg-[size:70px_70px]" />
+ 
+       <div className="pointer-events-none fixed inset-0 z-0">
+@@ -299,7 +315,7 @@ export default function Home() {
+       </section>
+ 
+       <section className="relative z-10 mx-auto max-w-6xl px-6 pb-28">
+-        <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--panel-bg-strong)] p-6 font-mono text-sm text-[var(--gold-light)] shadow-[0_0_80px_rgba(212,175,55,0.1)] backdrop-blur-xl">
++        <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--panel-bg-strong)] p-6 font-mono text-sm text-[var(--gold-light)] shadow-[0_0_80px_rgba(126, 196, 255,0.1)] backdrop-blur-xl">
+           <p className="text-[var(--muted)]">$ whoami</p>
+           <p className="mt-2">SLOW429 — Developer, Creator, Voiceover Artist</p>
+           <p className="mt-4 text-[var(--muted)]">$ status</p>
+@@ -314,9 +330,14 @@ export default function Home() {
+         <h2 className="mt-3 font-display text-4xl font-bold">Connect</h2>
+         <div className="mt-10 grid gap-5 md:grid-cols-2">
+           {socials.map((social, index) => (
+-            <a key={index} href={social.href} target="_blank" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 backdrop-blur-xl transition hover:border-[var(--card-border-strong)] hover:bg-[var(--card-bg-hover)]">
+-              <p className="text-sm uppercase tracking-[0.3em] opacity-50">{social.title}</p>
+-              <h3 className="mt-4 text-2xl font-bold">{social.value}</h3>
++            <a key={index} href={social.href} target="_blank" className="flex items-center gap-5 rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 backdrop-blur-xl transition hover:border-[var(--card-border-strong)] hover:bg-[var(--card-bg-hover)]">
++              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg)] text-[var(--gold)]">
++                <social.icon size={22} />
++              </div>
++              <div>
++                <p className="text-sm uppercase tracking-[0.3em] opacity-50">{social.title}</p>
++                <h3 className="mt-1 text-2xl font-bold">{social.value}</h3>
++              </div>
+             </a>
+           ))}
+         </div>
+@@ -351,12 +372,12 @@ export default function Home() {
+             setMusicOn(true);
+           }
+         }}
+-        className="fixed bottom-6 left-6 z-[999] rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-5 py-4 text-sm font-bold text-[var(--gold)] shadow-[0_0_50px_rgba(212,175,55,0.2)] backdrop-blur-xl"
++        className="fixed bottom-6 left-6 z-[999] rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-5 py-4 text-sm font-bold text-[var(--gold)] shadow-[0_0_50px_rgba(126, 196, 255,0.2)] backdrop-blur-xl"
+       >
+         {musicOn ? "Music ON" : "Music OFF"}
+       </motion.button>
+ 
+-      <motion.button onClick={() => setAiOpen(true)} className="fixed bottom-6 right-6 z-[999] rounded-full bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] p-5 text-[#1a1206] shadow-[0_0_60px_rgba(212,175,55,0.4)]">
++      <motion.button onClick={() => setAiOpen(true)} className="fixed bottom-6 right-6 z-[999] rounded-full bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] p-5 text-[#071018] shadow-[0_0_60px_rgba(126, 196, 255,0.4)]">
+         <Bot />
+       </motion.button>
+ 
+diff --git a/package-lock.json b/package-lock.json
+index 814a9b4..d5a4d80 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -13,7 +13,8 @@
+         "next": "16.2.6",
+         "react": "19.2.4",
+         "react-dom": "19.2.4",
+-        "react-github-calendar": "^5.0.6"
++        "react-github-calendar": "^5.0.6",
++        "react-icons": "^5.7.0"
+       },
+       "devDependencies": {
+         "@tailwindcss/postcss": "^4",
+@@ -5638,6 +5639,15 @@
+         "react": "^18.0.0 || ^19.0.0"
+       }
+     },
++    "node_modules/react-icons": {
++      "version": "5.7.0",
++      "resolved": "https://registry.npmjs.org/react-icons/-/react-icons-5.7.0.tgz",
++      "integrity": "sha512-LBLy340Rzqy6+/yVhZKT3B/QpP1BZaesGqasf09HPOBzRarcDIFH0WwXlXQfE7q7ipxK4MSiC5DIBWURCny6fw==",
++      "license": "MIT",
++      "peerDependencies": {
++        "react": "*"
++      }
++    },
+     "node_modules/react-is": {
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+diff --git a/package.json b/package.json
+index fd308d4..68ed1e6 100644
+--- a/package.json
++++ b/package.json
+@@ -14,7 +14,8 @@
+     "next": "16.2.6",
+     "react": "19.2.4",
+     "react-dom": "19.2.4",
+-    "react-github-calendar": "^5.0.6"
++    "react-github-calendar": "^5.0.6",
++    "react-icons": "^5.7.0"
+   },
+   "devDependencies": {
+     "@tailwindcss/postcss": "^4",
+diff --git a/public/avatar-poster.jpg b/public/avatar-poster.jpg
+index 189bbac..8d5932d 100644
+Binary files a/public/avatar-poster.jpg and b/public/avatar-poster.jpg differ
+diff --git a/public/avatar.gif b/public/avatar.gif
+deleted file mode 100644
+index 2153116..0000000
+Binary files a/public/avatar.gif and /dev/null differ
+diff --git a/public/avatar.mp4 b/public/avatar.mp4
+index e95c2e7..b02858f 100644
+Binary files a/public/avatar.mp4 and b/public/avatar.mp4 differ
+diff --git a/public/banner-poster.jpg b/public/banner-poster.jpg
+index 0dbc657..0ffb684 100644
+Binary files a/public/banner-poster.jpg and b/public/banner-poster.jpg differ
+diff --git a/public/banner.mp4 b/public/banner.mp4
+index 0aa2925..20da2e8 100644
+Binary files a/public/banner.mp4 and b/public/banner.mp4 differ
