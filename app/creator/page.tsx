@@ -17,19 +17,19 @@ const channels = [
   {
     title: "YouTube",
     description: "Long-form videos, experiments, gaming content, and future development content.",
-    href: "https://www.youtube.com/",
+    href: "https://www.youtube.com/@SLOW429",
     label: "Open YouTube",
   },
   {
     title: "Kick",
     description: "Live gaming and creator streams. Live status will be connected to real platform data later.",
-    href: "https://kick.com/",
+    href: "https://kick.com/3azf-valo",
     label: "Open Kick",
   },
   {
     title: "Discord",
     description: "The community hub for updates, projects, gaming, and future events.",
-    href: "https://discord.gg/3pjA9tS8vF",
+    href: "https://discord.gg/MvVxreJXMq",
     label: "Join Discord",
   },
 ];
