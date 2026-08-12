@@ -11,7 +11,7 @@ const projectItems = [
 const creatorLinks = [
   { title: "YouTube", value: "@SLOW429", href: "https://www.youtube.com/@SLOW429" },
   { title: "Kick", value: "3azf-valo", href: "https://kick.com/3azf-valo" },
-  { title: "Discord", value: "SLOW community", href: "https://discord.gg/3pjA9tS8vF" },
+  { title: "Discord", value: "SLOW community", href: "https://discord.gg/MvVxreJXMq" },
 ];
 
 const sections = {
@@ -74,7 +74,7 @@ const sections = {
       { title: "Official channels", items: creatorLinks.map((item) => `${item.title} — ${item.value}`) },
       { title: "Community", items: ["Discord community", "Gaming sessions", "Build and creator announcements"] },
     ],
-    links: [["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", "https://kick.com/3azf-valo"], ["Discord", "https://discord.gg/3pjA9tS8vF"], ["Gaming", "/gaming"]],
+    links: [["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", "https://kick.com/3azf-valo"], ["Discord", "https://discord.gg/MvVxreJXMq"], ["Gaming", "/gaming"]],
   },
   gaming: {
     title: "Gaming",
@@ -118,7 +118,7 @@ const sections = {
       { title: "Creator", items: creatorLinks.map((item) => `${item.title} — ${item.value}`) },
       { title: "Social & support", items: ["X — @SLOW_429", "Instagram — @m6.ydj", "Spotify — SLOW playlist/profile", "PayPal support"] },
     ],
-    links: [["GitHub", "https://github.com/SLOW429"], ["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", "https://kick.com/3azf-valo"], ["Discord", "https://discord.gg/3pjA9tS8vF"]],
+    links: [["GitHub", "https://github.com/SLOW429"], ["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", "https://kick.com/3azf-valo"], ["Discord", "https://discord.gg/MvVxreJXMq"]],
   },
   contact: {
     title: "Start a Project",
@@ -128,7 +128,7 @@ const sections = {
       { title: "Good fits", items: ["Website or web app", "Discord bot or automation", "AI integration", "SEO and performance work", "Custom developer tool"] },
       { title: "Include in your message", items: ["What you need", "What you already have", "Target timeline", "Budget range when known"] },
     ],
-    links: [["Services", "/services"], ["Projects", "/projects"], ["Discord", "https://discord.gg/3pjA9tS8vF"]],
+    links: [["Services", "/services"], ["Projects", "/projects"], ["Discord", "https://discord.gg/MvVxreJXMq"]],
   },
 } as const;
 
