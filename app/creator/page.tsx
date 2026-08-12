@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getLatestYouTubeVideos } from "@/lib/youtube";
+import { getKickLiveStatus } from "@/lib/kick";
 
 export const metadata: Metadata = {
   title: "Creator Hub",
@@ -43,7 +44,10 @@ const roadmap = [
 ];
 
 export default async function CreatorPage() {
-  const latestVideos = await getLatestYouTubeVideos(6);
+  const [latestVideos, kick] = await Promise.all([
+    getLatestYouTubeVideos(6),
+    getKickLiveStatus(),
+  ]);
 
   return (
     <main className="min-h-screen px-5 py-16 md:py-24">
@@ -73,13 +77,31 @@ export default async function CreatorPage() {
           ))}
         </section>
 
+        <section className="mt-10 rounded-[2rem] border border-[var(--card-border-strong)] bg-[var(--card-bg)] p-8 backdrop-blur-xl md:p-10">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">Kick</p>
+              <h2 className="mt-3 text-3xl font-bold">{kick.isLive ? "🔴 Live now" : "⚫ Offline"}</h2>
+              <p className="mt-3 max-w-2xl leading-7 text-[var(--muted)]">
+                {kick.isLive
+                  ? `${kick.title ?? "Live stream"}${kick.category ? ` • ${kick.category}` : ""}${typeof kick.viewerCount === "number" ? ` • ${kick.viewerCount.toLocaleString()} viewers` : ""}`
+                  : "Live status is automatic when the official Kick API credentials are configured."
+                }
+              </p>
+            </div>
+            <a href={kick.url} target="_blank" rel="noreferrer" className="inline-flex w-fit rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018] transition hover:-translate-y-0.5">
+              Watch on Kick
+            </a>
+          </div>
+        </section>
+
         <section className="mt-12">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">YouTube</p>
               <h2 className="mt-3 font-display text-3xl font-bold">Latest videos</h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">
-                This section can update automatically when <code>YOUTUBE_CHANNEL_ID</code> is configured in Vercel. It uses YouTube's public channel feed, so it does not consume a YouTube API quota.
+                Public channel feed, cached for performance. No YouTube API quota is required.
               </p>
             </div>
             <a href="https://www.youtube.com/@SLOW429" target="_blank" rel="noreferrer" className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 text-sm font-semibold transition hover:border-[var(--gold)]">
@@ -107,24 +129,9 @@ export default async function CreatorPage() {
             </div>
           ) : (
             <div className="mt-6 rounded-3xl border border-dashed border-[var(--card-border-strong)] bg-[var(--card-bg-soft)] p-7 text-sm leading-7 text-[var(--muted)]">
-              Automatic video syncing is ready but not configured yet. Add <code>YOUTUBE_CHANNEL_ID</code> to the Vercel production environment, redeploy, and the latest uploads will appear here automatically. Until then, use the official channel above.
+              Automatic video syncing is ready but not configured yet. Add <code>YOUTUBE_CHANNEL_ID</code> to the Vercel production environment and redeploy.
             </div>
           )}
-        </section>
-
-        <section className="mt-10 rounded-[2rem] border border-[var(--card-border-strong)] bg-[var(--card-bg)] p-8 backdrop-blur-xl md:p-10">
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">Live status</p>
-              <h2 className="mt-3 text-3xl font-bold">No fake status, no fake numbers.</h2>
-              <p className="mt-4 max-w-2xl leading-7 text-[var(--muted)]">
-                Until live platform integrations are configured, SLOW.DEV intentionally avoids claiming that a stream is live or showing made-up viewer counts.
-              </p>
-            </div>
-            <Link href="/links" className="inline-flex w-fit rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold transition hover:border-[var(--gold)]">
-              All links
-            </Link>
-          </div>
         </section>
 
         <section className="mt-10">
