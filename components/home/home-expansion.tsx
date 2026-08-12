@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ArrowRight, BriefcaseBusiness, Code2, Gamepad2, Wrench } from "lucide-react";
 
 const tools = [
@@ -18,13 +18,9 @@ const services = [
 ];
 
 export default function HomeExpansion() {
-  const [isHome, setIsHome] = useState(false);
+  const pathname = usePathname();
 
-  useEffect(() => {
-    setIsHome(window.location.pathname === "/");
-  }, []);
-
-  if (!isHome) return null;
+  if (pathname !== "/") return null;
 
   return (
     <div className="relative z-10 overflow-hidden bg-[var(--background)] px-6 pb-32 text-[var(--foreground)]">
