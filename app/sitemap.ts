@@ -1,6 +1,12 @@
 import type { MetadataRoute } from "next";
 
 const baseUrl = "https://slows.dev";
+const toolRoutes = [
+  "/tools/json-formatter",
+  "/tools/base64",
+  "/tools/seo-preview",
+  "/tools/image-compressor",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
@@ -16,11 +22,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/uses",
     "/links",
     "/contact",
+    ...toolRoutes,
   ];
 
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
-    changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : 0.7,
+    changeFrequency: route === "" ? "weekly" : route.startsWith("/tools/") ? "monthly" : "monthly",
+    priority: route === "" ? 1 : route === "/tools" ? 0.9 : route.startsWith("/tools/") ? 0.8 : 0.7,
   }));
 }
