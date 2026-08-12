@@ -33,7 +33,7 @@ const socials = [
   { title: "Instagram", value: "@m6.ydj", href: "https://www.instagram.com/m6.ydj/", icon: SiInstagram },
   { title: "Spotify", value: "My Spotify", href: "https://open.spotify.com/user/31pmd7jyoxhubdtasmvo3heuqpje?si=6e9e2fbbb98b4af7", icon: SiSpotify },
   { title: "PayPal", value: "Support Me", href: "https://www.paypal.com/paypalme/abdellatifeg", icon: SiPaypal },
-  { title: "Discord", value: "Join Server", href: "https://discord.gg/3pjA9tS8vF", icon: SiDiscord },
+  { title: "Discord", value: "Join Server", href: "https://discord.gg/MvVxreJXMq", icon: SiDiscord },
 ];
 
 function VisitorBadge() {
@@ -122,7 +122,7 @@ function DiscordCard() {
             {activity?.details && <p className="mt-2 text-[var(--muted)]">{activity.details}</p>}
           </div>
 
-          <a href="https://discord.gg/3pjA9tS8vF" target="_blank" className="mt-8 inline-flex rounded-2xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] px-7 py-4 font-bold text-[#071018] transition hover:scale-105 hover:shadow-[0_0_40px_rgba(126, 196, 255,0.4)]">
+          <a href="https://discord.gg/MvVxreJXMq" target="_blank" className="mt-8 inline-flex rounded-2xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] px-7 py-4 font-bold text-[#071018] transition hover:scale-105 hover:shadow-[0_0_40px_rgba(126, 196, 255,0.4)]">
             Join Discord
           </a>
         </div>
