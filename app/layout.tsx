@@ -3,6 +3,7 @@ import { Playfair_Display, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import HomeExpansion from "@/components/home/home-expansion";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -68,6 +69,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <SiteHeader />
         <div className="flex min-h-screen flex-1 flex-col pt-16">{children}</div>
+        <HomeExpansion />
         <SiteFooter />
       </body>
     </html>
