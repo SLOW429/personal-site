@@ -20,29 +20,52 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://slows.dev"),
-  title: "SLOW — Abdellatif Shaheen | Developer & Creator",
+  title: {
+    default: "SLOW — Developer, Creator & Builder",
+    template: "%s | SLOW",
+  },
   description:
-    "Portfolio of Abdellatif Shaheen (SLOW) — developer, automation builder, and voiceover artist based in Qatar. Bots, real-time systems, and cinematic digital work.",
-  keywords: ["SLOW429", "Abdellatif Shaheen", "developer portfolio", "Discord bots", "web developer Qatar"],
-  authors: [{ name: "Abdellatif Shaheen" }],
+    "SLOW is a developer and creator building software, AI experiments, automation, useful developer tools, and gaming content.",
+  keywords: [
+    "SLOW429",
+    "SLOW",
+    "developer",
+    "creator",
+    "builder",
+    "web development",
+    "AI",
+    "automation",
+    "developer tools",
+    "gaming",
+    "streaming",
+  ],
+  authors: [{ name: "Abdellatif Shaheen", url: "https://slows.dev" }],
+  creator: "SLOW",
+  publisher: "SLOW",
   icons: {
     icon: "/avatar-poster.jpg",
     shortcut: "/avatar-poster.jpg",
     apple: "/avatar-poster.jpg",
   },
   openGraph: {
-    title: "SLOW — Abdellatif Shaheen",
-    description: "Developer • Creator • Voiceover Artist — building cinematic AI, automation, and digital systems.",
+    title: "SLOW — Developer, Creator & Builder",
+    description:
+      "Building software, AI experiments, automation, useful tools, and gaming content.",
     url: "https://slows.dev",
     siteName: "SLOW",
-    images: [{ url: "/banner-poster.jpg", width: 1600, height: 565 }],
+    images: [{ url: "/banner-poster.jpg", width: 1600, height: 565, alt: "SLOW — Developer, Creator & Builder" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SLOW — Abdellatif Shaheen",
-    description: "Developer • Creator • Voiceover Artist",
+    title: "SLOW — Developer, Creator & Builder",
+    description:
+      "Building software, AI experiments, automation, useful tools, and gaming content.",
     images: ["/banner-poster.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
