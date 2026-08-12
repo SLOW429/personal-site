@@ -8,6 +8,12 @@ const projectItems = [
   { title: "chat-platform", text: "An experimental real-time communication platform exploring Node.js and WebSockets.", href: "https://github.com/SLOW429/chat-platform" },
 ];
 
+const creatorLinks = [
+  { title: "YouTube", value: "@SLOW429", href: "https://www.youtube.com/@SLOW429" },
+  { title: "Kick", value: "3azf-valo", href: "https://kick.com/3azf-valo" },
+  { title: "Discord", value: "SLOW community", href: "https://discord.gg/3pjA9tS8vF" },
+];
+
 const sections = {
   about: {
     title: "About SLOW",
@@ -61,24 +67,25 @@ const sections = {
   },
   creator: {
     title: "Creator Hub",
-    description: "The creator side of SLOW: building an audience around development, gaming, experiments, and live content.",
-    intro: "Streaming and content are part of the long-term SLOW ecosystem, with the website acting as the central hub for videos, streams, clips, and community.",
+    description: "The creator side of SLOW: gaming, live streaming, videos, clips, experiments, and community.",
+    intro: "Follow the real channels below. Live status, recent videos, and clips can be connected to platform APIs later without changing this page's structure.",
     groups: [
-      { title: "Content", items: ["Gaming videos", "Live streams", "Short clips", "Behind-the-scenes development content"] },
-      { title: "Platforms", items: ["YouTube", "Kick", "Discord community", "Social channels"] },
-      { title: "Status", items: ["Creator setup is being expanded", "Live integrations will use real platform data", "No fake viewer or stream statistics"] },
+      { title: "Live & video", items: ["Kick live streams", "YouTube videos", "Short clips", "Behind-the-scenes development content"] },
+      { title: "Official channels", items: creatorLinks.map((item) => `${item.title} — ${item.value}`) },
+      { title: "Community", items: ["Discord community", "Gaming sessions", "Build and creator announcements"] },
     ],
-    links: [["Gaming", "/gaming"], ["Links", "/links"], ["Discord", "https://discord.gg/3pjA9tS8vF"]],
+    links: [["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", "https://kick.com/3azf-valo"], ["Discord", "https://discord.gg/3pjA9tS8vF"], ["Gaming", "/gaming"]],
   },
   gaming: {
     title: "Gaming",
     description: "A dedicated space for games, streams, clips, guides, and future gaming utilities built around the creator side of SLOW.",
-    intro: "Gaming is not separate from the rest of the platform: it feeds the creator content, community, and future tools ecosystem.",
+    intro: "Gaming content will be centered around the real Kick and YouTube channels, while this page becomes the home for guides, clips, and future gaming utilities.",
     groups: [
-      { title: "Content", items: ["Game streams", "Clips and highlights", "Guides and experiments", "Community gaming content"] },
+      { title: "Watch", items: ["Kick streams", "YouTube gaming videos", "Clips and highlights"] },
+      { title: "Community", items: ["Discord gaming sessions", "Stream announcements", "Community events"] },
       { title: "Future utilities", items: ["Minecraft server utilities", "Gaming helpers", "Configuration resources", "Small creator tools"] },
     ],
-    links: [["Creator Hub", "/creator"], ["Discord", "https://discord.gg/3pjA9tS8vF"], ["Links", "/links"]],
+    links: [["Watch on Kick", "https://kick.com/3azf-valo"], ["Watch on YouTube", "https://www.youtube.com/@SLOW429"], ["Creator Hub", "/creator"]],
   },
   now: {
     title: "Now",
@@ -108,10 +115,10 @@ const sections = {
     intro: "Use this page as the shareable hub for social bios, profiles, and future creator campaigns.",
     groups: [
       { title: "Developer", items: ["GitHub — @SLOW429", "LinkedIn — Abdellatif Gahen"] },
-      { title: "Social", items: ["X — @SLOW_429", "Instagram — @m6.ydj", "Spotify — SLOW playlist/profile"] },
-      { title: "Community & support", items: ["Discord community", "PayPal support"] },
+      { title: "Creator", items: creatorLinks.map((item) => `${item.title} — ${item.value}`) },
+      { title: "Social & support", items: ["X — @SLOW_429", "Instagram — @m6.ydj", "Spotify — SLOW playlist/profile", "PayPal support"] },
     ],
-    links: [["GitHub", "https://github.com/SLOW429"], ["Discord", "https://discord.gg/3pjA9tS8vF"], ["Instagram", "https://www.instagram.com/m6.ydj/"]],
+    links: [["GitHub", "https://github.com/SLOW429"], ["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", "https://kick.com/3azf-valo"], ["Discord", "https://discord.gg/3pjA9tS8vF"]],
   },
   contact: {
     title: "Start a Project",
@@ -182,6 +189,18 @@ export default async function SectionPage({ params }: { params: Promise<{ sectio
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--gold)]">GitHub</p>
                 <h2 className="mt-3 text-xl font-bold text-[var(--foreground)]">{project.title}</h2>
                 <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{project.text}</p>
+              </a>
+            ))}
+          </div>
+        )}
+
+        {(section === "creator" || section === "gaming" || section === "links") && (
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {creatorLinks.map((creator) => (
+              <a key={creator.href} href={creator.href} target="_blank" rel="noreferrer" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]">
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--gold)]">{creator.title}</p>
+                <h2 className="mt-3 text-xl font-bold text-[var(--foreground)]">{creator.value}</h2>
+                <p className="mt-3 text-sm text-[var(--muted)]">Open official channel →</p>
               </a>
             ))}
           </div>
