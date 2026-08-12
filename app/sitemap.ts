@@ -7,6 +7,15 @@ const toolRoutes = [
   "/tools/seo-preview",
   "/tools/image-compressor",
 ];
+const blogRoutes = [
+  "/blog/building-slow-dev-into-a-personal-platform",
+  "/blog/designing-local-first-developer-tools",
+];
+const projectRoutes = [
+  "/projects/hr-bot",
+  "/projects/discord-bot",
+  "/projects/chat-platform",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
@@ -23,11 +32,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/links",
     "/contact",
     ...toolRoutes,
+    ...blogRoutes,
+    ...projectRoutes,
   ];
 
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
-    changeFrequency: route === "" ? "weekly" : route.startsWith("/tools/") ? "monthly" : "monthly",
-    priority: route === "" ? 1 : route === "/tools" ? 0.9 : route.startsWith("/tools/") ? 0.8 : 0.7,
+    changeFrequency: route === "" ? "weekly" : "monthly",
+    priority:
+      route === ""
+        ? 1
+        : route === "/tools"
+          ? 0.9
+          : route.startsWith("/tools/") || route.startsWith("/blog/") || route.startsWith("/projects/")
+            ? 0.8
+            : 0.7,
   }));
 }
