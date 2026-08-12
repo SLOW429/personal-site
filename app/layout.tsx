@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -25,23 +27,9 @@ export const metadata: Metadata = {
     template: "%s | SLOW",
   },
   description:
-    "SLOW is a developer and creator building software, AI experiments, automation, useful developer tools, and gaming content.",
-  keywords: [
-    "SLOW429",
-    "SLOW",
-    "developer",
-    "creator",
-    "builder",
-    "web development",
-    "AI",
-    "automation",
-    "developer tools",
-    "gaming",
-    "streaming",
-  ],
-  authors: [{ name: "Abdellatif Shaheen", url: "https://slows.dev" }],
-  creator: "SLOW",
-  publisher: "SLOW",
+    "SLOW.DEV — a personal hub for software projects, developer tools, AI experiments, services, content, gaming, and streaming.",
+  keywords: ["SLOW", "SLOW429", "developer", "creator", "developer tools", "web development", "AI", "automation"],
+  authors: [{ name: "SLOW" }],
   icons: {
     icon: "/avatar-poster.jpg",
     shortcut: "/avatar-poster.jpg",
@@ -49,23 +37,17 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "SLOW — Developer, Creator & Builder",
-    description:
-      "Building software, AI experiments, automation, useful tools, and gaming content.",
+    description: "Software, useful tools, AI experiments, content, gaming, and digital products.",
     url: "https://slows.dev",
     siteName: "SLOW",
-    images: [{ url: "/banner-poster.jpg", width: 1600, height: 565, alt: "SLOW — Developer, Creator & Builder" }],
+    images: [{ url: "/banner-poster.jpg", width: 1600, height: 565 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "SLOW — Developer, Creator & Builder",
-    description:
-      "Building software, AI experiments, automation, useful tools, and gaming content.",
+    description: "Software, useful tools, AI experiments, content, gaming, and digital products.",
     images: ["/banner-poster.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
   },
 };
 
@@ -83,7 +65,11 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SiteHeader />
+        <div className="flex min-h-screen flex-1 flex-col pt-16">{children}</div>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
