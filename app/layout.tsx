@@ -21,8 +21,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://slows.dev";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://slows.dev"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "SLOW — Developer, Creator & Builder",
     template: "%s | SLOW",
@@ -31,6 +33,7 @@ export const metadata: Metadata = {
     "SLOW.DEV — a personal hub for software projects, developer tools, AI experiments, services, content, gaming, and streaming.",
   keywords: ["SLOW", "SLOW429", "developer", "creator", "developer tools", "web development", "AI", "automation"],
   authors: [{ name: "SLOW" }],
+  alternates: { canonical: "/" },
   icons: {
     icon: "/avatar-poster.jpg",
     shortcut: "/avatar-poster.jpg",
@@ -39,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SLOW — Developer, Creator & Builder",
     description: "Software, useful tools, AI experiments, content, gaming, and digital products.",
-    url: "https://slows.dev",
+    url: siteUrl,
     siteName: "SLOW",
     images: [{ url: "/banner-poster.jpg", width: 1600, height: 565 }],
     type: "website",
@@ -56,6 +59,35 @@ export const viewport = {
   themeColor: "#060a13",
 };
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      name: "SLOW",
+      alternateName: "SLOW429",
+      url: siteUrl,
+      jobTitle: "Developer, Creator & Builder",
+      sameAs: [
+        "https://github.com/SLOW429",
+        "https://www.youtube.com/@SLOW429",
+        "https://kick.com/3azf-valo",
+        "https://discord.gg/MvVxreJXMq",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "SLOW.DEV",
+      description: "Personal platform for software, tools, services, content, gaming, and creator work.",
+      publisher: { "@id": `${siteUrl}/#person` },
+      inLanguage: "en",
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,6 +99,10 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <SiteHeader />
         <div className="flex min-h-screen flex-1 flex-col pt-16">{children}</div>
         <HomeExpansion />
