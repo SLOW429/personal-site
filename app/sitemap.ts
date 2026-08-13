@@ -18,6 +18,7 @@ const projectRoutes = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date();
   const routes = [
     "",
     "/about",
@@ -38,7 +39,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
-    changeFrequency: route === "" ? "weekly" : "monthly",
+    lastModified,
+    changeFrequency: route === "" ? "weekly" : route.startsWith("/blog/") || route.startsWith("/projects/") ? "monthly" : "weekly",
     priority:
       route === ""
         ? 1
