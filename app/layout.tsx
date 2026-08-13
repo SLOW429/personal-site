@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import HomeExpansion from "@/components/home/home-expansion";
+import { DevelopmentNotice } from "@/components/layout/development-notice";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -99,6 +100,7 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <DevelopmentNotice />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
