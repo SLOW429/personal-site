@@ -1,6 +1,19 @@
 import type { MetadataRoute } from "next";
 
 const baseUrl = "https://slows.dev";
+const locales = ["en", "ar", "tr"] as const;
+const localized = (route: string) => locales.map((locale) => ({
+  url: locale === "en" ? `${baseUrl}${route}` : `${baseUrl}/${locale}${route}`,
+  alternates: {
+    languages: {
+      en: `${baseUrl}${route}`,
+      ar: `${baseUrl}/ar${route}`,
+      tr: `${baseUrl}/tr${route}`,
+      "x-default": `${baseUrl}${route}`,
+    },
+  },
+}));
+
 const toolRoutes = [
   "/tools/json-formatter",
   "/tools/base64",
@@ -37,17 +50,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...projectRoutes,
   ];
 
-  return routes.map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified,
-    changeFrequency: route === "" ? "weekly" : route.startsWith("/blog/") || route.startsWith("/projects/") ? "monthly" : "weekly",
-    priority:
-      route === ""
-        ? 1
-        : route === "/tools"
-          ? 0.9
-          : route.startsWith("/tools/") || route.startsWith("/blog/") || route.startsWith("/projects/")
-            ? 0.8
-            : 0.7,
-  }));
+  return routes.flatMap((route) => {
+    const changeFrequency = route === "" ? "weekly" : route.startsWith("/blog/") || route.startsWith("/projects/") ? "monthly" : "weekly";
+    const priority = route === "" ? 1 : route === "/tools" ? 0.9 : route.startsWith("/tools/") || route.startsWith("/blog/") || route.startsWith("/projects/") ? 0.8 : 0.7;
+
+    return localized(route).map((entry) => ({
+      ...entry,
+      lastModified,
+      changeFrequency,
+      priority,
+    }));
+  });
 }
