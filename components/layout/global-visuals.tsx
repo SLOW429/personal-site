@@ -3,9 +3,47 @@
 import { Moon, Sun, Video, Waves } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+const COUNTER_STORAGE_KEY = "slow-visitor-count-v1";
 const COUNTER_URL = "https://api.counterapi.dev/v1/slows-dev/visitors/up";
-const VIDEO_SRC = "/CLIMA%20LINDO%20video%20.mp4";
+const VIDEO_SRC = encodeURI("/CLIMA LINDO video .mp4");
 type Node = { x: number; y: number; vx: number; vy: number };
+
+let visitorFetchPromise: Promise<number | null> | null = null;
+let fetchPatched = false;
+
+function installVisitorCounterCache() {
+  if (typeof window === "undefined" || fetchPatched) return;
+  fetchPatched = true;
+
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async (input, init) => {
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    const isVisitorRequest = url.includes("countapi.mileshilliard.com") || url.includes("api.counterapi.dev");
+    if (!isVisitorRequest) return originalFetch(input, init);
+
+    const cached = Number(sessionStorage.getItem(COUNTER_STORAGE_KEY));
+    if (Number.isFinite(cached) && cached >= 0) {
+      return new Response(JSON.stringify({ value: cached, count: cached }), { status: 200, headers: { "Content-Type": "application/json" } });
+    }
+
+    if (!visitorFetchPromise) {
+      visitorFetchPromise = originalFetch(input, init)
+        .then(async (response) => {
+          if (!response.ok) throw new Error("visitor counter request failed");
+          const json = await response.json();
+          const count = Number(json?.count ?? json?.value ?? json?.data?.count ?? json?.data?.value);
+          if (!Number.isFinite(count) || count < 0) return null;
+          sessionStorage.setItem(COUNTER_STORAGE_KEY, String(count));
+          return count;
+        })
+        .catch(() => null);
+    }
+
+    const count = await visitorFetchPromise;
+    if (count === null) return new Response(JSON.stringify({}), { status: 503 });
+    return new Response(JSON.stringify({ value: count, count }), { status: 200, headers: { "Content-Type": "application/json" } });
+  };
+}
 
 function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -103,29 +141,12 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
 
 function VisitorCounterRepair() {
   useEffect(() => {
-    let cancelled = false;
+    installVisitorCounterCache();
 
-    const hitFallback = async () => {
-      const badge = Array.from(document.querySelectorAll("div")).find((element) => element.textContent?.trim().endsWith("visitors"));
-      const value = badge?.querySelector("span.font-mono");
-      if (!value || value.textContent?.trim() !== "···") return;
-
-      try {
-        const response = await fetch(COUNTER_URL, { cache: "no-store" });
-        if (!response.ok) throw new Error("visitor counter request failed");
-        const json = await response.json();
-        const count = Number(json?.count ?? json?.value ?? json?.data?.count ?? json?.data?.value);
-        if (!cancelled && Number.isFinite(count)) value.textContent = count.toLocaleString();
-      } catch {
-        // Keep the original placeholder if the fallback service is unavailable.
-      }
-    };
-
-    const timer = window.setTimeout(hitFallback, 1200);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-    };
+    const badge = Array.from(document.querySelectorAll("div")).find((element) => element.textContent?.trim().endsWith("visitors"));
+    const value = badge?.querySelector("span.font-mono");
+    const cached = Number(sessionStorage.getItem(COUNTER_STORAGE_KEY));
+    if (value && Number.isFinite(cached)) value.textContent = cached.toLocaleString();
   }, []);
 
   return null;
@@ -137,6 +158,7 @@ export function GlobalVisuals() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    installVisitorCounterCache();
     const savedTheme = localStorage.getItem("slow-theme") === "light";
     const savedVideo = localStorage.getItem("slow-background") === "video";
     setLight(savedTheme);
