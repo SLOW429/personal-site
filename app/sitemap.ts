@@ -2,17 +2,7 @@ import type { MetadataRoute } from "next";
 
 const baseUrl = "https://slows.dev";
 const locales = ["en", "ar", "tr"] as const;
-const localized = (route: string) => locales.map((locale) => ({
-  url: locale === "en" ? `${baseUrl}${route}` : `${baseUrl}/${locale}${route}`,
-  alternates: {
-    languages: {
-      en: `${baseUrl}${route}`,
-      ar: `${baseUrl}/ar${route}`,
-      tr: `${baseUrl}/tr${route}`,
-      "x-default": `${baseUrl}${route}`,
-    },
-  },
-}));
+const localizedRoutes = ["/about", "/services", "/tools"] as const;
 
 const toolRoutes = [
   "/tools/json-formatter",
@@ -45,6 +35,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/uses",
     "/links",
     "/contact",
+    "/docs",
+    "/status",
     ...toolRoutes,
     ...blogRoutes,
     ...projectRoutes,
@@ -54,11 +46,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const changeFrequency = route === "" ? "weekly" : route.startsWith("/blog/") || route.startsWith("/projects/") ? "monthly" : "weekly";
     const priority = route === "" ? 1 : route === "/tools" ? 0.9 : route.startsWith("/tools/") || route.startsWith("/blog/") || route.startsWith("/projects/") ? 0.8 : 0.7;
 
-    return localized(route).map((entry) => ({
-      ...entry,
+    if (!localizedRoutes.includes(route as (typeof localizedRoutes)[number])) {
+      return [{
+        url: `${baseUrl}${route}`,
+        lastModified,
+        changeFrequency,
+        priority,
+      }];
+    }
+
+    return locales.map((locale) => ({
+      url: locale === "en" ? `${baseUrl}${route}` : `${baseUrl}/${locale}${route}`,
       lastModified,
       changeFrequency,
       priority,
+      alternates: {
+        languages: {
+          en: `${baseUrl}${route}`,
+          ar: `${baseUrl}/ar${route}`,
+          tr: `${baseUrl}/tr${route}`,
+          "x-default": `${baseUrl}${route}`,
+        },
+      },
     }));
   });
 }
