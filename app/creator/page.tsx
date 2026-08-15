@@ -49,6 +49,24 @@ export default async function CreatorPage() {
     getKickLiveStatus(),
   ]);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    name: "SLOW Creator Hub",
+    url: "https://slows.dev/creator",
+    mainEntity: {
+      "@type": "Person",
+      name: "SLOW",
+      url: "https://slows.dev",
+      sameAs: [
+        "https://www.youtube.com/@SLOW429",
+        "https://kick.com/3azf-valo",
+        "https://discord.gg/MvVxreJXMq",
+        "https://github.com/SLOW429",
+      ],
+    },
+  };
+
   return (
     <main className="min-h-screen px-5 py-16 md:py-24">
       <div className="mx-auto max-w-6xl">
@@ -62,13 +80,7 @@ export default async function CreatorPage() {
 
         <section className="mt-12 grid gap-5 md:grid-cols-3">
           {channels.map((channel) => (
-            <a
-              key={channel.title}
-              href={channel.href}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 backdrop-blur-xl transition hover:-translate-y-1 hover:border-[var(--card-border-strong)]"
-            >
+            <a key={channel.title} href={channel.href} target="_blank" rel="noreferrer" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 backdrop-blur-xl transition hover:-translate-y-1 hover:border-[var(--card-border-strong)]">
               <p className="text-xs uppercase tracking-[0.25em] text-[var(--gold)]">Channel</p>
               <h2 className="mt-4 text-2xl font-bold">{channel.title}</h2>
               <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{channel.description}</p>
@@ -85,13 +97,10 @@ export default async function CreatorPage() {
               <p className="mt-3 max-w-2xl leading-7 text-[var(--muted)]">
                 {kick.isLive
                   ? `${kick.title ?? "Live stream"}${kick.category ? ` • ${kick.category}` : ""}${typeof kick.viewerCount === "number" ? ` • ${kick.viewerCount.toLocaleString()} viewers` : ""}`
-                  : "Live status is automatic when the official Kick API credentials are configured."
-                }
+                  : "Live status is automatic when the official Kick API credentials are configured."}
               </p>
             </div>
-            <a href={kick.url} target="_blank" rel="noreferrer" className="inline-flex w-fit rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018] transition hover:-translate-y-0.5">
-              Watch on Kick
-            </a>
+            <a href={kick.url} target="_blank" rel="noreferrer" className="inline-flex w-fit rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018] transition hover:-translate-y-0.5">Watch on Kick</a>
           </div>
         </section>
 
@@ -100,25 +109,15 @@ export default async function CreatorPage() {
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">YouTube</p>
               <h2 className="mt-3 font-display text-3xl font-bold">Latest videos</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">
-                Public channel feed, cached for performance. No YouTube API quota is required.
-              </p>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Public channel feed, cached for performance. No YouTube API quota is required.</p>
             </div>
-            <a href="https://www.youtube.com/@SLOW429" target="_blank" rel="noreferrer" className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 text-sm font-semibold transition hover:border-[var(--gold)]">
-              Open channel
-            </a>
+            <a href="https://www.youtube.com/@SLOW429" target="_blank" rel="noreferrer" className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 text-sm font-semibold transition hover:border-[var(--gold)]">Open channel</a>
           </div>
 
           {latestVideos.length > 0 ? (
             <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {latestVideos.map((video) => (
-                <a
-                  key={video.id}
-                  href={video.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group overflow-hidden rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] transition hover:-translate-y-1 hover:border-[var(--card-border-strong)]"
-                >
+                <a key={video.id} href={video.url} target="_blank" rel="noreferrer" className="group overflow-hidden rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] transition hover:-translate-y-1 hover:border-[var(--card-border-strong)]">
                   <img src={video.thumbnail} alt={video.title} loading="lazy" className="aspect-video w-full object-cover" />
                   <div className="p-5">
                     <h3 className="line-clamp-2 font-semibold leading-6 text-[var(--foreground)]">{video.title}</h3>
@@ -128,9 +127,7 @@ export default async function CreatorPage() {
               ))}
             </div>
           ) : (
-            <div className="mt-6 rounded-3xl border border-dashed border-[var(--card-border-strong)] bg-[var(--card-bg-soft)] p-7 text-sm leading-7 text-[var(--muted)]">
-              Automatic video syncing is ready but not configured yet. Add <code>YOUTUBE_CHANNEL_ID</code> to the Vercel production environment and redeploy.
-            </div>
+            <div className="mt-6 rounded-3xl border border-dashed border-[var(--card-border-strong)] bg-[var(--card-bg-soft)] p-7 text-sm leading-7 text-[var(--muted)]">Automatic video syncing is ready but not configured yet. Add <code>YOUTUBE_CHANNEL_ID</code> to the Vercel production environment and redeploy.</div>
           )}
         </section>
 
@@ -142,9 +139,7 @@ export default async function CreatorPage() {
             </div>
           </div>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {roadmap.map((item) => (
-              <div key={item} className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-5 text-sm text-[var(--muted)]">{item}</div>
-            ))}
+            {roadmap.map((item) => <div key={item} className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-5 text-sm text-[var(--muted)]">{item}</div>)}
           </div>
         </section>
 
@@ -158,6 +153,7 @@ export default async function CreatorPage() {
           </div>
         </section>
       </div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     </main>
   );
 }
