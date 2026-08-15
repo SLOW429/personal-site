@@ -10,6 +10,11 @@ function getLocale(pathname: string): Locale {
   return "en";
 }
 
+function isLocalizedSection(pathname: string): boolean {
+  const match = pathname.match(/^\/(ar|tr)\/(about|services|tools)$/);
+  return Boolean(match);
+}
+
 export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = getLocale(pathname);
@@ -21,7 +26,11 @@ export function proxy(request: NextRequest) {
   }
 
   const url = request.nextUrl.clone();
-  url.pathname = pathname === `/${locale}` ? "/" : pathname.slice(locale.length + 1);
+  url.pathname = isLocalizedSection(pathname)
+    ? `/localized${pathname}`
+    : pathname === `/${locale}`
+      ? "/"
+      : pathname.slice(locale.length + 1);
 
   const response = NextResponse.rewrite(url);
   response.headers.set("x-site-locale", locale);
