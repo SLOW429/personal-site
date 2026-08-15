@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -7,10 +7,10 @@ import HomeExpansion from "@/components/home/home-expansion";
 import { DevelopmentNotice } from "@/components/layout/development-notice";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { CommandPalette } from "@/components/layout/command-palette";
+import { GlobalVisuals } from "@/components/layout/global-visuals";
 import { isLocale, localeDirections, maintenanceCopy, type Locale } from "@/lib/i18n";
 
 const siteUrl = "https://slows.dev";
-const PREVIEW_COOKIE = "slow_preview";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -52,13 +52,9 @@ const structuredData = {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const requestHeaders = await headers();
-  const requestCookies = await cookies();
   const headerLocale = requestHeaders.get("x-site-locale");
   const locale: Locale = isLocale(headerLocale) ? headerLocale : "en";
-  const previewHeader = requestHeaders.get("x-site-preview") === "1";
-  const previewCookie = Boolean(process.env.SLOW_PREVIEW_KEY) && requestCookies.get(PREVIEW_COOKIE)?.value === process.env.SLOW_PREVIEW_KEY;
-  const previewEnabled = previewHeader || previewCookie;
-  const maintenanceMode = !previewEnabled;
+  const maintenanceMode = true;
 
   return (
     <html lang={locale} dir={localeDirections[locale]} className="h-full antialiased">
@@ -71,9 +67,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         ) : (
           <>
             <DevelopmentNotice />
+            <GlobalVisuals />
             <SiteHeader />
             <CommandPalette locale={locale} />
-            <div className="flex min-h-screen flex-1 flex-col pt-16">{children}</div>
+            <div className="relative z-10 flex min-h-screen flex-1 flex-col pt-16">{children}</div>
             <HomeExpansion />
             <SiteFooter />
           </>
