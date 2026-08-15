@@ -9,6 +9,10 @@ const toolRoutes = [
   "/tools/base64",
   "/tools/seo-preview",
   "/tools/image-compressor",
+  "/tools/uuid-generator",
+  "/tools/jwt-decoder",
+  "/tools/url-encoder",
+  "/tools/timestamp",
 ];
 const blogRoutes = [
   "/blog/building-slow-dev-into-a-personal-platform",
@@ -47,12 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const priority = route === "" ? 1 : route === "/tools" ? 0.9 : route.startsWith("/tools/") || route.startsWith("/blog/") || route.startsWith("/projects/") ? 0.8 : 0.7;
 
     if (!localizedRoutes.includes(route as (typeof localizedRoutes)[number])) {
-      return [{
-        url: `${baseUrl}${route}`,
-        lastModified,
-        changeFrequency,
-        priority,
-      }];
+      return [{ url: `${baseUrl}${route}`, lastModified, changeFrequency, priority }];
     }
 
     return locales.map((locale) => ({
