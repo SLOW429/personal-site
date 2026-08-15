@@ -20,6 +20,22 @@ const toolMeta = {
     title: "Image Compressor",
     description: "Compress images to WebP in your browser and download the result without uploading your files.",
   },
+  "uuid-generator": {
+    title: "UUID Generator",
+    description: "Generate UUID v4 identifiers locally in your browser.",
+  },
+  "jwt-decoder": {
+    title: "JWT Decoder",
+    description: "Decode JWT header and payload locally without sending tokens to a server.",
+  },
+  "url-encoder": {
+    title: "URL Encoder & Decoder",
+    description: "Encode and decode URL components locally in your browser.",
+  },
+  timestamp: {
+    title: "Unix Timestamp Converter",
+    description: "Convert Unix timestamps between seconds, milliseconds, and ISO dates.",
+  },
 } as const;
 
 export function generateStaticParams() {
