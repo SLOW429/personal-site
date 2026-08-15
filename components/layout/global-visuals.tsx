@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 
 const COUNTER_URL = "https://api.counterapi.dev/v1/slows-dev/visitors/up";
 const VIDEO_SRC = "/CLIMA%20LINDO%20video%20.mp4";
-
 type Node = { x: number; y: number; vx: number; vy: number };
 
 function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
@@ -15,9 +14,8 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
   useEffect(() => {
     if (!enabled) return;
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
 
     let frame = 0;
     let width = 0;
@@ -33,30 +31,17 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
       nodes.length = 0;
       const count = Math.min(85, Math.max(44, Math.floor((width * height) / 18000)));
-      for (let i = 0; i < count; i++) {
-        nodes.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.22,
-          vy: (Math.random() - 0.5) * 0.22,
-        });
-      }
+      for (let i = 0; i < count; i++) nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22 });
     };
 
-    const move = (event: MouseEvent) => {
-      mouseRef.current = { x: event.clientX, y: event.clientY };
-    };
-    const leave = () => {
-      mouseRef.current = { x: -9999, y: -9999 };
-    };
+    const move = (event: MouseEvent) => { mouseRef.current = { x: event.clientX, y: event.clientY }; };
+    const leave = () => { mouseRef.current = { x: -9999, y: -9999 }; };
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
       const { x: mx, y: my } = mouseRef.current;
-
       for (const node of nodes) {
         const dx = mx - node.x;
         const dy = my - node.y;
@@ -66,7 +51,6 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
           node.x += dx * strength;
           node.y += dy * strength;
         }
-
         node.x += node.vx;
         node.y += node.vy;
         if (node.x < -20 || node.x > width + 20) node.vx *= -1;
@@ -77,15 +61,9 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
         const a = nodes[i];
         for (let j = i + 1; j < nodes.length; j++) {
           const b = nodes[j];
-          const dx = b.x - a.x;
-          const dy = b.y - a.y;
-          const distance = Math.hypot(dx, dy);
+          const distance = Math.hypot(b.x - a.x, b.y - a.y);
           if (distance > 150) continue;
-
-          const nearMouse = Math.min(
-            Math.hypot(a.x - mx, a.y - my),
-            Math.hypot(b.x - mx, b.y - my)
-          );
+          const nearMouse = Math.min(Math.hypot(a.x - mx, a.y - my), Math.hypot(b.x - mx, b.y - my));
           const alpha = Math.max(0.02, (1 - distance / 150) * 0.18 + (nearMouse < 260 ? 0.1 : 0));
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
@@ -103,7 +81,6 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
         ctx.fillStyle = distance < 260 ? "rgba(217,237,255,.72)" : "rgba(126,196,255,.3)";
         ctx.fill();
       }
-
       frame = requestAnimationFrame(draw);
     };
 
@@ -112,7 +89,6 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
     window.addEventListener("mousemove", move);
     window.addEventListener("mouseleave", leave);
     frame = requestAnimationFrame(draw);
-
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
@@ -129,31 +105,26 @@ function VisitorCounterRepair() {
   useEffect(() => {
     let cancelled = false;
 
-    const updateBadge = (count: number) => {
+    const hitFallback = async () => {
       const badge = Array.from(document.querySelectorAll("div")).find((element) => element.textContent?.trim().endsWith("visitors"));
       const value = badge?.querySelector("span.font-mono");
-      if (value) value.textContent = count.toLocaleString();
-    };
+      if (!value || value.textContent?.trim() !== "···") return;
 
-    const hit = async () => {
       try {
         const response = await fetch(COUNTER_URL, { cache: "no-store" });
         if (!response.ok) throw new Error("visitor counter request failed");
         const json = await response.json();
         const count = Number(json?.count ?? json?.value ?? json?.data?.count ?? json?.data?.value);
-        if (!cancelled && Number.isFinite(count)) updateBadge(count);
+        if (!cancelled && Number.isFinite(count)) value.textContent = count.toLocaleString();
       } catch {
-        // Keep the existing placeholder if the public counter is unavailable.
+        // Keep the original placeholder if the fallback service is unavailable.
       }
     };
 
-    const observer = new MutationObserver(() => hit());
-    observer.observe(document.body, { childList: true, subtree: true });
-    void hit();
-
+    const timer = window.setTimeout(hitFallback, 1200);
     return () => {
       cancelled = true;
-      observer.disconnect();
+      window.clearTimeout(timer);
     };
   }, []);
 
@@ -211,23 +182,11 @@ export function GlobalVisuals() {
       )}
 
       <div className="fixed right-6 top-6 z-[999] flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => setVideoMode((value) => !value)}
-          className="flex h-12 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-4 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl"
-          aria-label={videoMode ? "Use interactive spider web background" : "Use background video"}
-          title={videoMode ? "Spider Web" : "Video background"}
-        >
+        <button type="button" onClick={() => setVideoMode((value) => !value)} className="flex h-12 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-4 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={videoMode ? "Use interactive spider web background" : "Use background video"} title={videoMode ? "Spider Web" : "Video background"}>
           {videoMode ? <Waves size={17} /> : <Video size={17} />}
           <span className="hidden sm:inline">{videoMode ? "Web" : "Video"}</span>
         </button>
-        <button
-          type="button"
-          onClick={() => setLight((value) => !value)}
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl"
-          aria-label={light ? "Switch to dark mode" : "Switch to light mode"}
-          title={light ? "Dark mode" : "Light mode"}
-        >
+        <button type="button" onClick={() => setLight((value) => !value)} className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={light ? "Switch to dark mode" : "Switch to light mode"} title={light ? "Dark mode" : "Light mode"}>
           {light ? <Moon size={19} /> : <Sun size={19} />}
         </button>
       </div>
