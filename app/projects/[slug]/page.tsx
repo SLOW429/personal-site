@@ -58,6 +58,17 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const project = projects[slug as keyof typeof projects];
   if (!project) notFound();
+  const url = `https://slows.dev/projects/${slug}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.description,
+    url,
+    codeRepository: project.github,
+    creator: { "@type": "Person", name: "SLOW", url: "https://slows.dev" },
+    keywords: project.stack.join(", "),
+  };
 
   return (
     <main className="min-h-screen px-5 py-16 md:py-24">
@@ -72,6 +83,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           {project.sections.map(([heading, body]) => <section key={heading}><h2 className="font-display text-2xl font-bold">{heading}</h2><p className="mt-3 max-w-3xl leading-8 text-[var(--foreground)]/80">{body}</p></section>)}
         </div>
       </article>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     </main>
   );
 }
