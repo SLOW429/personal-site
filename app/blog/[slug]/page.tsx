@@ -49,6 +49,20 @@ export default async function BlogArticle({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const post = posts[slug as keyof typeof posts];
   if (!post) notFound();
+  const url = `https://slows.dev/blog/${slug}`;
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    mainEntityOfPage: url,
+    url,
+    author: { "@type": "Person", name: "SLOW", url: "https://slows.dev" },
+    publisher: { "@type": "Person", name: "SLOW", url: "https://slows.dev" },
+  };
 
   return (
     <main className="min-h-screen px-5 py-16 md:py-24">
@@ -66,6 +80,7 @@ export default async function BlogArticle({ params }: { params: Promise<{ slug: 
           ))}
         </div>
       </article>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     </main>
   );
 }
