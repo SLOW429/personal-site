@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const locales = ["ar", "tr"] as const;
 type Locale = "en" | (typeof locales)[number];
+const PREVIEW_COOKIE = "slow_preview";
+const PREVIEW_QUERY = "preview";
 
 function getLocale(pathname: string): Locale {
   for (const locale of locales) {
@@ -15,13 +17,38 @@ function isLocalizedSection(pathname: string): boolean {
   return Boolean(match);
 }
 
+function hasValidPreviewCookie(request: NextRequest): boolean {
+  const configuredKey = process.env.SLOW_PREVIEW_KEY;
+  if (!configuredKey) return false;
+  return request.cookies.get(PREVIEW_COOKIE)?.value === configuredKey;
+}
+
 export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = getLocale(pathname);
+  const configuredKey = process.env.SLOW_PREVIEW_KEY;
+  const previewKey = request.nextUrl.searchParams.get(PREVIEW_QUERY);
+
+  if (configuredKey && previewKey === configuredKey) {
+    const cleanUrl = request.nextUrl.clone();
+    cleanUrl.searchParams.delete(PREVIEW_QUERY);
+    const response = NextResponse.redirect(cleanUrl);
+    response.cookies.set(PREVIEW_COOKIE, configuredKey, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+    return response;
+  }
+
+  const previewEnabled = hasValidPreviewCookie(request);
 
   if (locale === "en") {
     const response = NextResponse.next();
     response.headers.set("x-site-locale", "en");
+    response.headers.set("x-site-preview", previewEnabled ? "1" : "0");
     return response;
   }
 
@@ -34,6 +61,7 @@ export function proxy(request: NextRequest) {
 
   const response = NextResponse.rewrite(url);
   response.headers.set("x-site-locale", locale);
+  response.headers.set("x-site-preview", previewEnabled ? "1" : "0");
   return response;
 }
 
