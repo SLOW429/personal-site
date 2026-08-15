@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import HomeExpansion from "@/components/home/home-expansion";
 import { DevelopmentNotice } from "@/components/layout/development-notice";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { CommandPalette } from "@/components/layout/command-palette";
 import { isLocale, localeDirections, maintenanceCopy, type Locale } from "@/lib/i18n";
 
 const siteUrl = "https://slows.dev";
@@ -66,6 +67,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <>
             <DevelopmentNotice />
             <SiteHeader />
+            <CommandPalette locale={locale} />
             <div className="flex min-h-screen flex-1 flex-col pt-16">{children}</div>
             <HomeExpansion />
             <SiteFooter />
