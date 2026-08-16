@@ -1,15 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const locales = ["ar", "tr"] as const;
-type Locale = "en" | (typeof locales)[number];
 const PREVIEW_COOKIE = "slow_preview";
 const PREVIEW_QUERY = "preview";
 
-function getLocale(pathname: string): Locale {
-  for (const locale of locales) {
-    if (pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)) return locale;
-  }
-  return "en";
+function getLocale(pathname: string) {
+  return pathname === "/ar" || pathname.startsWith("/ar/") ? "ar" as const : "en" as const;
 }
 
 function hasValidPreviewCookie(request: NextRequest) {
@@ -48,7 +43,7 @@ export function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
   url.pathname = `/localized${pathname}`;
   const response = NextResponse.rewrite(url);
-  response.headers.set("x-site-locale", locale);
+  response.headers.set("x-site-locale", "ar");
   response.headers.set("x-site-preview", previewEnabled ? "1" : "0");
   return response;
 }
