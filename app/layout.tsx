@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import HomeExpansion from "@/components/home/home-expansion";
 import { GlobalVisuals } from "@/components/layout/global-visuals";
 import PwaRegister from "@/components/layout/pwa-register";
-import { isLocale, localeDirections, type Locale } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -17,20 +15,9 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.author }],
   creator: siteConfig.author,
   publisher: siteConfig.author,
-  alternates: {
-    canonical: "/",
-    languages: {
-      en: siteConfig.url,
-      ar: `${siteConfig.url}/ar`,
-      "x-default": siteConfig.url,
-    },
-  },
+  alternates: { canonical: "/" },
   robots: { index: true, follow: true },
-  icons: {
-    icon: siteConfig.assets.icon,
-    shortcut: siteConfig.assets.icon,
-    apple: siteConfig.assets.icon,
-  },
+  icons: { icon: siteConfig.assets.icon, shortcut: siteConfig.assets.icon, apple: siteConfig.assets.icon },
   openGraph: {
     title: "SLOW — Developer, Creator & Builder",
     description: "Software, useful tools, AI experiments, services, gaming, and creator work.",
@@ -38,7 +25,6 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [{ url: siteConfig.assets.ogImage, width: 1600, height: 565, alt: siteConfig.name }],
     locale: "en_US",
-    alternateLocale: ["ar_AR"],
     type: "website",
   },
   twitter: {
@@ -76,18 +62,14 @@ const structuredData = {
       url: siteConfig.url,
       description: siteConfig.description,
       publisher: { "@id": `${siteConfig.url}/#person` },
-      inLanguage: ["en", "ar"],
+      inLanguage: "en",
     },
   ],
 };
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const requestHeaders = await headers();
-  const headerLocale = requestHeaders.get("x-site-locale");
-  const locale: Locale = isLocale(headerLocale) ? headerLocale : "en";
-
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang={locale} dir={localeDirections[locale]} className="h-full antialiased" suppressHydrationWarning>
+    <html lang="en" dir="ltr" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <GlobalVisuals />
         <SiteHeader />
