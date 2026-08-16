@@ -5,7 +5,7 @@ export type BlogPost = {
   date: string;
   category: string;
   tags: string[];
-  featured?: boolean;
+  featured: boolean;
   sections: readonly [string, string][];
 };
 
@@ -32,6 +32,7 @@ export const blogPosts = [
     date: "2026-08-12",
     category: "Engineering",
     tags: ["Developer Tools", "Privacy", "Performance"],
+    featured: false,
     sections: [
       ["Start with the smallest useful architecture", "Many developer utilities do not need a backend. JSON formatting, Base64 conversion, UUID generation, URL encoding, and image conversion can often happen directly in the browser."],
       ["Privacy is a product feature", "When input can stay on the device, the tool does not need to upload it just to produce a result. That reduces infrastructure and makes the privacy story much easier to understand."],
