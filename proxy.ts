@@ -1,13 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { isLocale, type Locale } from "@/lib/i18n";
 
 const PREVIEW_COOKIE = "slow_preview";
 const PREVIEW_QUERY = "preview";
-
-function getLocale(pathname: string): Locale {
-  const segment = pathname.split("/").filter(Boolean)[0];
-  return isLocale(segment) ? segment : "en";
-}
 
 function hasValidPreviewCookie(request: NextRequest) {
   const configuredKey = process.env.SLOW_PREVIEW_KEY;
@@ -15,8 +9,6 @@ function hasValidPreviewCookie(request: NextRequest) {
 }
 
 export function proxy(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
-  const locale = getLocale(pathname);
   const configuredKey = process.env.SLOW_PREVIEW_KEY;
   const previewKey = request.nextUrl.searchParams.get(PREVIEW_QUERY);
 
@@ -34,19 +26,8 @@ export function proxy(request: NextRequest) {
     return response;
   }
 
-  const previewEnabled = hasValidPreviewCookie(request);
-  if (locale === "en") {
-    const response = NextResponse.next();
-    response.headers.set("x-site-locale", locale);
-    response.headers.set("x-site-preview", previewEnabled ? "1" : "0");
-    return response;
-  }
-
-  const url = request.nextUrl.clone();
-  url.pathname = `/localized${pathname}`;
-  const response = NextResponse.rewrite(url);
-  response.headers.set("x-site-locale", locale);
-  response.headers.set("x-site-preview", previewEnabled ? "1" : "0");
+  const response = NextResponse.next();
+  response.headers.set("x-site-preview", hasValidPreviewCookie(request) ? "1" : "0");
   return response;
 }
 
