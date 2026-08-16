@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sectionCopy } from "@/lib/section-i18n";
-import { isLocale, type Locale } from "@/lib/i18n";
+import { isLocale, localizedPath, type Locale } from "@/lib/i18n";
 
 const validSections = ["about", "services", "tools"] as const;
 type Section = (typeof validSections)[number];
@@ -59,7 +59,7 @@ export default async function LocalizedSectionPage({ params }: { params: Promise
               <h2 className="font-display text-xl font-bold text-[var(--foreground)]">{group.title}</h2>
               <ul className="mt-5 space-y-3">
                 {group.items.map((item) => (
-                  <li key={item} className="border-l border-[var(--gold)]/40 pl-4 text-sm leading-6 text-[var(--muted)]">{item}</li>
+                  <li key={item} className="border-s-[var(--gold)]/40 border-s ps-4 text-sm leading-6 text-[var(--muted)]">{item}</li>
                 ))}
               </ul>
             </article>
@@ -68,7 +68,7 @@ export default async function LocalizedSectionPage({ params }: { params: Promise
 
         <div className="mt-10 flex flex-wrap gap-3">
           {page.links.map(([label, href]) => (
-            <Link key={href} href={href} className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-5 py-3 font-semibold text-[var(--foreground)] transition hover:-translate-y-0.5 hover:border-[var(--gold)]">
+            <Link key={href} href={localizedPath(href, locale)} className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-5 py-3 font-semibold text-[var(--foreground)] transition hover:-translate-y-0.5 hover:border-[var(--gold)]">
               {label}
             </Link>
           ))}
