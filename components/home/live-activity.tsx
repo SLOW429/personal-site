@@ -1,17 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Github, Radio, Users, Wifi } from "lucide-react";
+import { Radio, Users, Wifi } from "lucide-react";
+import { SiGithub } from "react-icons/si";
 import { useEffect, useState } from "react";
 
 const GitHubCalendar = dynamic(() => import("react-github-calendar").then((mod) => mod.GitHubCalendar), { ssr: false });
 const DISCORD_ID = "680035752461205524";
 
-type DiscordData = {
-  discord_status: "online" | "idle" | "dnd" | "offline";
-  activities?: Array<{ type: number; name: string; details?: string; state?: string }>;
-};
-
+type DiscordData = { discord_status: "online" | "idle" | "dnd" | "offline"; activities?: Array<{ type: number; name: string; details?: string; state?: string }> };
 type GitHubUser = { public_repos: number; followers: number; following: number };
 
 function StatusDot({ status }: { status: DiscordData["discord_status"] }) {
@@ -52,14 +49,12 @@ export function LiveActivity() {
     <section className="px-5 py-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between gap-6"><div><p className="text-xs uppercase tracking-[0.35em] text-[#7ec4ff]">Live signals</p><h2 className="mt-3 font-display text-3xl font-bold text-white sm:text-5xl">What’s happening behind the site.</h2></div><span className="hidden items-center gap-2 text-xs text-white/35 sm:flex"><Wifi size={13} /> refreshed every minute</span></div>
-
         <div className="mt-10 grid gap-5 lg:grid-cols-[1.1fr_.9fr]">
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-            <div className="flex items-center justify-between gap-4"><div className="flex items-center gap-3"><span className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-[#7ec4ff]"><Github size={18} /></span><div><p className="text-xs uppercase tracking-[0.25em] text-white/35">GitHub</p><h3 className="mt-1 font-semibold text-white">Contribution activity</h3></div></div><a href="https://github.com/SLOW429" target="_blank" rel="noreferrer" className="text-xs text-white/35 hover:text-white">@SLOW429</a></div>
+            <div className="flex items-center justify-between gap-4"><div className="flex items-center gap-3"><span className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-[#7ec4ff]"><SiGithub size={18} /></span><div><p className="text-xs uppercase tracking-[0.25em] text-white/35">GitHub</p><h3 className="mt-1 font-semibold text-white">Contribution activity</h3></div></div><a href="https://github.com/SLOW429" target="_blank" rel="noreferrer" className="text-xs text-white/35 hover:text-white">@SLOW429</a></div>
             <div className="mt-8 overflow-x-auto pb-2"><GitHubCalendar username="SLOW429" colorScheme="dark" labels={{ totalCount: "{{count}} contributions in the last year" }} /></div>
             {github && <div className="mt-7 grid grid-cols-3 gap-3"><div className="rounded-2xl border border-white/10 bg-black/15 p-4"><p className="text-xs text-white/35">Repos</p><p className="mt-1 text-2xl font-bold text-white">{github.public_repos}</p></div><div className="rounded-2xl border border-white/10 bg-black/15 p-4"><p className="text-xs text-white/35">Followers</p><p className="mt-1 text-2xl font-bold text-white">{github.followers}</p></div><div className="rounded-2xl border border-white/10 bg-black/15 p-4"><p className="text-xs text-white/35">Following</p><p className="mt-1 text-2xl font-bold text-white">{github.following}</p></div></div>}
           </div>
-
           <div className="grid gap-5">
             <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
               <div className="flex items-center gap-3"><span className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-[#a78bfa]"><Users size={18} /></span><div><p className="text-xs uppercase tracking-[0.25em] text-white/35">Discord</p><h3 className="mt-1 font-semibold text-white">Live presence</h3></div></div>
