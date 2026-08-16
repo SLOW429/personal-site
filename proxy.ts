@@ -12,15 +12,9 @@ function getLocale(pathname: string): Locale {
   return "en";
 }
 
-function isLocalizedSection(pathname: string): boolean {
-  const match = pathname.match(/^\/(ar|tr)\/(about|services|tools)$/);
-  return Boolean(match);
-}
-
-function hasValidPreviewCookie(request: NextRequest): boolean {
+function hasValidPreviewCookie(request: NextRequest) {
   const configuredKey = process.env.SLOW_PREVIEW_KEY;
-  if (!configuredKey) return false;
-  return request.cookies.get(PREVIEW_COOKIE)?.value === configuredKey;
+  return Boolean(configuredKey && request.cookies.get(PREVIEW_COOKIE)?.value === configuredKey);
 }
 
 export function proxy(request: NextRequest) {
@@ -44,7 +38,6 @@ export function proxy(request: NextRequest) {
   }
 
   const previewEnabled = hasValidPreviewCookie(request);
-
   if (locale === "en") {
     const response = NextResponse.next();
     response.headers.set("x-site-locale", "en");
@@ -53,12 +46,7 @@ export function proxy(request: NextRequest) {
   }
 
   const url = request.nextUrl.clone();
-  url.pathname = pathname === `/${locale}`
-    ? `/localized/${locale}`
-    : isLocalizedSection(pathname)
-      ? `/localized${pathname}`
-      : pathname.slice(locale.length + 1);
-
+  url.pathname = `/localized${pathname}`;
   const response = NextResponse.rewrite(url);
   response.headers.set("x-site-locale", locale);
   response.headers.set("x-site-preview", previewEnabled ? "1" : "0");
