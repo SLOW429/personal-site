@@ -77,39 +77,4 @@ export const sectionCopy: Record<Locale, Record<string, {
       links: [["اقرأ المدونة", "/ar/blog"], ["شاهد المشاريع", "/ar/projects"]],
     },
   },
-  tr: {
-    about: {
-      title: "SLOW Hakkında",
-      description: "SLOW; yazılım, otomasyon, deneyler ve slows.dev etrafında faydalı bir kişisel platform geliştiren bir geliştirici ve içerik üreticisidir.",
-      intro: "Amaç basit: faydalı şeyler yapmak, süreci belgelemek ve gerçek deneyimleri başkalarının kullanabileceği kaynaklara dönüştürmek.",
-      groups: [
-        { title: "Geliştir", items: ["Web uygulamaları", "Otomasyon ve botlar", "Yapay zeka deneyleri", "Geliştirici araçları"] },
-        { title: "Üret", items: ["Teknik içerik", "Oyun ve yayınlar", "Proje yazıları", "Deneyler ve eğitimler"] },
-        { title: "Bağlan", items: ["GitHub", "Discord topluluğu", "Sosyal platformlar", "Gelecekteki ürün ve hizmetler"] },
-      ],
-      links: [["Projeler", "/tr/projects"], ["Hizmetler", "/tr/services"], ["Şimdi", "/tr/now"]],
-    },
-    services: {
-      title: "Hizmetler",
-      description: "Bir şey geliştirmesi, iyileştirmesi veya bağlaması gereken kişi ve işletmeler için pratik geliştirme ve otomasyon desteği.",
-      intro: "Belirsiz danışmanlık paketleri yerine net çıktısı olan kapsamlı ve tanımlı projelere odaklanıyoruz.",
-      groups: [
-        { title: "Web geliştirme", items: ["Kişisel ve kurumsal siteler", "Landing page", "Özel web uygulamaları", "E-ticaret ve entegrasyonlar"] },
-        { title: "Otomasyon ve AI", items: ["Discord botları", "İş akışı otomasyonu", "AI entegrasyonları", "Özel dahili araçlar"] },
-        { title: "Performans ve SEO", items: ["Teknik SEO denetimleri", "Site performans iyileştirmeleri", "Core Web Vitals", "Arama indeksleme ve metadata altyapısı"] },
-      ],
-      links: [["Proje Başlat", "/tr/contact"], ["Projeleri Gör", "/tr/projects"]],
-    },
-    tools: {
-      title: "SLOW Araçları",
-      description: "Küçük sorunları hızlıca çözmek için tasarlanmış ücretsiz ve odaklı web araçları.",
-      intro: "Araçlar bölümü gerçek bir yardımcı araç platformuna dönüşüyor. İlk aşamayı küçük tutarak her aracın hızlı, erişilebilir ve güvenilir olmasını hedefliyoruz.",
-      groups: [
-        { title: "Geliştirici", items: ["JSON Formatter", "JSON Validator", "Base64 Encode / Decode", "UUID Generator"] },
-        { title: "SEO", items: ["SEO Önizleme", "Meta Tag Generator", "Robots.txt Generator", "Canonical Checker"] },
-        { title: "Görsel ve Creator", items: ["Görsel Sıkıştırıcı", "Görsel Boyutlandırıcı", "QR Kod Oluşturucu", "Creator araç deneyleri"] },
-      ],
-      links: [["Blogu Oku", "/tr/blog"], ["Projeleri Gör", "/tr/projects"]],
-    },
-  },
 };
