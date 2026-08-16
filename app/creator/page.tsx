@@ -37,7 +37,7 @@ const channels = [
 ];
 
 const roadmap = [
-  "Live status from real platform APIs",
+  "Live status and creator activity",
   "Latest videos and streams",
   "Clips and highlights",
   "Creator announcements and schedules",
@@ -97,7 +97,7 @@ export default async function CreatorPage() {
               <p className="mt-3 max-w-2xl leading-7 text-[var(--muted)]">
                 {kick.isLive
                   ? `${kick.title ?? "Live stream"}${kick.category ? ` • ${kick.category}` : ""}${typeof kick.viewerCount === "number" ? ` • ${kick.viewerCount.toLocaleString()} viewers` : ""}`
-                  : "Live status is automatic when the official Kick API credentials are configured."}
+                  : "Live status will appear here whenever a stream is active."}
               </p>
             </div>
             <a href={kick.url} target="_blank" rel="noreferrer" className="inline-flex w-fit rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018] transition hover:-translate-y-0.5">Watch on Kick</a>
@@ -109,7 +109,7 @@ export default async function CreatorPage() {
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">YouTube</p>
               <h2 className="mt-3 font-display text-3xl font-bold">Latest videos</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Public channel feed, cached for performance. No YouTube API quota is required.</p>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">Recent public videos from the SLOW channel.</p>
             </div>
             <a href="https://www.youtube.com/@SLOW429" target="_blank" rel="noreferrer" className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 text-sm font-semibold transition hover:border-[var(--gold)]">Open channel</a>
           </div>
@@ -127,7 +127,7 @@ export default async function CreatorPage() {
               ))}
             </div>
           ) : (
-            <div className="mt-6 rounded-3xl border border-dashed border-[var(--card-border-strong)] bg-[var(--card-bg-soft)] p-7 text-sm leading-7 text-[var(--muted)]">Automatic video syncing is ready but not configured yet. Add <code>YOUTUBE_CHANNEL_ID</code> to the Vercel production environment and redeploy.</div>
+            <div className="mt-6 rounded-3xl border border-dashed border-[var(--card-border-strong)] bg-[var(--card-bg-soft)] p-7 text-sm leading-7 text-[var(--muted)]">No recent public videos are available right now.</div>
           )}
         </section>
 
