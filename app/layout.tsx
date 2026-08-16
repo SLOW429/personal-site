@@ -2,16 +2,15 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
-import HomeExpansion from "@/components/home/home-expansion";
 import { GlobalVisuals } from "@/components/layout/global-visuals";
 import PwaRegister from "@/components/layout/pwa-register";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: { default: "SLOW — Developer, Creator & Builder", template: "%s | SLOW" },
-  description: siteConfig.description,
-  keywords: ["SLOW", "SLOW429", "developer", "developer tools", "web development", "automation", "AI", "gaming", "creator"],
+  title: { default: "SLOW429 — Developer, Creator & Voiceover Artist", template: "%s | SLOW.DEV" },
+  description: "SLOW429 builds software, developer tools, automation systems, creator experiences, and voice-led content.",
+  keywords: ["SLOW429", "SLOW.DEV", "developer", "creator", "voiceover artist", "developer tools", "automation", "AI", "gaming"],
   authors: [{ name: siteConfig.author }],
   creator: siteConfig.author,
   publisher: siteConfig.author,
@@ -19,8 +18,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   icons: { icon: siteConfig.assets.icon, shortcut: siteConfig.assets.icon, apple: siteConfig.assets.icon },
   openGraph: {
-    title: "SLOW — Developer, Creator & Builder",
-    description: "Software, useful tools, AI experiments, services, gaming, and creator work.",
+    title: "SLOW429 — Developer, Creator & Voiceover Artist",
+    description: "Software, tools, automation, creator work and experiments from SLOW.DEV.",
     url: siteConfig.url,
     siteName: siteConfig.name,
     images: [{ url: siteConfig.assets.ogImage, width: 1600, height: 565, alt: siteConfig.name }],
@@ -29,8 +28,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SLOW — Developer, Creator & Builder",
-    description: "Software, tools, services, gaming, and creator work from SLOW.DEV.",
+    title: "SLOW429 — Developer, Creator & Voiceover Artist",
+    description: "Software, tools, automation, creator work and experiments from SLOW.DEV.",
     images: [siteConfig.assets.ogImage],
   },
   manifest: "/manifest.webmanifest",
@@ -49,10 +48,9 @@ const structuredData = {
     {
       "@type": "Person",
       "@id": `${siteConfig.url}/#person`,
-      name: "SLOW",
-      alternateName: "SLOW429",
+      name: "SLOW429",
       url: siteConfig.url,
-      jobTitle: "Developer, Creator & Builder",
+      jobTitle: "Developer, Creator & Voiceover Artist",
       sameAs: Object.values(siteConfig.social),
     },
     {
@@ -60,7 +58,7 @@ const structuredData = {
       "@id": `${siteConfig.url}/#website`,
       name: siteConfig.name,
       url: siteConfig.url,
-      description: siteConfig.description,
+      description: "Software, tools, automation, creator work and experiments from SLOW.DEV.",
       publisher: { "@id": `${siteConfig.url}/#person` },
       inLanguage: "en",
     },
@@ -74,7 +72,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <GlobalVisuals />
         <SiteHeader />
         <div className="relative z-10 flex min-h-screen flex-1 flex-col pt-16">{children}</div>
-        <HomeExpansion />
         <SiteFooter />
         <PwaRegister />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
