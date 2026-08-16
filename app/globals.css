@@ -13,7 +13,24 @@
   --accent-soft: rgba(143, 211, 255, 0.12);
   --violet: #ad8cff;
   --font-sans: Arial, Helvetica, sans-serif;
+  --font-display: Arial, Helvetica, sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+  /* Compatibility tokens for the existing inner pages while they migrate to the new system. */
+  --gold: var(--accent);
+  --gold-light: var(--accent-strong);
+  --gold-deep: #2a4b68;
+  --ember: var(--violet);
+  --surface: #0a0f1a;
+  --card-bg: rgba(255, 255, 255, 0.035);
+  --card-bg-soft: rgba(255, 255, 255, 0.025);
+  --card-bg-hover: rgba(255, 255, 255, 0.06);
+  --card-border: var(--line);
+  --card-border-strong: var(--line-strong);
+  --panel-bg: rgba(10, 15, 26, 0.72);
+  --panel-bg-strong: rgba(10, 15, 26, 0.86);
+  --panel-bg-heavy: rgba(5, 7, 13, 0.96);
+  --ring-offset: var(--background);
 }
 
 @theme inline {
@@ -26,6 +43,7 @@
   --color-accent-strong: var(--accent-strong);
   --color-violet: var(--violet);
   --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
   --font-mono: var(--font-mono);
 }
 
