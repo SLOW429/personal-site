@@ -15,9 +15,9 @@ const siteUrl = "https://slows.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: "SLOW — Developer, Creator & Builder", template: "%s | SLOW" },
-  description: "SLOW.DEV is currently under development.",
+  description: "SLOW.DEV — developer tools, projects, services, content, gaming, and creator features.",
   alternates: { canonical: "/" },
-  robots: { index: false, follow: false },
+  robots: { index: true, follow: true },
 };
 
 export const viewport = { themeColor: "#060a13" };
@@ -47,14 +47,14 @@ const structuredData = {
   "@type": "WebSite",
   name: "SLOW.DEV",
   url: siteUrl,
-  description: "SLOW.DEV is currently under development.",
+  description: "SLOW.DEV — developer tools, projects, services, content, gaming, and creator features.",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const requestHeaders = await headers();
   const headerLocale = requestHeaders.get("x-site-locale");
   const locale: Locale = isLocale(headerLocale) ? headerLocale : "en";
-  const maintenanceMode = true;
+  const maintenanceMode = false;
 
   return (
     <html lang={locale} dir={localeDirections[locale]} className="h-full antialiased">
