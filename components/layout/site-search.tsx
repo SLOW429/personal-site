@@ -3,18 +3,13 @@
 import Link from "next/link";
 import { Search, ArrowRight, Command, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { localizedPath, type Locale } from "@/lib/i18n";
 import { searchIndex } from "@/lib/search-index";
 
-const labels = {
-  en: { button: "Search", placeholder: "Search projects, tools, articles...", empty: "No results", hint: "Type to search" },
-  ar: { button: "بحث", placeholder: "ابحث في المشاريع والأدوات والمقالات...", empty: "لا توجد نتائج", hint: "اكتب للبحث" },
-} satisfies Record<Locale, Record<string, string>>;
+const copy = { button: "Search", placeholder: "Search projects, tools, articles...", empty: "No results", hint: "Type to search", close: "Close" } as const;
 
-export function SiteSearch({ locale }: { locale: Locale }) {
+export function SiteSearch() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const copy = labels[locale];
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -48,11 +43,11 @@ export function SiteSearch({ locale }: { locale: Locale }) {
             <div className="flex items-center gap-3 border-b border-[var(--card-border)] p-4">
               <Search size={18} className="text-[var(--gold)]" />
               <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.placeholder} className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--muted)]" />
-              <button type="button" onClick={() => setOpen(false)} aria-label={locale === "ar" ? "إغلاق" : "Close"} className="rounded-lg p-2 text-[var(--muted)] hover:bg-[var(--card-bg-hover)]"><X size={17} /></button>
+              <button type="button" onClick={() => setOpen(false)} aria-label={copy.close} className="rounded-lg p-2 text-[var(--muted)] hover:bg-[var(--card-bg-hover)]"><X size={17} /></button>
             </div>
             <div className="max-h-[65vh] overflow-y-auto p-2">
               {results.map((item) => (
-                <Link key={item.href} href={localizedPath(item.href, locale)} onClick={() => setOpen(false)} className="group flex items-start gap-4 rounded-2xl px-4 py-3 transition hover:bg-[var(--card-bg-hover)]">
+                <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="group flex items-start gap-4 rounded-2xl px-4 py-3 transition hover:bg-[var(--card-bg-hover)]">
                   <span className="mt-0.5 min-w-14 rounded-full border border-[var(--card-border)] px-2 py-1 text-center text-[10px] uppercase tracking-wider text-[var(--gold)]">{item.type}</span>
                   <span className="min-w-0 flex-1"><span className="block font-semibold text-[var(--foreground)]">{item.title}</span><span className="mt-1 block text-xs leading-5 text-[var(--muted)]">{item.description}</span></span>
                   <ArrowRight size={15} className="mt-1 shrink-0 text-[var(--muted)] transition group-hover:translate-x-1 group-hover:text-[var(--gold)]" />
