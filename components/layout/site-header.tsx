@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import MobileNav from "./mobile-nav";
 import { LanguageSwitcher } from "./language-switcher";
 import { SiteSearch } from "./site-search";
@@ -23,16 +23,23 @@ function getLocaleFromPathname(pathname: string): Locale {
 
 export function SiteHeader() {
   const pathname = usePathname() || "/";
+  const router = useRouter();
   const locale = getLocaleFromPathname(pathname);
   const copy = labelMap[locale];
+  const previousLocale = useRef<Locale | null>(null);
 
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
-  }, [locale]);
+
+    if (previousLocale.current !== null && previousLocale.current !== locale) {
+      router.refresh();
+    }
+    previousLocale.current = locale;
+  }, [locale, router]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-[var(--card-border)] bg-[var(--background)]/80 backdrop-blur-xl">
+    <header className="fixed inset-x-0 z-50 border-b border-[var(--card-border)] bg-[var(--background)]/80 backdrop-blur-xl" style={{ top: "env(safe-area-inset-top, 0px)" }}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-5">
         <Link href={localizedPath("/", locale)} className="shrink-0 font-display text-xl font-bold tracking-tight text-[var(--foreground)]">SLOW<span className="text-[var(--gold)]">.</span></Link>
         <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex">
