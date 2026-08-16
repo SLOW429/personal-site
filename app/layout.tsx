@@ -20,16 +20,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/", languages: { en: siteUrl, ar: `${siteUrl}/ar`, tr: `${siteUrl}/tr`, "x-default": siteUrl } },
   robots: { index: true, follow: true },
   icons: { icon: "/avatar-poster.jpg", shortcut: "/avatar-poster.jpg", apple: "/avatar-poster.jpg" },
-  openGraph: {
-    title: "SLOW — Developer, Creator & Builder",
-    description: "Software, useful tools, AI experiments, services, gaming, and creator work.",
-    url: siteUrl,
-    siteName: "SLOW.DEV",
-    images: [{ url: "/banner-poster.jpg", width: 1600, height: 565, alt: "SLOW.DEV" }],
-    locale: "en_US",
-    alternateLocale: ["ar_AR", "tr_TR"],
-    type: "website",
-  },
+  openGraph: { title: "SLOW — Developer, Creator & Builder", description: "Software, useful tools, AI experiments, services, gaming, and creator work.", url: siteUrl, siteName: "SLOW.DEV", images: [{ url: "/banner-poster.jpg", width: 1600, height: 565, alt: "SLOW.DEV" }], locale: "en_US", alternateLocale: ["ar_AR", "tr_TR"], type: "website" },
   twitter: { card: "summary_large_image", title: "SLOW — Developer, Creator & Builder", description: "Software, tools, services, gaming, and creator work from SLOW.DEV.", images: ["/banner-poster.jpg"] },
 };
 
@@ -48,7 +39,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const headerLocale = requestHeaders.get("x-site-locale");
   const locale: Locale = isLocale(headerLocale) ? headerLocale : "en";
   return (
-    <html lang={locale} dir={localeDirections[locale]} className="h-full antialiased">
+    <html lang={locale} dir={localeDirections[locale]} className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
         <GlobalVisuals />
         <SiteHeader />
