@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowUpRight, Github, Mic2 } from "lucide-react";
+import { ArrowUpRight, Mic2 } from "lucide-react";
+import { SiGithub } from "react-icons/si";
 import { siteConfig } from "@/lib/site-config";
 
 const links = [
@@ -21,7 +22,7 @@ export function SiteFooter() {
             <Link href="/" className="font-display text-3xl font-black tracking-tight">SLOW<span className="text-[#7ec4ff]">.</span></Link>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/40">Developer, creator, and voiceover artist building software, tools, automation, community systems, and digital experiences.</p>
             <div className="mt-6 flex flex-wrap gap-2">
-              <a href={siteConfig.social.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3.5 py-2.5 text-sm text-white/60 hover:border-white/20 hover:text-white"><Github size={15} /> GitHub</a>
+              <a href={siteConfig.social.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3.5 py-2.5 text-sm text-white/60 hover:border-white/20 hover:text-white"><SiGithub size={15} /> GitHub</a>
               <Link href="/creator" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3.5 py-2.5 text-sm text-white/60 hover:border-white/20 hover:text-white"><Mic2 size={15} /> Creator Hub</Link>
             </div>
           </div>
