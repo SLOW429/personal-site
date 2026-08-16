@@ -10,10 +10,7 @@ export const siteConfig = {
     kick: "https://kick.com/3azf-valo",
     discord: "https://discord.gg/MvVxreJXMq",
   },
-  assets: {
-    icon: "/avatar-poster.jpg",
-    ogImage: "/banner-poster.jpg",
-  },
+  assets: { icon: "/avatar-poster.jpg", ogImage: "/banner-poster.jpg" },
   locales: {
     en: { path: "", hreflang: "en", og: "en_US" },
     ar: { path: "/ar", hreflang: "ar", og: "ar_AR" },
@@ -47,11 +44,13 @@ export const toolSlugs = [
   "json-formatter",
   "base64",
   "seo-preview",
+  "meta-tag-generator",
   "image-compressor",
   "uuid-generator",
   "jwt-decoder",
   "url-encoder",
   "timestamp",
+  "qr-generator",
 ] as const;
 
 export const publicRoutes = [
