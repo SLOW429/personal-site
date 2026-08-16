@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Pause, Play, Sun, Video, Waves } from "lucide-react";
+import { Moon, Music2, Pause, Sun, Video, Waves } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const COUNTER_STORAGE_KEY = "slow-visitor-count-v1";
@@ -42,7 +42,7 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
   const mouseRef = useRef({ x: -9999, y: -9999 });
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
@@ -50,8 +50,9 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
     let width = 0;
     let height = 0;
     const nodes: Node[] = [];
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width * dpr;
@@ -60,15 +61,15 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       nodes.length = 0;
-      const count = Math.min(95, Math.max(48, Math.floor((width * height) / 16000)));
-      for (let i = 0; i < count; i++) nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18 });
+      const count = Math.min(coarsePointer ? 58 : 95, Math.max(coarsePointer ? 30 : 48, Math.floor((width * height) / 16000)));
+      for (let i = 0; i < count; i++) nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.16, vy: (Math.random() - 0.5) * 0.16 });
     };
     const move = (event: MouseEvent) => { mouseRef.current = { x: event.clientX, y: event.clientY }; };
     const leave = () => { mouseRef.current = { x: -9999, y: -9999 }; };
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
       const { x: mx, y: my } = mouseRef.current;
-      const webRadius = 320;
+      const webRadius = coarsePointer ? 240 : 320;
       for (const node of nodes) {
         const dx = mx - node.x;
         const dy = my - node.y;
@@ -165,13 +166,11 @@ export function GlobalVisuals() {
     setLight(localStorage.getItem("slow-theme") === "light");
     setVideoMode(localStorage.getItem("slow-background") === "video");
     setMusicOn(localStorage.getItem(MUSIC_STORAGE_KEY) === "on");
-    document.body.classList.add("slow-transparent-mains");
   }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", light);
     document.body.classList.toggle("light", light);
-    document.body.classList.add("slow-transparent-mains");
     document.documentElement.style.colorScheme = light ? "light" : "dark";
     localStorage.setItem("slow-theme", light ? "light" : "dark");
   }, [light]);
@@ -220,11 +219,11 @@ export function GlobalVisuals() {
   return (
     <>
       <SpiderWebCanvas enabled={!videoMode} />
-      {videoMode && <><video ref={videoRef} src={VIDEO_SRC} autoPlay loop muted playsInline preload="auto" controls={false} disablePictureInPicture disableRemotePlayback aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover" onLoadedData={(event) => event.currentTarget.play().catch(() => undefined)} /><div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-black/25" /></>}
+      {videoMode && <><video ref={videoRef} src={VIDEO_SRC} autoPlay loop muted playsInline preload="metadata" controls={false} disablePictureInPicture disableRemotePlayback aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover" onLoadedData={(event) => event.currentTarget.play().catch(() => undefined)} /><div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-black/25" /></>}
       <audio ref={audioRef} id="slow-global-music" src="/clima-lindo.mp3" loop preload="metadata" />
-      <div className="fixed bottom-24 left-4 z-[999] md:bottom-6 md:left-6">
+      <div className="fixed bottom-4 left-4 z-[999] md:bottom-6 md:left-6">
         <div className="flex items-center gap-2">
-          <button type="button" onClick={toggleMusic} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={musicOn ? "Pause background music" : "Play background music"} title={musicOn ? "Pause music" : "Play music"}>{musicOn ? <Pause size={16} /> : <Play size={16} />}<span className="hidden sm:inline">Music</span></button>
+          <button type="button" onClick={toggleMusic} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={musicOn ? "Pause background music" : "Play background music"} title={musicOn ? "Pause music" : "Play music"}>{musicOn ? <Pause size={16} /> : <Music2 size={16} />}<span className="hidden sm:inline">Music</span></button>
           <button type="button" onClick={() => setVideoMode((value) => !value)} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={videoMode ? "Use interactive spider web background" : "Use background video"} title={videoMode ? "Spider Web" : "Video background"}>{videoMode ? <Waves size={16} /> : <Video size={16} />}<span className="hidden sm:inline">{videoMode ? "Web" : "Video"}</span></button>
           <button type="button" onClick={() => setLight((value) => !value)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={light ? "Switch to dark mode" : "Switch to light mode"} title={light ? "Dark mode" : "Light mode"}>{light ? <Moon size={18} /> : <Sun size={18} />}</button>
         </div>
