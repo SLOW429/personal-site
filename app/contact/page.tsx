@@ -1,15 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Check, Copy, MessageCircle } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Start a Project",
-  description: "Prepare a clear project brief for SLOW: what you need, timeline, current setup, and budget.",
-  alternates: { canonical: "/contact" },
-};
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -19,9 +12,7 @@ export default function ContactPage() {
   const [details, setDetails] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const brief = useMemo(() => {
-    return [`Project: ${project || "Not specified"}`, `Name: ${name || "Not specified"}`, `Timeline: ${timeline || "Not specified"}`, `Budget: ${budget || "Not specified"}`, `Details: ${details || "Not specified"}`].join("\n");
-  }, [budget, details, name, project, timeline]);
+  const brief = useMemo(() => [`Project: ${project || "Not specified"}`, `Name: ${name || "Not specified"}`, `Timeline: ${timeline || "Not specified"}`, `Budget: ${budget || "Not specified"}`, `Details: ${details || "Not specified"}`].join("\n"), [budget, details, name, project, timeline]);
 
   async function copyBrief() {
     try {
