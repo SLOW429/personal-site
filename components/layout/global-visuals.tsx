@@ -1,11 +1,11 @@
 "use client";
 
-import { Moon, Sun, Video, Waves } from "lucide-react";
+import { Moon, Music2, Pause, Play, Video, Waves } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const COUNTER_STORAGE_KEY = "slow-visitor-count-v1";
-const COUNTER_URL = "https://api.counterapi.dev/v1/slows-dev/visitors/up";
-const VIDEO_SRC = encodeURI("/CLIMA LINDO video .mp4");
+const VIDEO_SRC = "/CLIMA%20LINDO%20video%20.mp4";
+const MUSIC_STORAGE_KEY = "slow-music";
 type Node = { x: number; y: number; vx: number; vy: number };
 
 let visitorFetchPromise: Promise<number | null> | null = null;
@@ -70,8 +70,15 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       nodes.length = 0;
-      const count = Math.min(85, Math.max(44, Math.floor((width * height) / 18000)));
-      for (let i = 0; i < count; i++) nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22 });
+      const count = Math.min(95, Math.max(48, Math.floor((width * height) / 16000)));
+      for (let i = 0; i < count; i++) {
+        nodes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.18,
+        });
+      }
     };
 
     const move = (event: MouseEvent) => { mouseRef.current = { x: event.clientX, y: event.clientY }; };
@@ -80,12 +87,14 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
       const { x: mx, y: my } = mouseRef.current;
+      const webRadius = 320;
+
       for (const node of nodes) {
         const dx = mx - node.x;
         const dy = my - node.y;
         const distance = Math.hypot(dx, dy);
-        if (distance < 260 && distance > 0) {
-          const strength = (1 - distance / 260) * 0.035;
+        if (distance < webRadius && distance > 0) {
+          const strength = (1 - distance / webRadius) ** 2 * 0.045;
           node.x += dx * strength;
           node.y += dy * strength;
         }
@@ -100,23 +109,46 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
         for (let j = i + 1; j < nodes.length; j++) {
           const b = nodes[j];
           const distance = Math.hypot(b.x - a.x, b.y - a.y);
-          if (distance > 150) continue;
+          if (distance > 165) continue;
           const nearMouse = Math.min(Math.hypot(a.x - mx, a.y - my), Math.hypot(b.x - mx, b.y - my));
-          const alpha = Math.max(0.02, (1 - distance / 150) * 0.18 + (nearMouse < 260 ? 0.1 : 0));
+          const alpha = Math.max(0.018, (1 - distance / 165) * 0.22 + (nearMouse < webRadius ? 0.11 : 0));
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
           ctx.strokeStyle = `rgba(126,196,255,${alpha})`;
-          ctx.lineWidth = nearMouse < 260 ? 1.2 : 0.7;
+          ctx.lineWidth = nearMouse < webRadius ? 1.05 : 0.65;
           ctx.stroke();
         }
+      }
+
+      if (mx > 0 && my > 0) {
+        for (const node of nodes) {
+          const distance = Math.hypot(node.x - mx, node.y - my);
+          if (distance > webRadius) continue;
+          const alpha = Math.max(0.02, (1 - distance / webRadius) * 0.28);
+          ctx.beginPath();
+          ctx.moveTo(mx, my);
+          ctx.lineTo(node.x, node.y);
+          ctx.strokeStyle = `rgba(217,237,255,${alpha})`;
+          ctx.lineWidth = 0.8 + (1 - distance / webRadius) * 0.8;
+          ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.arc(mx, my, 5, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(217,237,255,.8)";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(mx, my, 24, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(126,196,255,.28)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
       }
 
       for (const node of nodes) {
         const distance = Math.hypot(node.x - mx, node.y - my);
         ctx.beginPath();
-        ctx.arc(node.x, node.y, distance < 260 ? 1.8 : 1.1, 0, Math.PI * 2);
-        ctx.fillStyle = distance < 260 ? "rgba(217,237,255,.72)" : "rgba(126,196,255,.3)";
+        ctx.arc(node.x, node.y, distance < webRadius ? 1.7 : 1, 0, Math.PI * 2);
+        ctx.fillStyle = distance < webRadius ? "rgba(217,237,255,.72)" : "rgba(126,196,255,.3)";
         ctx.fill();
       }
       frame = requestAnimationFrame(draw);
@@ -136,13 +168,12 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
   }, [enabled]);
 
   if (!enabled) return null;
-  return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 opacity-90" />;
+  return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-[2] opacity-95" />;
 }
 
 function VisitorCounterRepair() {
   useEffect(() => {
     installVisitorCounterCache();
-
     const badge = Array.from(document.querySelectorAll("div")).find((element) => element.textContent?.trim().endsWith("visitors"));
     const value = badge?.querySelector("span.font-mono");
     const cached = Number(sessionStorage.getItem(COUNTER_STORAGE_KEY));
@@ -155,17 +186,15 @@ function VisitorCounterRepair() {
 export function GlobalVisuals() {
   const [light, setLight] = useState(false);
   const [videoMode, setVideoMode] = useState(false);
+  const [musicOn, setMusicOn] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     installVisitorCounterCache();
-    const savedTheme = localStorage.getItem("slow-theme") === "light";
-    const savedVideo = localStorage.getItem("slow-background") === "video";
-    setLight(savedTheme);
-    setVideoMode(savedVideo);
-    document.documentElement.classList.toggle("light", savedTheme);
-    document.body.classList.toggle("light", savedTheme);
-    document.documentElement.style.colorScheme = savedTheme ? "light" : "dark";
+    setLight(localStorage.getItem("slow-theme") === "light");
+    setVideoMode(localStorage.getItem("slow-background") === "video");
+    setMusicOn(localStorage.getItem(MUSIC_STORAGE_KEY) === "on");
   }, []);
 
   useEffect(() => {
@@ -173,25 +202,55 @@ export function GlobalVisuals() {
     document.body.classList.toggle("light", light);
     document.documentElement.style.colorScheme = light ? "light" : "dark";
     localStorage.setItem("slow-theme", light ? "light" : "dark");
+    window.dispatchEvent(new Event("slow-theme-change"));
   }, [light]);
 
   useEffect(() => {
     localStorage.setItem("slow-background", videoMode ? "video" : "canvas");
     const video = videoRef.current;
-    const audio = document.getElementById("bg-music") as HTMLAudioElement | null;
-    if (video && audio) video.currentTime = audio.currentTime;
+    if (!video) return;
+    const play = () => video.play().catch(() => undefined);
+    if (videoMode) {
+      video.load();
+      play();
+    } else {
+      video.pause();
+    }
   }, [videoMode]);
 
   useEffect(() => {
     const sync = () => {
       const video = videoRef.current;
-      const audio = document.getElementById("bg-music") as HTMLAudioElement | null;
-      if (!video || !audio || !videoMode || audio.paused) return;
-      if (Math.abs(video.currentTime - audio.currentTime) > 0.2) video.currentTime = audio.currentTime;
+      const audio = audioRef.current;
+      if (!video || !audio || !videoMode || !audio.duration) return;
+      if (Math.abs(video.currentTime - audio.currentTime) > 0.2) {
+        video.currentTime = audio.currentTime % video.duration;
+      }
     };
-    const timer = window.setInterval(sync, 500);
+    const timer = window.setInterval(sync, 350);
     return () => window.clearInterval(timer);
   }, [videoMode]);
+
+  const toggleMusic = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (musicOn) {
+      audio.pause();
+      setMusicOn(false);
+      localStorage.setItem(MUSIC_STORAGE_KEY, "off");
+      return;
+    }
+    audio.volume = 0.25;
+    await audio.play().catch(() => undefined);
+    setMusicOn(!audio.paused);
+    localStorage.setItem(MUSIC_STORAGE_KEY, audio.paused ? "off" : "on");
+    if (!videoMode) return;
+    const video = videoRef.current;
+    if (video) {
+      video.currentTime = audio.currentTime % (video.duration || 1);
+      video.play().catch(() => undefined);
+    }
+  };
 
   return (
     <>
@@ -203,14 +262,22 @@ export function GlobalVisuals() {
         </>
       )}
 
-      <div className="fixed right-6 top-6 z-[999] flex items-center gap-2">
-        <button type="button" onClick={() => setVideoMode((value) => !value)} className="flex h-12 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-4 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={videoMode ? "Use interactive spider web background" : "Use background video"} title={videoMode ? "Spider Web" : "Video background"}>
-          {videoMode ? <Waves size={17} /> : <Video size={17} />}
-          <span className="hidden sm:inline">{videoMode ? "Web" : "Video"}</span>
-        </button>
-        <button type="button" onClick={() => setLight((value) => !value)} className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={light ? "Switch to dark mode" : "Switch to light mode"} title={light ? "Dark mode" : "Light mode"}>
-          {light ? <Moon size={19} /> : <Sun size={19} />}
-        </button>
+      <audio ref={audioRef} id="slow-global-music" src="/clima-lindo.mp3" loop preload="metadata" />
+
+      <div className="fixed bottom-24 right-4 z-[999] flex flex-col items-end gap-2 md:bottom-6 md:right-6">
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={toggleMusic} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={musicOn ? "Pause background music" : "Play background music"} title={musicOn ? "Pause music" : "Play music"}>
+            {musicOn ? <Pause size={16} /> : <Play size={16} />}
+            <span className="hidden sm:inline">Music</span>
+          </button>
+          <button type="button" onClick={() => setVideoMode((value) => !value)} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={videoMode ? "Use interactive spider web background" : "Use background video"} title={videoMode ? "Spider Web" : "Video background"}>
+            {videoMode ? <Waves size={16} /> : <Video size={16} />}
+            <span className="hidden sm:inline">{videoMode ? "Web" : "Video"}</span>
+          </button>
+          <button type="button" onClick={() => setLight((value) => !value)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={light ? "Switch to dark mode" : "Switch to light mode"} title={light ? "Dark mode" : "Light mode"}>
+            <Moon size={18} />
+          </button>
+        </div>
       </div>
 
       <VisitorCounterRepair />
