@@ -3,14 +3,12 @@
 :root {
   --background: #060a13;
   --foreground: #eaf3fb;
-
   --gold: #7ec4ff;
   --gold-light: #d9edff;
   --gold-deep: #3a6a99;
   --ember: #a78bfa;
   --muted: #8fa3b8;
   --surface: #0d1420;
-
   --card-bg: rgba(6, 12, 24, 0.55);
   --card-bg-soft: rgba(255, 255, 255, 0.04);
   --card-bg-hover: rgba(255, 255, 255, 0.07);
@@ -26,14 +24,12 @@
 .light {
   --background: #eef5fc;
   --foreground: #0d1b2a;
-
   --gold: #2f7cc4;
   --gold-light: #1f5c94;
   --gold-deep: #163f66;
   --ember: #6f5fc9;
   --muted: #52708a;
   --surface: #ffffff;
-
   --card-bg: rgba(255, 255, 255, 0.6);
   --card-bg-soft: rgba(255, 255, 255, 0.5);
   --card-bg-hover: rgba(255, 255, 255, 0.75);
@@ -60,47 +56,28 @@
   --font-mono: var(--font-geist-mono);
 }
 
-* {
-  scrollbar-color: var(--gold-deep) var(--background);
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--gold), var(--gold-deep));
-  border-radius: 999px;
-}
-
-::selection {
-  background: var(--gold);
-  color: #060a13;
-}
+* { scrollbar-color: var(--gold-deep) var(--background); }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--gold), var(--gold-deep)); border-radius: 999px; }
+::selection { background: var(--gold); color: #060a13; }
 
 html,
-body {
-  min-height: 100%;
-  background: var(--background);
-  color: var(--foreground);
-}
+body { min-height: 100%; background: var(--background); color: var(--foreground); }
+body { font-family: var(--font-sans), Arial, Helvetica, sans-serif; transition: background-color 300ms ease, color 300ms ease; }
 
-body {
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  transition: background-color 300ms ease, color 300ms ease;
-}
+/* The background canvas/video lives behind page content globally. */
+body.slow-transparent-mains main { background-color: transparent !important; }
+body.slow-transparent-mains section { background-color: initial; }
 
-/* GlobalVisuals is the single source of truth for theme/music controls. */
+/* GlobalVisuals is the single source of truth for theme/music/background controls. */
 main > button.fixed.right-6.top-6,
-main > button.fixed.bottom-6.left-6 {
-  display: none !important;
-}
+main > button.fixed.bottom-6.left-6 { display: none !important; }
 
-:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+@media (max-width: 767px) {
+  .slow-transparent-mains main { padding-left: 1rem; padding-right: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
