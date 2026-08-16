@@ -16,5 +16,7 @@ export const searchIndex = [
   { type: "Page", title: "Creator Hub", description: "Gaming, YouTube, Kick and Discord.", href: "/creator", keywords: "creator gaming youtube kick discord stream" },
   { type: "Page", title: "Gaming", description: "Streams, games and community.", href: "/gaming", keywords: "gaming stream games kick" },
   { type: "Page", title: "Now", description: "What SLOW is working on now.", href: "/now", keywords: "now current building" },
+  { type: "Page", title: "Docs", description: "Documentation and developer notes for SLOW.DEV.", href: "/docs", keywords: "docs documentation developer guide" },
+  { type: "Page", title: "Status", description: "SLOW.DEV service status and health.", href: "/status", keywords: "status uptime health" },
   { type: "Page", title: "Contact", description: "Start a project with SLOW.", href: "/contact", keywords: "contact project hire work" },
 ] as const;
