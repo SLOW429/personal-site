@@ -13,7 +13,6 @@ const links = [["About", "/about"], ["Projects", "/projects"], ["Services", "/se
 const labelMap: Record<Locale, Record<string, string>> = {
   en: { About: "About", Projects: "Projects", Services: "Services", Tools: "Tools", Blog: "Blog", Creator: "Creator", Contact: "Contact" },
   ar: { About: "من نحن", Projects: "المشاريع", Services: "الخدمات", Tools: "الأدوات", Blog: "المدونة", Creator: "صانع المحتوى", Contact: "تواصل معنا" },
-  tr: { About: "Hakkımda", Projects: "Projeler", Services: "Hizmetler", Tools: "Araçlar", Blog: "Blog", Creator: "İçerik", Contact: "İletişim" },
 };
 
 function getLocaleFromPathname(pathname: string): Locale {
@@ -31,10 +30,7 @@ export function SiteHeader() {
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
-
-    if (previousLocale.current !== null && previousLocale.current !== locale) {
-      router.refresh();
-    }
+    if (previousLocale.current !== null && previousLocale.current !== locale) router.refresh();
     previousLocale.current = locale;
   }, [locale, router]);
 
