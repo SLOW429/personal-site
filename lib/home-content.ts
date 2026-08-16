@@ -57,25 +57,6 @@ export const homeContent: Record<Locale, {
     askPlaceholder: "اكتب سؤالك...",
     visitors: "زائر",
   },
-  tr: {
-    eyebrow: "Geliştirici • İçerik Üreticisi • Builder",
-    title: "Gerçekten faydalı yazılımlar, araçlar ve deneyimler geliştiriyorum.",
-    description: "SLOW.DEV; yazılım projelerim, geliştirici araçlarım, yapay zeka deneylerim, hizmetlerim, oyun içeriklerim ve üretim sürecimin merkezi.",
-    primaryCta: "Projeleri keşfet",
-    secondaryCta: "Proje başlat",
-    projectsTitle: "Öne Çıkan Projeler",
-    projectsDescription: "SLOW yolculuğundaki gerçek yazılım, otomasyon, bot ve deneyler.",
-    creatorTitle: "Creator Hub",
-    creatorDescription: "Oyun, canlı yayınlar, videolar, klipler ve SLOW topluluğu.",
-    toolsTitle: "SLOW Araçları",
-    toolsDescription: "Geliştirici ve içerik üreticilerinin küçük sorunlarını hızlıca çözmek için ücretsiz araçlar.",
-    servicesTitle: "Hizmetler",
-    servicesDescription: "Web geliştirme, otomasyon, AI entegrasyonları, performans ve teknik SEO.",
-    contactCta: "Birlikte geliştirelim",
-    aiAssistant: "SLOW AI Asistanı",
-    askPlaceholder: "Bir şey sor...",
-    visitors: "ziyaretçi",
-  },
 };
 
 export function getHomeContent(locale: Locale) {
