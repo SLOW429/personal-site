@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Gamepad2, Headphones, Radio, Users } from "lucide-react";
+import { Gamepad2, Headphones, Radio, Users, type LucideIcon } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Gaming",
   description: "Gaming, live streams, highlights, community sessions, and creator utilities from SLOW.",
   alternates: { canonical: "/gaming" },
 };
+
+const cards: Array<{ icon: LucideIcon; title: string; text: string }> = [
+  { icon: Radio, title: "Live", text: "Watch the live channel on Kick." },
+  { icon: Gamepad2, title: "Games", text: "FPS, experiments, co-op sessions, and whatever is worth playing." },
+  { icon: Users, title: "Community", text: "Join Discord for stream announcements and sessions." },
+  { icon: Headphones, title: "Highlights", text: "Turn strong moments into clips and future videos." },
+];
 
 export default function GamingPage() {
   return (
@@ -19,16 +26,11 @@ export default function GamingPage() {
         </header>
 
         <section className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {[
-            [Radio, "Live", "Watch the live channel on Kick."],
-            [Gamepad2, "Games", "FPS, experiments, co-op sessions, and whatever is worth playing."],
-            [Users, "Community", "Join Discord for stream announcements and sessions."],
-            [Headphones, "Highlights", "Turn strong moments into clips and future videos."],
-          ].map(([Icon, title, text]) => (
-            <article key={title as string} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 backdrop-blur-xl">
+          {cards.map(({ icon: Icon, title, text }) => (
+            <article key={title} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 backdrop-blur-xl">
               <Icon size={23} className="text-[var(--gold)]" />
-              <h2 className="mt-5 text-xl font-bold">{title as string}</h2>
-              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{text as string}</p>
+              <h2 className="mt-5 text-xl font-bold">{title}</h2>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{text}</p>
             </article>
           ))}
         </section>
