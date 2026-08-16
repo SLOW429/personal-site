@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
-import SiteFooter from "@/components/layout/site-footer";
+import { SiteFooter } from "@/components/layout/site-footer";
 import HomeExpansion from "@/components/home/home-expansion";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { CommandPalette } from "@/components/layout/command-palette";
