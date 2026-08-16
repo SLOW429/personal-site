@@ -9,7 +9,6 @@ import { searchIndex } from "@/lib/search-index";
 const labels = {
   en: { button: "Search", placeholder: "Search projects, tools, articles...", empty: "No results", hint: "Type to search" },
   ar: { button: "بحث", placeholder: "ابحث في المشاريع والأدوات والمقالات...", empty: "لا توجد نتائج", hint: "اكتب للبحث" },
-  tr: { button: "Ara", placeholder: "Projelerde, araçlarda ve yazılarda ara...", empty: "Sonuç yok", hint: "Yazmaya başla" },
 } satisfies Record<Locale, Record<string, string>>;
 
 export function SiteSearch({ locale }: { locale: Locale }) {
@@ -49,7 +48,7 @@ export function SiteSearch({ locale }: { locale: Locale }) {
             <div className="flex items-center gap-3 border-b border-[var(--card-border)] p-4">
               <Search size={18} className="text-[var(--gold)]" />
               <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.placeholder} className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--muted)]" />
-              <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="rounded-lg p-2 text-[var(--muted)] hover:bg-[var(--card-bg-hover)]"><X size={17} /></button>
+              <button type="button" onClick={() => setOpen(false)} aria-label={locale === "ar" ? "إغلاق" : "Close"} className="rounded-lg p-2 text-[var(--muted)] hover:bg-[var(--card-bg-hover)]"><X size={17} /></button>
             </div>
             <div className="max-h-[65vh] overflow-y-auto p-2">
               {results.map((item) => (
