@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Bot, Gauge, Globe2, Search, Wrench } from "lucide-react";
+import { ArrowRight, Bot, Gauge, Globe2, Search, Wrench, type LucideIcon } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services" },
 };
 
-const services = [
+const services: Array<{ icon: LucideIcon; title: string; text: string }> = [
   { icon: Globe2, title: "Web Development", text: "Fast, responsive websites, landing pages, dashboards, and custom web applications built around a clear goal." },
   { icon: Bot, title: "Automation & AI", text: "Bots, AI integrations, workflow automation, and small internal systems that remove repetitive work." },
   { icon: Gauge, title: "Performance", text: "Frontend cleanup, Core Web Vitals work, media optimization, and practical speed improvements." },
@@ -42,22 +42,13 @@ export default function ServicesPage() {
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">How it works</p>
           <h2 className="mt-3 font-display text-3xl font-bold">A small, practical process.</h2>
           <div className="mt-7 grid gap-4 md:grid-cols-4">
-            {process.map((step, index) => (
-              <div key={step} className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-5">
-                <span className="font-mono text-xs text-[var(--gold)]">0{index + 1}</span>
-                <p className="mt-3 font-semibold">{step}</p>
-              </div>
-            ))}
+            {process.map((step, index) => <div key={step} className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-5"><span className="font-mono text-xs text-[var(--gold)]">0{index + 1}</span><p className="mt-3 font-semibold">{step}</p></div>)}
           </div>
         </section>
 
         <section className="mt-10 rounded-[2rem] border border-[var(--card-border-strong)] bg-[linear-gradient(135deg,var(--card-bg),var(--panel-bg-strong))] p-8 md:p-10">
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-            <div className="max-w-3xl">
-              <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">Start here</p>
-              <h2 className="mt-3 font-display text-3xl font-bold">Have a specific problem?</h2>
-              <p className="mt-4 leading-7 text-[var(--muted)]">Send the outcome you want, what you already have, your target timeline, and anything that is already blocking you.</p>
-            </div>
+            <div className="max-w-3xl"><p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">Start here</p><h2 className="mt-3 font-display text-3xl font-bold">Have a specific problem?</h2><p className="mt-4 leading-7 text-[var(--muted)]">Send the outcome you want, what you already have, your target timeline, and anything that is already blocking you.</p></div>
             <Link href="/contact" className="inline-flex w-fit items-center gap-2 rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">Start a project <ArrowRight size={16} /></Link>
           </div>
         </section>
