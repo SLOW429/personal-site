@@ -72,12 +72,7 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
       nodes.length = 0;
       const count = Math.min(95, Math.max(48, Math.floor((width * height) / 16000)));
       for (let i = 0; i < count; i++) {
-        nodes.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.18,
-          vy: (Math.random() - 0.5) * 0.18,
-        });
+        nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18 });
       }
     };
 
@@ -137,11 +132,6 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
         ctx.arc(mx, my, 5, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(217,237,255,.8)";
         ctx.fill();
-        ctx.beginPath();
-        ctx.arc(mx, my, 24, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(126,196,255,.28)";
-        ctx.lineWidth = 1;
-        ctx.stroke();
       }
 
       for (const node of nodes) {
@@ -179,7 +169,6 @@ function VisitorCounterRepair() {
     const cached = Number(sessionStorage.getItem(COUNTER_STORAGE_KEY));
     if (value && Number.isFinite(cached)) value.textContent = cached.toLocaleString();
   }, []);
-
   return null;
 }
 
@@ -195,11 +184,13 @@ export function GlobalVisuals() {
     setLight(localStorage.getItem("slow-theme") === "light");
     setVideoMode(localStorage.getItem("slow-background") === "video");
     setMusicOn(localStorage.getItem(MUSIC_STORAGE_KEY) === "on");
+    document.body.classList.add("slow-transparent-mains");
   }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", light);
     document.body.classList.toggle("light", light);
+    document.body.classList.add("slow-transparent-mains");
     document.documentElement.style.colorScheme = light ? "light" : "dark";
     localStorage.setItem("slow-theme", light ? "light" : "dark");
     window.dispatchEvent(new Event("slow-theme-change"));
@@ -207,12 +198,13 @@ export function GlobalVisuals() {
 
   useEffect(() => {
     localStorage.setItem("slow-background", videoMode ? "video" : "canvas");
+    document.body.classList.toggle("slow-video-mode", videoMode);
     const video = videoRef.current;
     if (!video) return;
-    const play = () => video.play().catch(() => undefined);
     if (videoMode) {
+      video.muted = true;
       video.load();
-      play();
+      video.play().catch(() => undefined);
     } else {
       video.pause();
     }
@@ -222,10 +214,9 @@ export function GlobalVisuals() {
     const sync = () => {
       const video = videoRef.current;
       const audio = audioRef.current;
-      if (!video || !audio || !videoMode || !audio.duration) return;
-      if (Math.abs(video.currentTime - audio.currentTime) > 0.2) {
-        video.currentTime = audio.currentTime % video.duration;
-      }
+      if (!video || !audio || !videoMode || !audio.duration || !video.duration) return;
+      const target = audio.currentTime % video.duration;
+      if (Math.abs(video.currentTime - target) > 0.2) video.currentTime = target;
     };
     const timer = window.setInterval(sync, 350);
     return () => window.clearInterval(timer);
@@ -242,13 +233,12 @@ export function GlobalVisuals() {
     }
     audio.volume = 0.25;
     await audio.play().catch(() => undefined);
-    setMusicOn(!audio.paused);
-    localStorage.setItem(MUSIC_STORAGE_KEY, audio.paused ? "off" : "on");
-    if (!videoMode) return;
-    const video = videoRef.current;
-    if (video) {
-      video.currentTime = audio.currentTime % (video.duration || 1);
-      video.play().catch(() => undefined);
+    const playing = !audio.paused;
+    setMusicOn(playing);
+    localStorage.setItem(MUSIC_STORAGE_KEY, playing ? "on" : "off");
+    if (playing && videoMode && videoRef.current) {
+      videoRef.current.currentTime = audio.currentTime % (videoRef.current.duration || 1);
+      videoRef.current.play().catch(() => undefined);
     }
   };
 
@@ -257,14 +247,14 @@ export function GlobalVisuals() {
       <SpiderWebCanvas enabled={!videoMode} />
       {videoMode && (
         <>
-          <video ref={videoRef} src={VIDEO_SRC} autoPlay loop muted playsInline preload="auto" controls={false} disablePictureInPicture disableRemotePlayback aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover" />
+          <video ref={videoRef} src={VIDEO_SRC} autoPlay loop muted playsInline preload="auto" controls={false} disablePictureInPicture disableRemotePlayback aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover" onLoadedData={(event) => event.currentTarget.play().catch(() => undefined)} />
           <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-black/25" />
         </>
       )}
 
       <audio ref={audioRef} id="slow-global-music" src="/clima-lindo.mp3" loop preload="metadata" />
 
-      <div className="fixed bottom-24 right-4 z-[999] flex flex-col items-end gap-2 md:bottom-6 md:right-6">
+      <div className="fixed bottom-24 left-4 z-[999] md:bottom-6 md:left-6">
         <div className="flex items-center gap-2">
           <button type="button" onClick={toggleMusic} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={musicOn ? "Pause background music" : "Play background music"} title={musicOn ? "Pause music" : "Play music"}>
             {musicOn ? <Pause size={16} /> : <Play size={16} />}
@@ -275,7 +265,7 @@ export function GlobalVisuals() {
             <span className="hidden sm:inline">{videoMode ? "Web" : "Video"}</span>
           </button>
           <button type="button" onClick={() => setLight((value) => !value)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={light ? "Switch to dark mode" : "Switch to light mode"} title={light ? "Dark mode" : "Light mode"}>
-            <Moon size={18} />
+            {light ? <Moon size={18} /> : <Moon size={18} />}
           </button>
         </div>
       </div>
