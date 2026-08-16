@@ -53,10 +53,10 @@ export function proxy(request: NextRequest) {
   }
 
   const url = request.nextUrl.clone();
-  url.pathname = isLocalizedSection(pathname)
-    ? `/localized${pathname}`
-    : pathname === `/${locale}`
-      ? "/"
+  url.pathname = pathname === `/${locale}`
+    ? `/localized/${locale}`
+    : isLocalizedSection(pathname)
+      ? `/localized${pathname}`
       : pathname.slice(locale.length + 1);
 
   const response = NextResponse.rewrite(url);
