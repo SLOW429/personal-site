@@ -92,8 +92,9 @@ body {
   transition: background-color 300ms ease, color 300ms ease;
 }
 
-/* The homepage had a local theme button; GlobalVisuals is now the single source of truth. */
-main > button.fixed.right-6.top-6 {
+/* GlobalVisuals is the single source of truth for theme/music controls. */
+main > button.fixed.right-6.top-6,
+main > button.fixed.bottom-6.left-6 {
   display: none !important;
 }
 
