@@ -21,6 +21,8 @@ const content = {
       uses: ["ما أستخدمه", "التقنيات والأدوات خلف SLOW.", "Next.js وReact وTypeScript وPython وGitHub وVercel وDocker."],
       links: ["الروابط", "كل الروابط الرسمية.", "GitHub وYouTube وKick وDiscord وغيرها."],
       contact: ["ابدأ مشروعًا", "حوّل فكرتك أو مشكلتك إلى brief واضح.", "البيانات تبقى في المتصفح حتى تختار مشاركتها."],
+      docs: ["التوثيق", "ملاحظات ومراجع للمطورين حول SLOW.DEV وأدواته.", "توثيق عملي يركز على الاستخدام والبنية والخصوصية."],
+      status: ["الحالة", "حالة خدمات SLOW.DEV والصحة التقنية العامة.", "هذه الصفحة مخصصة للمؤشرات العامة دون عرض أسرار أو بيانات داخلية."],
     },
   },
   tr: {
@@ -38,6 +40,8 @@ const content = {
       uses: ["Kullandıklarım", "SLOW'un arkasındaki teknoloji ve araçlar.", "Next.js, React, TypeScript, Python, GitHub, Vercel ve Docker."],
       links: ["Bağlantılar", "Tüm resmi bağlantılar.", "GitHub, YouTube, Kick, Discord ve diğer kanallar."],
       contact: ["Proje Başlat", "Fikrini veya problemini net bir brief'e dönüştür.", "Bilgiler paylaşmayı seçene kadar tarayıcıda kalır."],
+      docs: ["Dokümantasyon", "SLOW.DEV ve araçları için geliştirici notları ve referanslar.", "Kullanım, mimari ve gizlilik odaklı pratik dokümantasyon."],
+      status: ["Durum", "SLOW.DEV servislerinin ve genel teknik sağlığın durumu.", "Genel göstergeler paylaşılır; gizli veya dahili veriler gösterilmez."],
     },
   },
 } as const;
@@ -48,7 +52,7 @@ const blogData = { "building-slow-dev-into-a-personal-platform": "Building SLOW.
 const toolSlugs = ["json-formatter", "base64", "seo-preview", "image-compressor", "uuid-generator", "jwt-decoder", "url-encoder", "timestamp"] as ToolSlug[];
 
 export function generateStaticParams() {
-  const routes = ["", "about", "projects", "services", "tools", "blog", "creator", "gaming", "now", "uses", "links", "contact"];
+  const routes = ["", "about", "projects", "services", "tools", "blog", "creator", "gaming", "now", "uses", "links", "contact", "docs", "status"];
   return (Object.keys(content) as Locale[]).flatMap((locale) => routes.map((route) => ({ locale, segments: route ? [route] : [] })));
 }
 
@@ -77,9 +81,7 @@ export default async function LocalizedCatchAll({ params }: { params: Promise<{ 
     const page = content[locale].sections.tools;
     return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW / TOOLS</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{page[0]}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{page[1]}</p><div className="mt-12"><ToolSuite /></div></div></main>;
   }
-  if (section === "tools" && slug && toolSlugs.includes(slug as ToolSlug)) {
-    return <div dir={dir} lang={locale}><ToolDetail slug={slug as ToolSlug} /></div>;
-  }
+  if (section === "tools" && slug && toolSlugs.includes(slug as ToolSlug)) return <div dir={dir} lang={locale}><ToolDetail slug={slug as ToolSlug} /></div>;
   if (section === "projects" && !slug) return <LocalizedList locale={locale} dir={dir} title={content[locale].sections.projects[0]} description={content[locale].sections.projects[1]} items={Object.entries(projectData).map(([s, t]) => [t, href(`/projects/${s}`)])} />;
   if (section === "blog" && !slug) return <LocalizedList locale={locale} dir={dir} title={content[locale].sections.blog[0]} description={content[locale].sections.blog[1]} items={Object.entries(blogData).map(([s, t]) => [t, href(`/blog/${s}`)])} />;
   if (section === "projects" && slug && slug in projectData) return <Detail locale={locale} dir={dir} back={href("/projects")} title={projectData[slug as keyof typeof projectData]} eyebrow={locale === "ar" ? "دراسة حالة" : "Case Study"} body={locale === "ar" ? "مشروع حقيقي من رحلة SLOW موثق حول المشكلة والحل والبنية والنتائج." : "A real SLOW project documented around the problem, solution, architecture, and result."} />;
