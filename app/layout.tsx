@@ -4,10 +4,9 @@ import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import HomeExpansion from "@/components/home/home-expansion";
-import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { GlobalVisuals } from "@/components/layout/global-visuals";
-import { isLocale, localeDirections, maintenanceCopy, type Locale } from "@/lib/i18n";
+import { isLocale, localeDirections, type Locale } from "@/lib/i18n";
 
 const siteUrl = "https://slows.dev";
 
@@ -15,35 +14,74 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: "SLOW — Developer, Creator & Builder", template: "%s | SLOW" },
   description: "SLOW.DEV — developer tools, projects, services, content, gaming, and creator features.",
-  alternates: { canonical: "/" },
+  keywords: ["SLOW", "SLOW429", "developer", "developer tools", "web development", "automation", "AI", "gaming", "creator"],
+  authors: [{ name: "SLOW" }],
+  creator: "SLOW",
+  publisher: "SLOW",
+  alternates: {
+    canonical: "/",
+    languages: {
+      en: siteUrl,
+      ar: `${siteUrl}/ar`,
+      tr: `${siteUrl}/tr`,
+      "x-default": siteUrl,
+    },
+  },
   robots: { index: true, follow: true },
+  icons: {
+    icon: "/avatar-poster.jpg",
+    shortcut: "/avatar-poster.jpg",
+    apple: "/avatar-poster.jpg",
+  },
+  openGraph: {
+    title: "SLOW — Developer, Creator & Builder",
+    description: "Software, useful tools, AI experiments, services, gaming, and creator work.",
+    url: siteUrl,
+    siteName: "SLOW.DEV",
+    images: [{ url: "/banner-poster.jpg", width: 1600, height: 565, alt: "SLOW.DEV" }],
+    locale: "en_US",
+    alternateLocale: ["ar_AR", "tr_TR"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SLOW — Developer, Creator & Builder",
+    description: "Software, tools, services, gaming, and creator work from SLOW.DEV.",
+    images: ["/banner-poster.jpg"],
+  },
 };
 
-export const viewport = { themeColor: "#060a13" };
-
-function MaintenancePage({ locale }: { locale: Locale }) {
-  const copy = maintenanceCopy[locale];
-  return (
-    <main className="min-h-screen bg-[#060a13] px-6 text-white">
-      <div className="flex min-h-screen items-center justify-center text-center">
-        <section className="max-w-2xl">
-          <p className="text-5xl md:text-7xl">🚧</p>
-          <p className="mt-8 text-xs uppercase tracking-[0.4em] text-[#d9edff]">{copy.eyebrow}</p>
-          <h1 className="mt-5 text-5xl font-bold tracking-tight md:text-7xl">{copy.title}</h1>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-white/65 md:text-lg">{copy.body}</p>
-          <div className="mt-10"><LanguageSwitcher /></div>
-        </section>
-      </div>
-    </main>
-  );
-}
+export const viewport = {
+  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#060a13" }, { media: "(prefers-color-scheme: light)", color: "#eef5fc" }],
+};
 
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "SLOW.DEV",
-  url: siteUrl,
-  description: "SLOW.DEV — developer tools, projects, services, content, gaming, and creator features.",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      name: "SLOW",
+      alternateName: "SLOW429",
+      url: siteUrl,
+      jobTitle: "Developer, Creator & Builder",
+      sameAs: [
+        "https://github.com/SLOW429",
+        "https://www.youtube.com/@SLOW429",
+        "https://kick.com/3azf-valo",
+        "https://discord.gg/MvVxreJXMq",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      name: "SLOW.DEV",
+      url: siteUrl,
+      description: "Developer tools, projects, services, content, gaming, and creator features.",
+      publisher: { "@id": `${siteUrl}/#person` },
+      inLanguage: ["en", "ar", "tr"],
+    },
+  ],
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -55,12 +93,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang={locale} dir={localeDirections[locale]} className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        {maintenanceMode ? (
-          <>
-            <MaintenancePage locale={locale} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-          </>
-        ) : (
+        {maintenanceMode ? null : (
           <>
             <GlobalVisuals />
             <SiteHeader />
@@ -70,6 +103,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <SiteFooter />
           </>
         )}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </body>
     </html>
   );
