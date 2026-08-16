@@ -19,7 +19,6 @@ const links = [
 const labels: Record<Locale, Record<string, string>> = {
   en: { About: "About", Projects: "Projects", Services: "Services", Tools: "Tools", Blog: "Blog", Creator: "Creator", Gaming: "Gaming", Start: "Start a Project", Open: "Open navigation", Close: "Close navigation", Language: "Language" },
   ar: { About: "من نحن", Projects: "المشاريع", Services: "الخدمات", Tools: "الأدوات", Blog: "المدونة", Creator: "صانع المحتوى", Gaming: "الألعاب", Start: "ابدأ مشروعًا", Open: "فتح القائمة", Close: "إغلاق القائمة", Language: "اللغة" },
-  tr: { About: "Hakkımda", Projects: "Projeler", Services: "Hizmetler", Tools: "Araçlar", Blog: "Blog", Creator: "İçerik", Gaming: "Oyun", Start: "Proje Başlat", Open: "Menüyü aç", Close: "Menüyü kapat", Language: "Dil" },
 };
 
 export default function MobileNav({ locale }: { locale: Locale }) {
