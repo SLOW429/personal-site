@@ -1,89 +1,66 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ToolSuite } from "@/components/tools/tool-suite";
-import { isLocale, localizedPath, type Locale } from "@/lib/i18n";
+import ToolSuite from "@/components/tools/tool-suite";
+import { localizedPath } from "@/lib/i18n";
 
 const content = {
   ar: {
-    home: { eyebrow: "مطور • صانع محتوى • Builder", title: "أبني برمجيات وأدوات وتجارب مفيدة فعلًا.", description: "SLOW.DEV هو المكان الذي أجمع فيه المشاريع البرمجية، أدوات المطورين، تجارب الذكاء الاصطناعي، الخدمات، الألعاب، والمحتوى.", primary: "استكشف المشاريع", secondary: "ابدأ مشروعًا" },
-    nav: { about: "من نحن", projects: "المشاريع", services: "الخدمات", tools: "الأدوات", blog: "المدونة", creator: "صانع المحتوى", gaming: "الألعاب", now: "الآن", uses: "ما أستخدمه", links: "الروابط", contact: "تواصل معنا" },
+    home: ["مطور • صانع محتوى • Builder", "أبني برمجيات وأدوات وتجارب مفيدة فعلًا.", "SLOW.DEV هو المكان الذي أجمع فيه المشاريع، الأدوات، تجارب الذكاء الاصطناعي، الخدمات، الألعاب، والمحتوى."],
+    nav: { projects: "المشاريع", services: "الخدمات", tools: "الأدوات", blog: "المدونة", creator: "صانع المحتوى", contact: "تواصل معنا" },
     sections: {
-      about: ["عن SLOW", "أبني البرمجيات والأتمتة والأدوات والمحتوى من مكان واحد.", "الهدف: أشياء مفيدة، مشاريع حقيقية، وتوثيق يمكن الرجوع إليه.", [["نبني", ["تطبيقات الويب", "الأتمتة والبوتات", "تجارب AI", "أدوات المطورين"]], ["نصنع", ["محتوى تقني", "ألعاب وبث مباشر", "دراسات حالة", "تجارب وشروحات"]], ["نتواصل", ["GitHub", "Discord", "YouTube", "Kick"]]]],
-      services: ["الخدمات", "تطوير الويب، الأتمتة، الذكاء الاصطناعي، الأداء، وSEO التقني.", "نبدأ من المشكلة والنتيجة المطلوبة، ثم نبني الحل على خطوات واضحة.", [["تطوير الويب", ["مواقع شخصية وتجارية", "Landing pages", "تطبيقات ويب", "تكاملات"]], ["Automation & AI", ["Discord bots", "أتمتة workflows", "تكاملات AI", "أدوات داخلية"]], ["الأداء وSEO", ["Core Web Vitals", "تحسين الوسائط", "Metadata", "Indexing"]]]],
-      tools: ["أدوات SLOW", "أدوات مجانية وسريعة للمطورين وصناع المحتوى.", "المعالجة تتم محليًا في المتصفح كلما كان ذلك ممكنًا.", [["Developer", ["JSON", "Base64", "JWT", "UUID", "URL", "Timestamp"]], ["SEO", ["SEO Preview", "Meta Generator", "Canonical"]], ["Images", ["Image Compressor", "Utilities"]]]],
-      blog: ["المدونة", "ملاحظات تقنية، build logs، دراسات وتجارب من المشاريع الحقيقية.", "محتوى نابع من العمل الفعلي، وليس حشوًا عامًا.", [["Engineering", ["Next.js", "TypeScript", "AI", "Automation"]], ["Build Logs", ["Projects", "Performance", "SEO"]]]],
-      creator: ["Creator Hub", "الألعاب، البث المباشر، الفيديوهات، المقاطع، والمجتمع.", "كل القنوات الرسمية في مكان واحد.", [["القنوات", ["YouTube", "Kick", "Discord"]], ["المحتوى", ["Gaming", "Streams", "Clips", "Build content"]]]],
-      gaming: ["Gaming", "الألعاب والبث والمجتمع في مكان واحد.", "تابع البثوث والمقاطع والجلسات القادمة.", [["Live", ["Kick", "YouTube"]], ["Community", ["Discord", "Sessions"]]]],
-      now: ["الآن", "ما أعمل عليه حاليًا.", "هذه الصفحة تتغير مع تقدم المشاريع والمحتوى.", [["أبني", ["SLOW.DEV", "Developer Tools", "SEO & Performance"]], ["أصنع", ["Gaming content", "Streams", "Technical posts"]]]],
-      uses: ["ما أستخدمه", "التقنيات والأدوات الموجودة خلف SLOW.", "القائمة تتغير مع تطور طريقة العمل.", [["Development", ["Next.js", "React", "TypeScript", "Python"]], ["Infrastructure", ["Vercel", "GitHub", "Docker"]]]],
-      links: ["الروابط", "كل الروابط الرسمية في مكان واحد.", "استخدم هذه الصفحة كعنوان مشاركة واحد.", [["Developer", ["GitHub", "LinkedIn"]], ["Creator", ["YouTube", "Kick", "Discord"]]]],
-      contact: ["ابدأ مشروعًا", "حول فكرتك أو مشكلتك إلى brief واضح يمكن العمل عليه.", "لا يوجد إرسال تلقائي؛ البيانات تبقى في متصفحك حتى تختار مشاركة الـbrief.", [["ابدأ", ["حدد النتيجة", "حدد الموعد", "حدد الميزانية"]], ["ثم", ["انسخ الـbrief", "أرسله عبر Discord"]]]],
+      about: ["عن SLOW", "برمجيات وأتمتة وأدوات ومحتوى من مكان واحد.", "نبني أشياء مفيدة، نوثق طريقة العمل، ونحوّل التجربة إلى موارد قابلة للاستخدام."],
+      projects: ["المشاريع", "مشاريع حقيقية في البرمجيات والأتمتة والأنظمة اللحظية.", "استكشف المشاريع ودراسات الحالة وروابط GitHub."],
+      services: ["الخدمات", "تطوير الويب، الأتمتة، الذكاء الاصطناعي، الأداء، وSEO التقني.", "نبدأ من المشكلة والنتيجة ثم نبني الحل على خطوات واضحة."],
+      tools: ["أدوات SLOW", "أدوات مجانية وسريعة للمطورين وصناع المحتوى.", "المعالجة تتم محليًا في المتصفح كلما أمكن."],
+      blog: ["المدونة", "Build logs وملاحظات وتجارب من المشاريع الحقيقية.", "محتوى تقني نابع من العمل الفعلي، وليس حشوًا عامًا."],
+      creator: ["Creator Hub", "الألعاب والبث المباشر والفيديوهات والمجتمع.", "كل القنوات الرسمية ومحتوى SLOW في مكان واحد."],
+      gaming: ["Gaming", "الألعاب والبث والمجتمع في مكان واحد.", "تابع Kick وYouTube وDiscord من مكان واحد."],
+      now: ["الآن", "ما أعمل عليه حاليًا.", "تتغير هذه الصفحة مع تقدم المشاريع والمحتوى."],
+      uses: ["ما أستخدمه", "التقنيات والأدوات خلف SLOW.", "Next.js وReact وTypeScript وPython وGitHub وVercel وDocker."],
+      links: ["الروابط", "كل الروابط الرسمية.", "GitHub وYouTube وKick وDiscord وغيرها."],
+      contact: ["ابدأ مشروعًا", "حوّل فكرتك أو مشكلتك إلى brief واضح.", "البيانات تبقى في المتصفح حتى تختار مشاركتها."],
     },
-    blogPosts: [
-      ["building-slow-dev-into-a-personal-platform", "تحويل SLOW.DEV إلى منصة شخصية", "كيف يتحول الموقع الشخصي إلى مكان للمشاريع والأدوات والمحتوى والمجتمع."],
-      ["designing-local-first-developer-tools", "لماذا أدوات SLOW Local-First", "كيف تساعد المعالجة داخل المتصفح على السرعة والخصوصية وتقليل التكلفة."]
-    ],
-    projects: [
-      ["hr-bot", "HR-BOT", "أتمتة Highrise والموسيقى باستخدام Python وDocker وCoolify."],
-      ["discord-bot", "Discord Bot", "أدوات وإدارة وأتمتة لمجتمعات Discord."],
-      ["chat-platform", "Chat Platform", "تجربة تواصل لحظي باستخدام Node.js وWebSockets."]
-    ]
   },
   tr: {
-    home: { eyebrow: "Geliştirici • İçerik Üreticisi • Builder", title: "Gerçekten faydalı yazılımlar, araçlar ve deneyimler geliştiriyorum.", description: "SLOW.DEV; projelerim, geliştirici araçlarım, AI deneylerim, hizmetlerim, oyun ve içerik çalışmalarım için tek merkezdir.", primary: "Projeleri keşfet", secondary: "Proje başlat" },
-    nav: { about: "Hakkımda", projects: "Projeler", services: "Hizmetler", tools: "Araçlar", blog: "Blog", creator: "İçerik", gaming: "Oyun", now: "Şimdi", uses: "Kullandıklarım", links: "Bağlantılar", contact: "İletişim" },
+    home: ["Geliştirici • İçerik Üreticisi • Builder", "Gerçekten faydalı yazılımlar, araçlar ve deneyimler geliştiriyorum.", "SLOW.DEV; projelerim, araçlarım, AI deneylerim, hizmetlerim, oyun ve içerik çalışmalarım için tek merkezdir."],
+    nav: { projects: "Projeler", services: "Hizmetler", tools: "Araçlar", blog: "Blog", creator: "İçerik", contact: "İletişim" },
     sections: {
-      about: ["SLOW Hakkında", "Yazılım, otomasyon, araçlar ve içerik üretimini tek bir platformda birleştiriyorum.", "Amaç: faydalı işler, gerçek projeler ve paylaşılabilir teknik deneyimler.", [["Geliştir", ["Web uygulamaları", "Otomasyon ve botlar", "AI deneyleri", "Geliştirici araçları"]], ["Üret", ["Teknik içerik", "Oyun ve yayınlar", "Case study", "Deneyler"]]]],
-      services: ["Hizmetler", "Web geliştirme, otomasyon, AI entegrasyonları, performans ve teknik SEO.", "Önce problemi ve hedefi netleştirip sonra çözümü küçük adımlarla geliştiriyoruz.", [["Web", ["Kurumsal siteler", "Landing pages", "Web uygulamaları", "Entegrasyonlar"]], ["Automation & AI", ["Discord botları", "Workflow otomasyonu", "AI entegrasyonları", "İç araçlar"]], ["SEO & Performance", ["Core Web Vitals", "Media optimization", "Metadata", "Indexing"]]]],
-      tools: ["SLOW Araçları", "Geliştiriciler ve üreticiler için hızlı, ücretsiz tarayıcı araçları.", "Mümkün olan her yerde işlemler tarayıcıda yapılır.", [["Developer", ["JSON", "Base64", "JWT", "UUID", "URL", "Timestamp"]], ["SEO", ["SEO Preview", "Meta Generator", "Canonical"]], ["Images", ["Image Compressor", "Utilities"]]]],
-      blog: ["Blog", "Gerçek projelerden build logları, teknik notlar ve deneyimler.", "İçerik gerçek çalışmalardan çıkar; gereksiz dolgu yok.", [["Engineering", ["Next.js", "TypeScript", "AI", "Automation"]], ["Build Logs", ["Projects", "Performance", "SEO"]]]],
-      creator: ["Creator Hub", "Oyun, yayınlar, videolar, klipler ve topluluk.", "Resmi kanallar tek bir yerde.", [["Kanallar", ["YouTube", "Kick", "Discord"]], ["İçerik", ["Gaming", "Streams", "Clips", "Build content"]]]],
-      gaming: ["Gaming", "Oyun, yayın ve topluluk tek yerde.", "Canlı yayınları, klipleri ve gelecek oturumları takip et.", [["Live", ["Kick", "YouTube"]], ["Community", ["Discord", "Sessions"]]]],
-      now: ["Şimdi", "Şu anda üzerinde çalıştığım şeyler.", "Bu sayfa projeler ilerledikçe güncellenir.", [["Build", ["SLOW.DEV", "Developer Tools", "SEO & Performance"]], ["Create", ["Gaming content", "Streams", "Technical posts"]]]],
-      uses: ["Kullandıklarım", "SLOW'un arkasındaki teknoloji ve araçlar.", "Çalışma şekli geliştikçe liste de değişir.", [["Development", ["Next.js", "React", "TypeScript", "Python"]], ["Infrastructure", ["Vercel", "GitHub", "Docker"]]]],
-      links: ["Bağlantılar", "Tüm resmi bağlantılar tek yerde.", "Bu sayfayı paylaşılabilir merkez olarak kullan.", [["Developer", ["GitHub", "LinkedIn"]], ["Creator", ["YouTube", "Kick", "Discord"]]]],
-      contact: ["Proje Başlat", "Fikrini veya problemini net bir proje brief'ine dönüştür.", "Otomatik gönderim yok; bilgiler paylaşmayı seçene kadar tarayıcıda kalır.", [["Başla", ["Hedefi belirle", "Süreyi belirle", "Bütçeyi belirle"]], ["Sonra", ["Brief'i kopyala", "Discord üzerinden gönder"]]]],
+      about: ["SLOW Hakkında", "Yazılım, otomasyon, araçlar ve içerik üretimini tek platformda birleştiriyorum.", "Amaç; faydalı işler, gerçek projeler ve paylaşılabilir teknik deneyimler."],
+      projects: ["Projeler", "Yazılım, otomasyon ve gerçek zamanlı sistem projeleri.", "Projeleri, case study sayfalarını ve GitHub bağlantılarını keşfet."],
+      services: ["Hizmetler", "Web geliştirme, otomasyon, AI entegrasyonları, performans ve teknik SEO.", "Önce problemi ve hedefi netleştirip sonra çözümü geliştiriyoruz."],
+      tools: ["SLOW Araçları", "Geliştiriciler ve üreticiler için hızlı, ücretsiz araçlar.", "Mümkün olan her yerde işlemler tarayıcıda yapılır."],
+      blog: ["Blog", "Gerçek projelerden build logları ve teknik notlar.", "İçerik gerçek çalışmalardan çıkar; gereksiz dolgu yok."],
+      creator: ["Creator Hub", "Oyun, yayınlar, videolar, klipler ve topluluk.", "Resmi kanallar ve SLOW içeriği tek yerde."],
+      gaming: ["Gaming", "Oyun, yayın ve topluluk tek yerde.", "Kick, YouTube ve Discord'u tek merkezden takip et."],
+      now: ["Şimdi", "Şu anda üzerinde çalıştığım şeyler.", "Projeler ve içerik ilerledikçe güncellenir."],
+      uses: ["Kullandıklarım", "SLOW'un arkasındaki teknoloji ve araçlar.", "Next.js, React, TypeScript, Python, GitHub, Vercel ve Docker."],
+      links: ["Bağlantılar", "Tüm resmi bağlantılar.", "GitHub, YouTube, Kick, Discord ve diğer kanallar."],
+      contact: ["Proje Başlat", "Fikrini veya problemini net bir brief'e dönüştür.", "Bilgiler paylaşmayı seçene kadar tarayıcıda kalır."],
     },
-    blogPosts: [
-      ["building-slow-dev-into-a-personal-platform", "SLOW.DEV'i kişisel platforma dönüştürmek", "Kişisel sitenin proje, araç, içerik ve topluluk merkezi haline gelmesi."],
-      ["designing-local-first-developer-tools", "SLOW Tools neden Local-First", "Tarayıcı içi işlemlerin hız, gizlilik ve maliyet avantajları."]
-    ],
-    projects: [
-      ["hr-bot", "HR-BOT", "Python, Docker ve Coolify ile Highrise otomasyon ve müzik botu."],
-      ["discord-bot", "Discord Bot", "Discord toplulukları için araçlar, yönetim ve otomasyon."],
-      ["chat-platform", "Chat Platform", "Node.js ve WebSockets ile gerçek zamanlı iletişim deneyi."]
-    ]
-  }
+  },
 } as const;
 
 type Locale = keyof typeof content;
+type SectionKey = keyof typeof content.ar.sections;
+const projectData = { "hr-bot": "HR-BOT", "discord-bot": "Discord Bot", "chat-platform": "Chat Platform" } as const;
+const blogData = { "building-slow-dev-into-a-personal-platform": "Building SLOW.DEV Into a Personal Platform", "designing-local-first-developer-tools": "Why SLOW Tools Are Local-First" } as const;
 
 export function generateStaticParams() {
-  const routes = ["", "about", "projects", "services", "tools", "blog", "creator", "gaming", "now", "uses", "links", "contact"];
-  return (Object.keys(content) as Locale[]).flatMap((locale) => routes.map((route) => ({ locale, segments: route ? [route] : [] })));
-}
-
-function baseUrl(path: string, locale: Locale) {
-  return localizedPath(path, locale);
+  const sections = ["", "about", "projects", "services", "tools", "blog", "creator", "gaming", "now", "uses", "links", "contact"];
+  return (Object.keys(content) as Locale[]).flatMap((locale) => sections.map((section) => ({ locale, segments: section ? [section] : [] })));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; segments?: string[] }> }): Promise<Metadata> {
   const { locale: rawLocale, segments = [] } = await params;
   if (!(rawLocale in content)) return {};
   const locale = rawLocale as Locale;
-  const section = segments[0] || "home";
-  if (section === "projects" && segments[1]) {
-    const p = content[locale].projects.find(([slug]) => slug === segments[1]);
-    if (p) return { title: `${p[1]} | SLOW`, description: p[2], alternates: { canonical: baseUrl(`/projects/${p[0]}`, locale) } };
-  }
-  if (section === "blog" && segments[1]) {
-    const p = content[locale].blogPosts.find(([slug]) => slug === segments[1]);
-    if (p) return { title: `${p[1]} | SLOW`, description: p[2], alternates: { canonical: baseUrl(`/blog/${p[0]}`, locale) } };
-  }
-  const page = section === "home" ? content[locale].home : content[locale].sections[section as keyof typeof content[Locale]["sections"]];
-  if (!page) return {};
-  return { title: `${page[0]} | SLOW`, description: page[1], alternates: { canonical: baseUrl(section === "home" ? "/" : `/${section}`, locale) } };
+  const section = segments[0];
+  const slug = segments[1];
+  if (section === "projects" && slug && slug in projectData) return { title: `${projectData[slug as keyof typeof projectData]} | SLOW` };
+  if (section === "blog" && slug && slug in blogData) return { title: `${blogData[slug as keyof typeof blogData]} | SLOW` };
+  const page = section ? content[locale].sections[section as SectionKey] : content[locale].home;
+  return { title: `${page[0]} | SLOW`, description: page[2], alternates: { canonical: localizedPath(section ? `/${section}` : "/", locale) } };
 }
 
 export default async function LocalizedCatchAll({ params }: { params: Promise<{ locale: string; segments?: string[] }> }) {
@@ -91,33 +68,42 @@ export default async function LocalizedCatchAll({ params }: { params: Promise<{ 
   if (!(rawLocale in content)) notFound();
   const locale = rawLocale as Locale;
   const dir = locale === "ar" ? "rtl" : "ltr";
-  const section = segments[0] || "home";
+  const section = segments[0];
+  const slug = segments[1];
   const href = (path: string) => localizedPath(path, locale);
 
-  if (section === "tools" && !segments[1]) {
-    const t = content[locale].sections.tools;
-    return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW / TOOLS</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{t[0]}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{t[1]}</p><div className="mt-12"><ToolSuite /></div></div></main>;
+  if (section === "tools" && !slug) {
+    const page = content[locale].sections.tools;
+    return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW / TOOLS</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{page[0]}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{page[1]}</p><div className="mt-12"><ToolSuite /></div></div></main>;
   }
 
-  if (section === "projects" && segments[1]) {
-    const p = content[locale].projects.find(([slug]) => slug === segments[1]);
-    if (!p) notFound();
-    return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><article className="mx-auto max-w-4xl"><Link href={href("/projects")} className="text-sm text-[var(--gold-light)]">← {content[locale].nav.projects}</Link><p className="mt-10 text-xs uppercase tracking-[0.3em] text-[var(--gold)]">Case Study</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{p[1]}</h1><p className="mt-6 text-lg leading-8 text-[var(--muted)]">{p[2]}</p><div className="mt-10 grid gap-5 md:grid-cols-3"><div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6"><h2 className="font-semibold">{locale === "ar" ? "المشكلة" : "Problem"}</h2><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{locale === "ar" ? "تحويل احتياج حقيقي إلى نظام قابل للاستخدام والتطوير." : "Turning a real need into a maintainable, usable system."}</p></div><div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6"><h2 className="font-semibold">{locale === "ar" ? "الحل" : "Solution"}</h2><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{locale === "ar" ? "بناء نسخة عملية صغيرة ثم تطويرها على مراحل." : "Build a focused version first, then improve it in small steps."}</p></div><div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6"><h2 className="font-semibold">{locale === "ar" ? "النتيجة" : "Result"}</h2><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{locale === "ar" ? "بنية أوضح، نشر أسهل، ومساحة أفضل للتوسع." : "Clearer architecture, easier shipping, and room to grow."}</p></div></div></article></main>;
+  if (section === "projects" && !slug) {
+    return <LocalizedList locale={locale} dir={dir} title={content[locale].sections.projects[0]} description={content[locale].sections.projects[1]} items={Object.entries(projectData).map(([slug, title]) => [title, href(`/projects/${slug}`)])} />;
+  }
+  if (section === "blog" && !slug) {
+    return <LocalizedList locale={locale} dir={dir} title={content[locale].sections.blog[0]} description={content[locale].sections.blog[1]} items={Object.entries(blogData).map(([slug, title]) => [title, href(`/blog/${slug}`)])} />;
+  }
+  if (section === "projects" && slug && slug in projectData) {
+    const title = projectData[slug as keyof typeof projectData];
+    return <Detail dir={dir} locale={locale} back={href("/projects")} title={title} eyebrow={locale === "ar" ? "دراسة حالة" : "Case Study"} body={locale === "ar" ? "مشروع حقيقي من رحلة SLOW، موثق حول المشكلة والحل والبنية والنتائج." : "A real SLOW project documented around the problem, solution, architecture, and result."} />;
+  }
+  if (section === "blog" && slug && slug in blogData) {
+    const title = blogData[slug as keyof typeof blogData];
+    return <Detail dir={dir} locale={locale} back={href("/blog")} title={title} eyebrow="Blog" body={locale === "ar" ? "مقال من build logs الخاصة بـSLOW يشرح القرارات العملية والتجارب القابلة لإعادة الاستخدام." : "A SLOW build log explaining practical decisions and reusable experiments."} />;
   }
 
-  if (section === "blog" && segments[1]) {
-    const p = content[locale].blogPosts.find(([slug]) => slug === segments[1]);
-    if (!p) notFound();
-    return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><article className="mx-auto max-w-3xl"><Link href={href("/blog")} className="text-sm text-[var(--gold-light)]">← {content[locale].nav.blog}</Link><p className="mt-10 text-xs uppercase tracking-[0.3em] text-[var(--gold)]">Blog</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{p[1]}</h1><p className="mt-6 text-lg leading-8 text-[var(--muted)]">{p[2]}</p><div className="mt-10 rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7"><h2 className="text-2xl font-bold">{locale === "ar" ? "محتوى المقال" : "Article"}</h2><p className="mt-4 leading-8 text-[var(--muted)]">{locale === "ar" ? "هذا المقال جزء من build logs الخاصة بـSLOW، ويركز على القرارات العملية والتجارب التي يمكن تطبيقها في مشاريع أخرى." : "This article is part of SLOW's build logs, focusing on practical decisions and experiments that can be reused in other projects."}</p></div></article></main>;
-  }
-
-  const page = section === "home" ? null : content[locale].sections[section as keyof typeof content[Locale]["sections"]];
-  if (section !== "home" && !page) notFound();
-
-  if (section === "home") {
-    const h = content[locale].home;
-    return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><section className="flex min-h-[72vh] items-center"><div className="max-w-4xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW / {h.eyebrow}</p><h1 className="mt-5 font-display text-5xl font-bold tracking-tight md:text-7xl">{h.title}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{h.description}</p><div className="mt-9 flex flex-wrap gap-3"><Link href={href("/projects")} className="rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">{h.primary}</Link><Link href={href("/contact")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{h.secondary}</Link><Link href={href("/tools")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{content[locale].nav.tools}</Link></div></div></section><section className="grid gap-5 pb-24 md:grid-cols-2">{[[content[locale].nav.projects,"/projects"],[content[locale].nav.tools,"/tools"],[content[locale].nav.creator,"/creator"],[content[locale].nav.services,"/services"]].map(([title,path])=><Link key={path} href={href(path)} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 transition hover:-translate-y-1 hover:border-[var(--gold)]"><h2 className="font-display text-2xl font-bold">{title}</h2><p className="mt-3 leading-7 text-[var(--muted)]">{h.description}</p></Link>)}</section></div></main>;
-  }
-
-  return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><div className="max-w-3xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW.DEV / {section}</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{page![0]}</h1><p className="mt-6 text-lg leading-8 text-[var(--muted)]">{page![1]}</p><p className="mt-4 leading-7 text-[var(--foreground)]/80">{page![2]}</p></div><div className="mt-12 grid gap-5 lg:grid-cols-3">{page![3].map((group: readonly [string, readonly string[]])=><section key={group[0]} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 backdrop-blur-xl"><h2 className="text-xl font-bold">{group[0]}</h2><ul className="mt-5 space-y-3">{group[1].map((item)=> <li key={item} className="border-s border-[var(--gold)]/40 ps-4 text-sm leading-6 text-[var(--muted)]">{item}</li>)}</ul></section>)}</div><div className="mt-10 flex flex-wrap gap-3"><Link href={href("/projects")} className="rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">{content[locale].nav.projects}</Link><Link href={href("/contact")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{content[locale].nav.contact}</Link></div></div></main>;
+  const page = section ? content[locale].sections[section as SectionKey] : content[locale].home;
+  if (!page) notFound();
+  const home = !section;
+  return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><section className="flex min-h-[60vh] items-center"><div className="max-w-4xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW.DEV</p><h1 className="mt-5 font-display text-5xl font-bold tracking-tight md:text-7xl">{page[0]}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{page[1]}</p><p className="mt-5 max-w-3xl leading-7 text-[var(--foreground)]/80">{page[2]}</p><div className="mt-9 flex flex-wrap gap-3"><Link href={href("/projects")} className="rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">{content[locale].nav.projects}</Link><Link href={href("/tools")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{content[locale].nav.tools}</Link><Link href={href("/contact")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{content[locale].nav.contact}</Link></div></div></section>{!home && <section className="grid gap-5 pb-24 md:grid-cols-2 lg:grid-cols-3"><Feature label={content[locale].nav.projects} href={href("/projects")} /><Feature label={content[locale].nav.creator} href={href("/creator")} /><Feature label={content[locale].nav.services} href={href("/services")} /></section>}</div></main>;
 }
+
+function LocalizedList({ locale, dir, title, description, items }: { locale: Locale; dir: "rtl" | "ltr"; title: string; description: string; items: string[][] }) {
+  return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><h1 className="font-display text-5xl font-bold md:text-7xl">{title}</h1><p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">{description}</p><div className="mt-12 grid gap-5 md:grid-cols-3">{items.map(([label, href]) => <Link key={href} href={href} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]"><h2 className="text-xl font-bold">{label}</h2><p className="mt-3 text-sm text-[var(--muted)]">{locale === "ar" ? "افتح الصفحة" : "Open page"} →</p></Link>)}</div></div></main>;
+}
+
+function Detail({ locale, dir, back, title, eyebrow, body }: { locale: Locale; dir: "rtl" | "ltr"; back: string; title: string; eyebrow: string; body: string }) {
+  return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><article className="mx-auto max-w-4xl"><Link href={back} className="text-sm text-[var(--gold-light)]">← {locale === "ar" ? "رجوع" : "Back"}</Link><p className="mt-10 text-xs uppercase tracking-[0.3em] text-[var(--gold)]">{eyebrow}</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{title}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{body}</p><div className="mt-10 grid gap-5 md:grid-cols-3">{[locale === "ar" ? "المشكلة" : "Problem", locale === "ar" ? "الحل" : "Solution", locale === "ar" ? "النتيجة" : "Result"].map((label) => <section key={label} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6"><h2 className="font-semibold">{label}</h2><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{body}</p></section>)}</div></article></main>;
+}
+
+function Feature({ label, href }: { label: string; href: string }) { return <Link href={href} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]"><h2 className="text-xl font-bold">{label}</h2></Link>; }
