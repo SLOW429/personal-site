@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
+import SiteFooter from "@/components/layout/site-footer";
 import HomeExpansion from "@/components/home/home-expansion";
-import { DevelopmentNotice } from "@/components/layout/development-notice";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { GlobalVisuals } from "@/components/layout/global-visuals";
@@ -24,7 +23,6 @@ export const viewport = { themeColor: "#060a13" };
 
 function MaintenancePage({ locale }: { locale: Locale }) {
   const copy = maintenanceCopy[locale];
-
   return (
     <main className="min-h-screen bg-[#060a13] px-6 text-white">
       <div className="flex min-h-screen items-center justify-center text-center">
@@ -33,9 +31,7 @@ function MaintenancePage({ locale }: { locale: Locale }) {
           <p className="mt-8 text-xs uppercase tracking-[0.4em] text-[#d9edff]">{copy.eyebrow}</p>
           <h1 className="mt-5 text-5xl font-bold tracking-tight md:text-7xl">{copy.title}</h1>
           <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-white/65 md:text-lg">{copy.body}</p>
-          <div className="mt-10">
-            <LanguageSwitcher />
-          </div>
+          <div className="mt-10"><LanguageSwitcher /></div>
         </section>
       </div>
     </main>
@@ -66,7 +62,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           </>
         ) : (
           <>
-            <DevelopmentNotice />
             <GlobalVisuals />
             <SiteHeader />
             <CommandPalette locale={locale} />
