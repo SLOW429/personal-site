@@ -25,25 +25,6 @@ const content = {
       status: ["الحالة", "حالة خدمات SLOW.DEV والصحة التقنية العامة.", "هذه الصفحة مخصصة للمؤشرات العامة دون عرض أسرار أو بيانات داخلية."],
     },
   },
-  tr: {
-    home: ["Geliştirici • İçerik Üreticisi • Builder", "Gerçekten faydalı yazılımlar, araçlar ve deneyimler geliştiriyorum.", "SLOW.DEV; projelerim, araçlarım, AI deneylerim, hizmetlerim, oyun ve içerik çalışmalarım için tek merkezdir."],
-    nav: { projects: "Projeler", services: "Hizmetler", tools: "Araçlar", blog: "Blog", creator: "İçerik", contact: "İletişim" },
-    sections: {
-      about: ["SLOW Hakkında", "Yazılım, otomasyon, araçlar ve içerik üretimini tek platformda birleştiriyorum.", "Amaç; faydalı işler, gerçek projeler ve paylaşılabilir teknik deneyimler."],
-      projects: ["Projeler", "Yazılım, otomasyon ve gerçek zamanlı sistem projeleri.", "Projeleri, case study sayfalarını ve GitHub bağlantılarını keşfet."],
-      services: ["Hizmetler", "Web geliştirme, otomasyon, AI entegrasyonları, performans ve teknik SEO.", "Önce problemi ve hedefi netleştirip sonra çözümü geliştiriyoruz."],
-      tools: ["SLOW Araçları", "Geliştiriciler ve üreticiler için hızlı, ücretsiz araçlar.", "Mümkün olan her yerde işlemler tarayıcıda yapılır."],
-      blog: ["Blog", "Gerçek projelerden build logları ve teknik notlar.", "İçerik gerçek çalışmalardan çıkar; gereksiz dolgu yok."],
-      creator: ["Creator Hub", "Oyun, yayınlar, videolar, klipler ve topluluk.", "Resmi kanallar ve SLOW içeriği tek yerde."],
-      gaming: ["Gaming", "Oyun, yayın ve topluluk tek yerde.", "Kick, YouTube ve Discord'u tek merkezden takip et."],
-      now: ["Şimdi", "Şu anda üzerinde çalıştığım şeyler.", "Projeler ve içerik ilerledikçe güncellenir."],
-      uses: ["Kullandıklarım", "SLOW'un arkasındaki teknoloji ve araçlar.", "Next.js, React, TypeScript, Python, GitHub, Vercel ve Docker."],
-      links: ["Bağlantılar", "Tüm resmi bağlantılar.", "GitHub, YouTube, Kick, Discord ve diğer kanallar."],
-      contact: ["Proje Başlat", "Fikrini veya problemini net bir brief'e dönüştür.", "Bilgiler paylaşmayı seçene kadar tarayıcıda kalır."],
-      docs: ["Dokümantasyon", "SLOW.DEV ve araçları için geliştirici notları ve referanslar.", "Kullanım, mimari ve gizlilik odaklı pratik dokümantasyon."],
-      status: ["Durum", "SLOW.DEV servislerinin ve genel teknik sağlığın durumu.", "Genel göstergeler paylaşılır; gizli veya dahili veriler gösterilmez."],
-    },
-  },
 } as const;
 
 type Locale = keyof typeof content;
@@ -53,49 +34,66 @@ const toolSlugs = ["json-formatter", "base64", "seo-preview", "image-compressor"
 
 export function generateStaticParams() {
   const routes = ["", "about", "projects", "services", "tools", "blog", "creator", "gaming", "now", "uses", "links", "contact", "docs", "status"];
-  return (Object.keys(content) as Locale[]).flatMap((locale) => routes.map((route) => ({ locale, segments: route ? [route] : [] })));
+  return routes.map((route) => ({ locale: "ar", segments: route ? [route] : [] }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; segments?: string[] }> }): Promise<Metadata> {
   const { locale: rawLocale, segments = [] } = await params;
-  if (!(rawLocale in content)) return {};
-  const locale = rawLocale as Locale;
+  if (rawLocale !== "ar") return {};
   const section = segments[0];
   const slug = segments[1];
   if (section === "projects" && slug && slug in projectData) return { title: `${projectData[slug as keyof typeof projectData]} | SLOW` };
   if (section === "blog" && slug && slug in blogData) return { title: `${blogData[slug as keyof typeof blogData]} | SLOW` };
-  const page = section ? content[locale].sections[section as keyof typeof content.ar.sections] : content[locale].home;
-  return { title: `${page[0]} | SLOW`, description: page[2], alternates: { canonical: localizedPath(section ? `/${section}` : "/", locale) } };
+  const page = section ? content.ar.sections[section as keyof typeof content.ar.sections] : content.ar.home;
+  if (!page) return {};
+  return { title: `${page[0]} | SLOW`, description: page[2], alternates: { canonical: localizedPath(section ? `/${section}` : "/", "ar") } };
 }
 
 export default async function LocalizedCatchAll({ params }: { params: Promise<{ locale: string; segments?: string[] }> }) {
   const { locale: rawLocale, segments = [] } = await params;
-  if (!(rawLocale in content)) notFound();
-  const locale = rawLocale as Locale;
-  const dir = locale === "ar" ? "rtl" : "ltr";
+  if (rawLocale !== "ar") notFound();
+
+  const locale: Locale = "ar";
+  const dir = "rtl" as const;
   const section = segments[0];
   const slug = segments[1];
   const href = (path: string) => localizedPath(path, locale);
 
   if (section === "tools" && !slug) {
-    const page = content[locale].sections.tools;
+    const page = content.ar.sections.tools;
     return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW / TOOLS</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{page[0]}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{page[1]}</p><div className="mt-12"><ToolSuite /></div></div></main>;
   }
-  if (section === "tools" && slug && toolSlugs.includes(slug as ToolSlug)) return <div dir={dir} lang={locale}><ToolDetail slug={slug as ToolSlug} /></div>;
-  if (section === "projects" && !slug) return <LocalizedList locale={locale} dir={dir} title={content[locale].sections.projects[0]} description={content[locale].sections.projects[1]} items={Object.entries(projectData).map(([s, t]) => [t, href(`/projects/${s}`)])} />;
-  if (section === "blog" && !slug) return <LocalizedList locale={locale} dir={dir} title={content[locale].sections.blog[0]} description={content[locale].sections.blog[1]} items={Object.entries(blogData).map(([s, t]) => [t, href(`/blog/${s}`)])} />;
-  if (section === "projects" && slug && slug in projectData) return <Detail locale={locale} dir={dir} back={href("/projects")} title={projectData[slug as keyof typeof projectData]} eyebrow={locale === "ar" ? "دراسة حالة" : "Case Study"} body={locale === "ar" ? "مشروع حقيقي من رحلة SLOW موثق حول المشكلة والحل والبنية والنتائج." : "A real SLOW project documented around the problem, solution, architecture, and result."} />;
-  if (section === "blog" && slug && slug in blogData) return <Detail locale={locale} dir={dir} back={href("/blog")} title={blogData[slug as keyof typeof blogData]} eyebrow="Blog" body={locale === "ar" ? "مقال من build logs الخاصة بـSLOW يشرح القرارات العملية والتجارب القابلة لإعادة الاستخدام." : "A SLOW build log explaining practical decisions and reusable experiments."} />;
 
-  const page = section ? content[locale].sections[section as keyof typeof content.ar.sections] : content[locale].home;
+  if (section === "tools" && slug && toolSlugs.includes(slug as ToolSlug)) {
+    return <div dir={dir} lang={locale}><ToolDetail slug={slug as ToolSlug} /></div>;
+  }
+
+  if (section === "projects" && !slug) {
+    return <LocalizedList title={content.ar.sections.projects[0]} description={content.ar.sections.projects[1]} items={Object.entries(projectData).map(([s, t]) => [t, href(`/projects/${s}`)])} />;
+  }
+
+  if (section === "blog" && !slug) {
+    return <LocalizedList title={content.ar.sections.blog[0]} description={content.ar.sections.blog[1]} items={Object.entries(blogData).map(([s, t]) => [t, href(`/blog/${s}`)])} />;
+  }
+
+  if (section === "projects" && slug && slug in projectData) {
+    return <Detail back={href("/projects")} title={projectData[slug as keyof typeof projectData]} eyebrow="دراسة حالة" body="مشروع حقيقي من رحلة SLOW موثق حول المشكلة والحل والبنية والنتائج." />;
+  }
+
+  if (section === "blog" && slug && slug in blogData) {
+    return <Detail back={href("/blog")} title={blogData[slug as keyof typeof blogData]} eyebrow="المدونة" body="مقال من build logs الخاصة بـSLOW يشرح القرارات العملية والتجارب القابلة لإعادة الاستخدام." />;
+  }
+
+  const page = section ? content.ar.sections[section as keyof typeof content.ar.sections] : content.ar.home;
   if (!page) notFound();
-  return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><section className="flex min-h-[60vh] items-center"><div className="max-w-4xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW.DEV</p><h1 className="mt-5 font-display text-5xl font-bold tracking-tight md:text-7xl">{page[0]}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{page[1]}</p><p className="mt-5 max-w-3xl leading-7 text-[var(--foreground)]/80">{page[2]}</p><div className="mt-9 flex flex-wrap gap-3"><Link href={href("/projects")} className="rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">{content[locale].nav.projects}</Link><Link href={href("/tools")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{content[locale].nav.tools}</Link><Link href={href("/contact")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{content[locale].nav.contact}</Link></div></div></section></div></main>;
+
+  return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><section className="flex min-h-[60vh] items-center"><div className="max-w-4xl"><p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW.DEV</p><h1 className="mt-5 font-display text-5xl font-bold tracking-tight md:text-7xl">{page[0]}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{page[1]}</p><p className="mt-5 max-w-3xl leading-7 text-[var(--foreground)]/80">{page[2]}</p><div className="mt-9 flex flex-wrap gap-3"><Link href={href("/projects")} className="rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">{content.ar.nav.projects}</Link><Link href={href("/tools")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{content.ar.nav.tools}</Link><Link href={href("/contact")} className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">{content.ar.nav.contact}</Link></div></div></section></div></main>;
 }
 
-function LocalizedList({ locale, dir, title, description, items }: { locale: Locale; dir: "rtl" | "ltr"; title: string; description: string; items: string[][] }) {
-  return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><h1 className="font-display text-5xl font-bold md:text-7xl">{title}</h1><p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">{description}</p><div className="mt-12 grid gap-5 md:grid-cols-3">{items.map(([label, link]) => <Link key={link} href={link} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]"><h2 className="text-xl font-bold">{label}</h2><p className="mt-3 text-sm text-[var(--muted)]">{locale === "ar" ? "افتح الصفحة" : "Open page"} →</p></Link>)}</div></div></main>;
+function LocalizedList({ title, description, items }: { title: string; description: string; items: string[][] }) {
+  return <main dir="rtl" lang="ar" className="min-h-screen px-5 py-16 md:py-24"><div className="mx-auto max-w-6xl"><h1 className="font-display text-5xl font-bold md:text-7xl">{title}</h1><p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">{description}</p><div className="mt-12 grid gap-5 md:grid-cols-3">{items.map(([label, link]) => <Link key={link} href={link} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]"><h2 className="font-display text-2xl font-bold">{label}</h2><p className="mt-3 text-sm leading-6 text-[var(--muted)]">افتح الصفحة واستكشف التفاصيل والمحتوى المرتبط بها.</p></Link>)}</div></div></main>;
 }
 
-function Detail({ locale, dir, back, title, eyebrow, body }: { locale: Locale; dir: "rtl" | "ltr"; back: string; title: string; eyebrow: string; body: string }) {
-  return <main dir={dir} lang={locale} className="min-h-screen px-5 py-16 md:py-24"><article className="mx-auto max-w-4xl"><Link href={back} className="text-sm text-[var(--gold-light)]">← {locale === "ar" ? "رجوع" : "Back"}</Link><p className="mt-10 text-xs uppercase tracking-[0.3em] text-[var(--gold)]">{eyebrow}</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{title}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{body}</p><div className="mt-10 grid gap-5 md:grid-cols-3">{[locale === "ar" ? "المشكلة" : "Problem", locale === "ar" ? "الحل" : "Solution", locale === "ar" ? "النتيجة" : "Result"].map((label) => <section key={label} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6"><h2 className="font-semibold">{label}</h2><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{body}</p></section>)}</div></article></main>;
+function Detail({ back, title, eyebrow, body }: { back: string; title: string; eyebrow: string; body: string }) {
+  return <main dir="rtl" lang="ar" className="min-h-screen px-5 py-16 md:py-24"><article className="mx-auto max-w-4xl"><Link href={back} className="text-sm text-[var(--gold-light)]">← رجوع</Link><p className="mt-10 text-xs uppercase tracking-[0.3em] text-[var(--gold)]">{eyebrow}</p><h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">{title}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{body}</p><div className="mt-10 grid gap-5 md:grid-cols-3">{["المشكلة", "الحل", "النتيجة"].map((label) => <section key={label} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6"><h2 className="font-semibold">{label}</h2><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{body}</p></section>)}</div></article></main>;
 }
