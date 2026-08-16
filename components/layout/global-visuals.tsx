@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Music2, Pause, Play, Video, Waves } from "lucide-react";
+import { Moon, Pause, Play, Sun, Video, Waves } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const COUNTER_STORAGE_KEY = "slow-visitor-count-v1";
@@ -14,31 +14,23 @@ let fetchPatched = false;
 function installVisitorCounterCache() {
   if (typeof window === "undefined" || fetchPatched) return;
   fetchPatched = true;
-
   const originalFetch = window.fetch.bind(window);
   window.fetch = async (input, init) => {
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     const isVisitorRequest = url.includes("countapi.mileshilliard.com") || url.includes("api.counterapi.dev");
     if (!isVisitorRequest) return originalFetch(input, init);
-
     const cached = Number(sessionStorage.getItem(COUNTER_STORAGE_KEY));
-    if (Number.isFinite(cached) && cached >= 0) {
-      return new Response(JSON.stringify({ value: cached, count: cached }), { status: 200, headers: { "Content-Type": "application/json" } });
-    }
-
+    if (Number.isFinite(cached) && cached >= 0) return new Response(JSON.stringify({ value: cached, count: cached }), { status: 200, headers: { "Content-Type": "application/json" } });
     if (!visitorFetchPromise) {
-      visitorFetchPromise = originalFetch(input, init)
-        .then(async (response) => {
-          if (!response.ok) throw new Error("visitor counter request failed");
-          const json = await response.json();
-          const count = Number(json?.count ?? json?.value ?? json?.data?.count ?? json?.data?.value);
-          if (!Number.isFinite(count) || count < 0) return null;
-          sessionStorage.setItem(COUNTER_STORAGE_KEY, String(count));
-          return count;
-        })
-        .catch(() => null);
+      visitorFetchPromise = originalFetch(input, init).then(async (response) => {
+        if (!response.ok) throw new Error("visitor counter request failed");
+        const json = await response.json();
+        const count = Number(json?.count ?? json?.value ?? json?.data?.count ?? json?.data?.value);
+        if (!Number.isFinite(count) || count < 0) return null;
+        sessionStorage.setItem(COUNTER_STORAGE_KEY, String(count));
+        return count;
+      }).catch(() => null);
     }
-
     const count = await visitorFetchPromise;
     if (count === null) return new Response(JSON.stringify({}), { status: 503 });
     return new Response(JSON.stringify({ value: count, count }), { status: 200, headers: { "Content-Type": "application/json" } });
@@ -54,12 +46,10 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
-
     let frame = 0;
     let width = 0;
     let height = 0;
     const nodes: Node[] = [];
-
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
@@ -71,19 +61,14 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       nodes.length = 0;
       const count = Math.min(95, Math.max(48, Math.floor((width * height) / 16000)));
-      for (let i = 0; i < count; i++) {
-        nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18 });
-      }
+      for (let i = 0; i < count; i++) nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18 });
     };
-
     const move = (event: MouseEvent) => { mouseRef.current = { x: event.clientX, y: event.clientY }; };
     const leave = () => { mouseRef.current = { x: -9999, y: -9999 }; };
-
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
       const { x: mx, y: my } = mouseRef.current;
       const webRadius = 320;
-
       for (const node of nodes) {
         const dx = mx - node.x;
         const dy = my - node.y;
@@ -98,7 +83,6 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
         if (node.x < -20 || node.x > width + 20) node.vx *= -1;
         if (node.y < -20 || node.y > height + 20) node.vy *= -1;
       }
-
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
         for (let j = i + 1; j < nodes.length; j++) {
@@ -115,7 +99,6 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
           ctx.stroke();
         }
       }
-
       if (mx > 0 && my > 0) {
         for (const node of nodes) {
           const distance = Math.hypot(node.x - mx, node.y - my);
@@ -133,7 +116,6 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
         ctx.fillStyle = "rgba(217,237,255,.8)";
         ctx.fill();
       }
-
       for (const node of nodes) {
         const distance = Math.hypot(node.x - mx, node.y - my);
         ctx.beginPath();
@@ -143,7 +125,6 @@ function SpiderWebCanvas({ enabled }: { enabled: boolean }) {
       }
       frame = requestAnimationFrame(draw);
     };
-
     resize();
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", move);
@@ -193,12 +174,10 @@ export function GlobalVisuals() {
     document.body.classList.add("slow-transparent-mains");
     document.documentElement.style.colorScheme = light ? "light" : "dark";
     localStorage.setItem("slow-theme", light ? "light" : "dark");
-    window.dispatchEvent(new Event("slow-theme-change"));
   }, [light]);
 
   useEffect(() => {
     localStorage.setItem("slow-background", videoMode ? "video" : "canvas");
-    document.body.classList.toggle("slow-video-mode", videoMode);
     const video = videoRef.current;
     if (!video) return;
     if (videoMode) {
@@ -236,40 +215,20 @@ export function GlobalVisuals() {
     const playing = !audio.paused;
     setMusicOn(playing);
     localStorage.setItem(MUSIC_STORAGE_KEY, playing ? "on" : "off");
-    if (playing && videoMode && videoRef.current) {
-      videoRef.current.currentTime = audio.currentTime % (videoRef.current.duration || 1);
-      videoRef.current.play().catch(() => undefined);
-    }
   };
 
   return (
     <>
       <SpiderWebCanvas enabled={!videoMode} />
-      {videoMode && (
-        <>
-          <video ref={videoRef} src={VIDEO_SRC} autoPlay loop muted playsInline preload="auto" controls={false} disablePictureInPicture disableRemotePlayback aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover" onLoadedData={(event) => event.currentTarget.play().catch(() => undefined)} />
-          <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-black/25" />
-        </>
-      )}
-
+      {videoMode && <><video ref={videoRef} src={VIDEO_SRC} autoPlay loop muted playsInline preload="auto" controls={false} disablePictureInPicture disableRemotePlayback aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover" onLoadedData={(event) => event.currentTarget.play().catch(() => undefined)} /><div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-black/25" /></>}
       <audio ref={audioRef} id="slow-global-music" src="/clima-lindo.mp3" loop preload="metadata" />
-
       <div className="fixed bottom-24 left-4 z-[999] md:bottom-6 md:left-6">
         <div className="flex items-center gap-2">
-          <button type="button" onClick={toggleMusic} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={musicOn ? "Pause background music" : "Play background music"} title={musicOn ? "Pause music" : "Play music"}>
-            {musicOn ? <Pause size={16} /> : <Play size={16} />}
-            <span className="hidden sm:inline">Music</span>
-          </button>
-          <button type="button" onClick={() => setVideoMode((value) => !value)} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={videoMode ? "Use interactive spider web background" : "Use background video"} title={videoMode ? "Spider Web" : "Video background"}>
-            {videoMode ? <Waves size={16} /> : <Video size={16} />}
-            <span className="hidden sm:inline">{videoMode ? "Web" : "Video"}</span>
-          </button>
-          <button type="button" onClick={() => setLight((value) => !value)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={light ? "Switch to dark mode" : "Switch to light mode"} title={light ? "Dark mode" : "Light mode"}>
-            {light ? <Moon size={18} /> : <Moon size={18} />}
-          </button>
+          <button type="button" onClick={toggleMusic} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={musicOn ? "Pause background music" : "Play background music"} title={musicOn ? "Pause music" : "Play music"}>{musicOn ? <Pause size={16} /> : <Play size={16} />}<span className="hidden sm:inline">Music</span></button>
+          <button type="button" onClick={() => setVideoMode((value) => !value)} className="flex h-11 items-center gap-2 rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] px-3 text-sm font-semibold text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={videoMode ? "Use interactive spider web background" : "Use background video"} title={videoMode ? "Spider Web" : "Video background"}>{videoMode ? <Waves size={16} /> : <Video size={16} />}<span className="hidden sm:inline">{videoMode ? "Web" : "Video"}</span></button>
+          <button type="button" onClick={() => setLight((value) => !value)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--card-border-strong)] bg-[var(--card-bg)] text-[var(--gold)] shadow-[0_0_30px_rgba(126,196,255,.18)] backdrop-blur-xl" aria-label={light ? "Switch to dark mode" : "Switch to light mode"} title={light ? "Dark mode" : "Light mode"}>{light ? <Moon size={18} /> : <Sun size={18} />}</button>
         </div>
       </div>
-
       <VisitorCounterRepair />
     </>
   );
