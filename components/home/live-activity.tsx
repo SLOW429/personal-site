@@ -8,7 +8,11 @@ import { useEffect, useState } from "react";
 const GitHubCalendar = dynamic(() => import("react-github-calendar").then((mod) => mod.GitHubCalendar), { ssr: false });
 const DISCORD_ID = "680035752461205524";
 
-type DiscordData = { discord_status: "online" | "idle" | "dnd" | "offline"; activities?: Array<{ type: number; name: string; details?: string; state?: string }> };
+type DiscordData = {
+  discord_status: "online" | "idle" | "dnd" | "offline";
+  activities?: Array<{ type: number; name: string; details?: string; state?: string }>;
+};
+
 type GitHubUser = { public_repos: number; followers: number; following: number };
 
 function StatusDot({ status }: { status: DiscordData["discord_status"] }) {
@@ -23,23 +27,40 @@ export function LiveActivity() {
 
   useEffect(() => {
     let active = true;
+    let controller: AbortController | null = null;
+
     const load = async () => {
+      if (document.hidden) return;
+      controller?.abort();
+      controller = new AbortController();
       try {
         const [discordResponse, githubResponse] = await Promise.all([
-          fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`, { cache: "no-store" }),
-          fetch("https://api.github.com/users/SLOW429", { cache: "no-store" }),
+          fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`, { cache: "no-store", signal: controller.signal }),
+          fetch("https://api.github.com/users/SLOW429", { cache: "no-store", signal: controller.signal }),
         ]);
+        if (!discordResponse.ok || !githubResponse.ok) throw new Error("live service unavailable");
         const [discordJson, githubJson] = await Promise.all([discordResponse.json(), githubResponse.json()]);
         if (!active) return;
         setDiscord(discordJson?.success ? discordJson.data : null);
         setGithub(githubJson?.public_repos !== undefined ? githubJson : null);
-      } catch {
-        if (active) setError(true);
+        setError(false);
+      } catch (cause) {
+        if (!active || (cause instanceof DOMException && cause.name === "AbortError")) return;
+        setError(true);
       }
     };
+
     load();
     const interval = window.setInterval(load, 60_000);
-    return () => { active = false; window.clearInterval(interval); };
+    const onVisibility = () => { if (!document.hidden) load(); };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      active = false;
+      controller?.abort();
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, []);
 
   const activity = discord?.activities?.find((item) => item.type === 0);
