@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, CheckCircle2, Code2, X } from "lucide-react";
 import { SiGithub } from "react-icons/si";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { projectTags, projects, type Project } from "@/lib/projects-content";
 
 function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
@@ -27,10 +27,18 @@ function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void
 }
 
 function CaseStudyModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md" onMouseDown={onClose}>
+    <motion.div role="dialog" aria-modal="true" aria-labelledby="case-study-title" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md" onMouseDown={onClose}>
       <motion.div initial={{ opacity: 0, y: 24, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 24, scale: 0.98 }} transition={{ duration: 0.25 }} className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] border border-white/10 bg-[#0a101b] p-6 shadow-2xl sm:p-8" onMouseDown={(event) => event.stopPropagation()}>
-        <div className="flex items-start justify-between gap-6"><div><p className="text-[11px] uppercase tracking-[0.3em] text-[#7ec4ff]">Case Study</p><h2 className="mt-2 font-display text-3xl font-bold text-white">{project.title}</h2></div><button type="button" onClick={onClose} aria-label="Close case study" className="rounded-xl border border-white/10 p-2 text-white/50 hover:text-white"><X size={18} /></button></div>
+        <div className="flex items-start justify-between gap-6"><div><p className="text-[11px] uppercase tracking-[0.3em] text-[#7ec4ff]">Case Study</p><h2 id="case-study-title" className="mt-2 font-display text-3xl font-bold text-white">{project.title}</h2></div><button type="button" onClick={onClose} aria-label="Close case study" className="rounded-xl border border-white/10 p-2 text-white/50 hover:text-white"><X size={18} /></button></div>
         <div className="mt-8 grid gap-5 md:grid-cols-2"><section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"><p className="text-xs uppercase tracking-[0.25em] text-white/35">Problem</p><p className="mt-3 text-sm leading-7 text-white/65">{project.caseStudy.problem}</p></section><section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"><p className="text-xs uppercase tracking-[0.25em] text-white/35">Solution</p><p className="mt-3 text-sm leading-7 text-white/65">{project.caseStudy.solution}</p></section></div>
         <section className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-5"><p className="text-xs uppercase tracking-[0.25em] text-white/35">Architecture</p><ul className="mt-4 grid gap-3 sm:grid-cols-2">{project.caseStudy.architecture.map((item) => <li key={item} className="flex gap-3 text-sm leading-6 text-white/65"><CheckCircle2 size={16} className="mt-1 shrink-0 text-[#7ec4ff]" />{item}</li>)}</ul></section>
         <section className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-5"><p className="text-xs uppercase tracking-[0.25em] text-white/35">Results / direction</p><ul className="mt-4 grid gap-3 sm:grid-cols-2">{project.caseStudy.results.map((item) => <li key={item} className="flex gap-3 text-sm leading-6 text-white/65"><CheckCircle2 size={16} className="mt-1 shrink-0 text-[#a78bfa]" />{item}</li>)}</ul></section>
