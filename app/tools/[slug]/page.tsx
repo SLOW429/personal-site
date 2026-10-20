@@ -1,0 +1,114 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import ToolDetail, { type ToolSlug } from "../../../components/tools/tool-detail";
+
+const toolMeta = {
+  "json-formatter": {
+    title: "JSON Formatter & Validator",
+    description: "Format and validate JSON locally in your browser. Free, fast, and privacy-friendly.",
+  },
+  base64: {
+    title: "Base64 Encoder & Decoder",
+    description: "Encode and decode UTF-8 text locally in your browser without sending it to a server.",
+  },
+  "seo-preview": {
+    title: "SEO & Social Preview",
+    description: "Preview SEO titles, meta descriptions, canonical URLs, and social cards before publishing.",
+  },
+  "image-compressor": {
+    title: "Image Compressor",
+    description: "Compress images to WebP in your browser and download the result without uploading your files.",
+  },
+  "uuid-generator": {
+    title: "UUID Generator",
+    description: "Generate UUID v4 identifiers locally in your browser.",
+  },
+  "jwt-decoder": {
+    title: "JWT Decoder",
+    description: "Decode JWT header and payload locally without sending tokens to a server.",
+  },
+  "url-encoder": {
+    title: "URL Encoder & Decoder",
+    description: "Encode and decode URL components locally in your browser.",
+  },
+  timestamp: {
+    title: "Unix Timestamp Converter",
+    description: "Convert Unix timestamps between seconds, milliseconds, and ISO dates.",
+  },
+<<<<<<< HEAD
+} as const satisfies Record<ToolSlug, { title: string; description: string }>;
+
+function isToolSlug(slug: string): slug is ToolSlug {
+  return Object.hasOwn(toolMeta, slug);
+}
+=======
+} as const;
+>>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
+
+export function generateStaticParams() {
+  return Object.keys(toolMeta).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+<<<<<<< HEAD
+  if (!isToolSlug(slug)) return {};
+  const tool = toolMeta[slug];
+=======
+  const tool = toolMeta[slug as ToolSlug];
+  if (!tool) return {};
+>>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
+  const url = `https://slows.dev/tools/${slug}`;
+  return {
+    title: `${tool.title} | SLOW Tools`,
+    description: tool.description,
+    alternates: { canonical: url },
+    openGraph: { title: `${tool.title} | SLOW Tools`, description: tool.description, url, type: "website" },
+  };
+}
+
+export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+<<<<<<< HEAD
+  if (!isToolSlug(slug)) notFound();
+  const key = slug;
+=======
+  if (!(slug in toolMeta)) notFound();
+  const key = slug as ToolSlug;
+>>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
+  const tool = toolMeta[key];
+  const url = `https://slows.dev/tools/${slug}`;
+  return (
+    <>
+      <ToolDetail slug={key} />
+<<<<<<< HEAD
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: tool.title,
+            applicationCategory: "DeveloperApplication",
+            operatingSystem: "Web",
+            url,
+            offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          }).replace(/</g, "\\u003c"),
+        }}
+      />
+=======
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: tool.title,
+        applicationCategory: "DeveloperApplication",
+        operatingSystem: "Web",
+        url,
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      }) }} />
+>>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
+      <div className="mx-auto -mt-10 max-w-5xl px-5 pb-16 text-sm text-[var(--muted)]"><Link href="/tools" className="hover:text-[var(--gold)]">← Back to SLOW Tools</Link></div>
+    </>
+  );
+}
