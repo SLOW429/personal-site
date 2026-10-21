@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { LocalizedCopy } from "@/components/layout/localized-text";
+import { useLocale } from "@/components/layout/locale-provider";
 
 type ImageSource = {
   url: string;
@@ -18,6 +20,7 @@ const buttonClass =
 const maxFileSize = 20 * 1024 * 1024;
 
 export default function ImageCompressor() {
+  const { text } = useLocale();
   const [source, setSource] = useState<ImageSource | null>(null);
   const [result, setResult] = useState<CompressedImage | null>(null);
   const [quality, setQuality] = useState(0.8);
@@ -118,9 +121,9 @@ export default function ImageCompressor() {
     <div>
       <div className="mt-5 flex flex-wrap items-center gap-3">
         <label className="block w-full text-sm">
-          <span className="sr-only">Choose an image</span>
+          <span className="sr-only"><LocalizedCopy source="Choose an image" /></span>
           <input
-            aria-label="Choose an image"
+            aria-label={text("Choose an image")}
             type="file"
             accept="image/*"
             onChange={(event) => selectImage(event.target.files?.[0])}
@@ -128,9 +131,9 @@ export default function ImageCompressor() {
           />
         </label>
         <label className="flex items-center gap-2 text-sm text-[var(--muted)]">
-          Quality
+          <LocalizedCopy source="Quality" />
           <input
-            aria-label="WebP quality"
+            aria-label={text("WebP quality")}
             type="range"
             min="0.4"
             max="1"
@@ -144,14 +147,14 @@ export default function ImageCompressor() {
 
       {error && (
         <p role="alert" className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200">
-          {error}
+          {text(error)}
         </p>
       )}
 
       {source && (
         <Image
           src={source.url}
-          alt="Original image preview"
+          alt={text("Original image preview")}
           width={1000}
           height={800}
           unoptimized
@@ -161,15 +164,15 @@ export default function ImageCompressor() {
 
       {source && currentResult && (
         <div className="mt-5 grid gap-3 text-sm sm:grid-cols-3">
-          <div>Original<br /><b>{Math.round(source.size / 1024)} KB</b></div>
+          <div><LocalizedCopy source="Original" /><br /><b>{Math.round(source.size / 1024)} KB</b></div>
           <div>WebP<br /><b>{Math.round(currentResult.size / 1024)} KB</b></div>
-          <div>Saved<br /><b>{savings}%</b></div>
+          <div><LocalizedCopy source="Saved" /><br /><b>{savings}%</b></div>
         </div>
       )}
 
       {currentResult && (
         <a href={currentResult.url} download="slow-compressed.webp" className={buttonClass}>
-          Download WebP
+          <LocalizedCopy source="Download WebP" />
         </a>
       )}
     </div>

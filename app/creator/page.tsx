@@ -101,7 +101,7 @@ export default async function CreatorPage() {
               <h2 className="mt-3 text-3xl font-bold">{kick.isLive ? <>🔴 <LocalizedText message="creator.kickLive" /></> : <>⚫ <LocalizedText message="creator.kickOffline" /></>}</h2>
               <p className="mt-3 max-w-2xl leading-7 text-[var(--muted)]">
                 {kick.isLive
-                  ? <>{kick.title ?? "Live stream"}{kick.category ? ` • ${kick.category}` : ""}{typeof kick.viewerCount === "number" ? <> • <LocalizedNumber value={kick.viewerCount} /></> : null}</>
+                  ? <>{kick.title ?? <LocalizedText message="creator.streamTitle" />}{kick.category ? ` • ${kick.category}` : ""}{typeof kick.viewerCount === "number" ? <> • <LocalizedNumber value={kick.viewerCount} /></> : null}</>
                   : <LocalizedText message="creator.liveFallback" />}
               </p>
             </div>

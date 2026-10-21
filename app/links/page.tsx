@@ -3,6 +3,7 @@ import { ArrowUpRight, Music2 } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { SiGithub, SiInstagram, SiYoutube } from "react-icons/si";
 import { siteConfig } from "@/lib/site-config";
+import { LocalizedCopy } from "@/components/layout/localized-text";
 
 export const metadata: Metadata = {
   title: "Links",
@@ -22,9 +23,9 @@ export default function LinksPage() {
   return (
     <main className="min-h-screen px-5 py-16 md:py-24">
       <div className="mx-auto max-w-4xl text-center">
-        <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW / LINKS</p>
-        <h1 className="mt-4 font-display text-5xl font-bold md:text-7xl">Every official link. One place.</h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">Use this page for profiles, creator bios, and community links. No link shortener or tracking layer in the middle.</p>
+        <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]"><LocalizedCopy source="SLOW / LINKS" /></p>
+        <h1 className="mt-4 font-display text-5xl font-bold md:text-7xl"><LocalizedCopy source="Every official link. One place." /></h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]"><LocalizedCopy source="Use this page for profiles, creator bios, and community links. No link shortener or tracking layer in the middle." /></p>
         <div className="mx-auto mt-10 max-w-2xl space-y-3 text-start">
           {links.map(([Icon, title, handle, href]) => (
             <a key={title} href={href} target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-4 transition hover:-translate-y-0.5 hover:border-[var(--gold)]">
@@ -35,7 +36,7 @@ export default function LinksPage() {
           ))}
         </div>
         <div className="mt-8 rounded-3xl border border-[var(--card-border-strong)] bg-[var(--card-bg)] p-7">
-          <p className="text-sm leading-7 text-[var(--muted)]">Community and live channels are available from the Creator Hub.</p>
+          <p className="text-sm leading-7 text-[var(--muted)]"><LocalizedCopy source="Community and live channels are available from the Creator Hub." /></p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <a href={siteConfig.social.kick} target="_blank" rel="noreferrer" className="rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">Kick</a>
             <a href="https://discord.gg/MvVxreJXMq" target="_blank" rel="noreferrer" className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">Discord</a>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrGenerator from "@/components/tools/qr-generator";
+import { LocalizedCopy } from "@/components/layout/localized-text";
 
 export const metadata: Metadata = {
   title: "QR Code Generator | SLOW Tools",
@@ -16,9 +17,9 @@ export default function QrGeneratorPage() {
   return (
     <main className="min-h-screen px-5 py-16 md:py-24">
       <div className="mx-auto max-w-5xl">
-        <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW TOOLS / QR</p>
-        <h1 className="mt-4 font-display text-5xl font-bold tracking-tight md:text-7xl">QR Code Generator</h1>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">Turn a URL or text into a downloadable QR code in seconds.</p>
+        <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]"><LocalizedCopy source="SLOW TOOLS / QR" /></p>
+        <h1 className="mt-4 font-display text-5xl font-bold tracking-tight md:text-7xl"><LocalizedCopy source="QR Code Generator" /></h1>
+        <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]"><LocalizedCopy source="Turn a URL or text into a downloadable QR code in seconds." /></p>
         <div className="mt-10"><QrGenerator /></div>
       </div>
     </main>

@@ -2,11 +2,13 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { isLocale, translate, type Locale, type TranslationKey } from "@/lib/localization";
+import { translateContent } from "@/lib/content-localization";
 
 type LocaleContextValue = {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   t: (key: TranslationKey) => string;
+  text: (source: string) => string;
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
@@ -67,6 +69,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
       locale,
       setLocale,
       t: (key) => translate(locale, key),
+      text: (source) => translateContent(locale, source),
     }),
     [locale, setLocale],
   );

@@ -24,7 +24,7 @@ Open `http://localhost:3000`.
 
 ## Languages
 
-Use the language selector in the site header to switch between English, Arabic, and Turkish. The selected language is saved in the browser; Arabic automatically enables right-to-left layout.
+Use the language selector in the site header to switch between English, Arabic, and Turkish. Shared navigation, route copy, project case studies, blog articles, and tool interfaces are localized; the selected language is saved in the browser, and Arabic automatically enables right-to-left layout.
 
 ## Optional YouTube integration
 

@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import { Radio, Users, Wifi } from "lucide-react";
 import { SiGithub } from "react-icons/si";
 import { useEffect, useState } from "react";
+import { useLocale } from "@/components/layout/locale-provider";
+import type { TranslationKey } from "@/lib/localization";
 
 const GitHubCalendar = dynamic(
   () => import("react-github-calendar").then((module) => module.GitHubCalendar),
@@ -105,16 +107,18 @@ function StatusDot({ status }: { status: DiscordStatus }) {
   return <span aria-hidden="true" className={`inline-block h-2.5 w-2.5 rounded-full ${color}`} />;
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function Stat({ label, value }: { label: TranslationKey; value: number }) {
+  const { t } = useLocale();
   return (
     <div className="min-w-0 rounded-2xl border border-white/10 bg-black/15 p-4">
-      <p className="text-xs text-white/35">{label}</p>
+      <p className="text-xs text-white/35">{t(label)}</p>
       <p className="mt-1 break-words text-2xl font-bold text-white">{value}</p>
     </div>
   );
 }
 
 export function LiveActivity() {
+  const { t } = useLocale();
   const [discord, setDiscord] = useState<DiscordData | null>(null);
   const [github, setGithub] = useState<GitHubUser | null>(null);
   const [error, setError] = useState(false);
@@ -175,19 +179,25 @@ export function LiveActivity() {
 
   const activity = discord?.activities.find((item) => item.type === 0);
   const status = discord?.discord_status ?? "offline";
+  const statusKey: Record<DiscordStatus, TranslationKey> = {
+    online: "live.status.online",
+    idle: "live.status.idle",
+    dnd: "live.status.dnd",
+    offline: "live.status.offline",
+  };
 
   return (
     <section className="px-5 py-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between gap-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-[#7ec4ff]">Live signals</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-[#7ec4ff]">{t("live.eyebrow")}</p>
             <h2 className="mt-3 font-display text-3xl font-bold text-white sm:text-5xl">
-              What’s happening behind the site.
+              {t("live.headline")}
             </h2>
           </div>
           <span className="hidden items-center gap-2 text-xs text-white/35 sm:flex">
-            <Wifi size={13} /> refreshed every minute
+            <Wifi size={13} /> {t("live.refreshed")}
           </span>
         </div>
 
@@ -200,7 +210,7 @@ export function LiveActivity() {
                 </span>
                 <div>
                   <p className="text-xs uppercase tracking-[0.25em] text-white/35">GitHub</p>
-                  <h3 className="mt-1 font-semibold text-white">Contribution activity</h3>
+                  <h3 className="mt-1 font-semibold text-white">{t("live.contributions")}</h3>
                 </div>
               </div>
               <a
@@ -217,15 +227,15 @@ export function LiveActivity() {
               <GitHubCalendar
                 username="SLOW429"
                 colorScheme="dark"
-                labels={{ totalCount: "{{count}} contributions in the last year" }}
+                labels={{ totalCount: t("live.contributionCount") }}
               />
             </div>
 
             {github && (
               <div className="mt-7 grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
-                <Stat label="Repos" value={github.public_repos} />
-                <Stat label="Followers" value={github.followers} />
-                <Stat label="Following" value={github.following} />
+                <Stat label="live.repos" value={github.public_repos} />
+                <Stat label="live.followers" value={github.followers} />
+                <Stat label="live.following" value={github.following} />
               </div>
             )}
           </div>
@@ -238,16 +248,16 @@ export function LiveActivity() {
                 </span>
                 <div>
                   <p className="text-xs uppercase tracking-[0.25em] text-white/35">Discord</p>
-                  <h3 className="mt-1 font-semibold text-white">Live presence</h3>
+                  <h3 className="mt-1 font-semibold text-white">{t("live.presence")}</h3>
                 </div>
               </div>
               <div className="mt-7 flex items-center gap-3">
                 <StatusDot status={status} />
-                <span className="capitalize text-white/75">{status}</span>
+                <span className="capitalize text-white/75">{t(statusKey[status])}</span>
               </div>
-              <p className="mt-4 text-xl font-semibold text-white">{activity?.name ?? "Quiet mode."}</p>
+              <p className="mt-4 text-xl font-semibold text-white">{activity?.name ?? t("live.quiet")}</p>
               <p className="mt-2 text-sm leading-6 text-white/45">
-                {activity?.details ?? activity?.state ?? "No current activity is being shared."}
+                {activity?.details ?? activity?.state ?? t("live.noActivity")}
               </p>
               <a
                 href="https://discord.gg/MvVxreJXMq"
@@ -255,19 +265,18 @@ export function LiveActivity() {
                 rel="noreferrer"
                 className="mt-6 inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-white/75 hover:border-white/20 hover:text-white"
               >
-                <Radio size={15} /> Join the community
+                <Radio size={15} /> {t("live.joinCommunity")}
               </a>
             </div>
 
             <div className="rounded-[2rem] border border-[#7ec4ff]/10 bg-[linear-gradient(135deg,rgba(126,196,255,.08),rgba(167,139,250,.05))] p-6 sm:p-8">
-              <p className="text-xs uppercase tracking-[0.25em] text-[#7ec4ff]">System note</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-[#7ec4ff]">{t("live.systemNote")}</p>
               <p className="mt-3 text-sm leading-7 text-white/55">
-                Live integrations are progressive enhancements. When an external service is unavailable,
-                the site keeps rendering cleanly instead of blocking the page.
+                {t("live.systemDescription")}
               </p>
               {error && (
                 <p role="status" className="mt-3 text-xs text-amber-200/70">
-                  Some live services are temporarily unavailable.
+                  {t("live.unavailable")}
                 </p>
               )}
             </div>

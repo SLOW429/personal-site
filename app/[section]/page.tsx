@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/lib/site-config";
+import { LocalizedCopy } from "@/components/layout/localized-text";
 
 const projectItems = [
   { title: "HR-BOT", text: "Highrise automation and music bot work built with Python, Docker, and Coolify.", href: "https://github.com/SLOW429/HR-BOT" },
@@ -168,19 +169,19 @@ export default async function SectionPage({ params }: { params: Promise<{ sectio
     <main className="min-h-[70vh] px-5 py-16 md:py-24">
       <section className="mx-auto w-full max-w-6xl">
         <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW.DEV / {section}</p>
-          <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-[var(--foreground)] md:text-6xl">{page.title}</h1>
-          <p className="mt-5 text-lg leading-8 text-[var(--muted)]">{page.description}</p>
-          <p className="mt-5 max-w-3xl text-base leading-7 text-[var(--foreground)]/80">{page.intro}</p>
+          <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]"><LocalizedCopy source={`SLOW.DEV / ${section}`} /></p>
+          <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-[var(--foreground)] md:text-6xl"><LocalizedCopy source={page.title} /></h1>
+          <p className="mt-5 text-lg leading-8 text-[var(--muted)]"><LocalizedCopy source={page.description} /></p>
+          <p className="mt-5 max-w-3xl text-base leading-7 text-[var(--foreground)]/80"><LocalizedCopy source={page.intro} /></p>
         </div>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
           {page.groups.map((group) => (
             <article key={group.title} className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-[0_0_60px_rgba(126,196,255,0.05)] backdrop-blur-xl">
-              <h2 className="font-display text-xl font-bold text-[var(--foreground)]">{group.title}</h2>
+              <h2 className="font-display text-xl font-bold text-[var(--foreground)]"><LocalizedCopy source={group.title} /></h2>
               <ul className="mt-5 space-y-3">
                 {group.items.map((item) => (
-                  <li key={item} className="border-l border-[var(--gold)]/40 pl-4 text-sm leading-6 text-[var(--muted)]">{item}</li>
+                  <li key={item} className="border-s border-[var(--gold)]/40 ps-4 text-sm leading-6 text-[var(--muted)]"><LocalizedCopy source={item} /></li>
                 ))}
               </ul>
             </article>
@@ -193,7 +194,7 @@ export default async function SectionPage({ params }: { params: Promise<{ sectio
               <a key={project.title} href={project.href} target="_blank" rel="noreferrer" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]">
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--gold)]">GitHub</p>
                 <h2 className="mt-3 text-xl font-bold text-[var(--foreground)]">{project.title}</h2>
-                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{project.text}</p>
+                <p className="mt-3 text-sm leading-6 text-[var(--muted)]"><LocalizedCopy source={project.text} /></p>
               </a>
             ))}
           </div>
@@ -205,7 +206,7 @@ export default async function SectionPage({ params }: { params: Promise<{ sectio
               <a key={creator.href} href={creator.href} target="_blank" rel="noreferrer" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]">
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--gold)]">{creator.title}</p>
                 <h2 className="mt-3 text-xl font-bold text-[var(--foreground)]">{creator.value}</h2>
-                <p className="mt-3 text-sm text-[var(--muted)]">Open official channel →</p>
+                <p className="mt-3 text-sm text-[var(--muted)]"><LocalizedCopy source="Open official channel →" /></p>
               </a>
             ))}
           </div>
@@ -216,11 +217,11 @@ export default async function SectionPage({ params }: { params: Promise<{ sectio
             const external = href.startsWith("http");
             return external ? (
               <a key={href} href={href} target="_blank" rel="noreferrer" className="rounded-2xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] px-5 py-3 font-semibold text-[#071018] transition hover:-translate-y-0.5">
-                {label}
+                <LocalizedCopy source={label} />
               </a>
             ) : (
               <Link key={href} href={href} className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-5 py-3 font-semibold text-[var(--foreground)] transition hover:-translate-y-0.5 hover:border-[var(--gold)]">
-                {label}
+                <LocalizedCopy source={label} />
               </Link>
             );
           })}

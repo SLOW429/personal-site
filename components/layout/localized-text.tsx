@@ -8,6 +8,11 @@ export function LocalizedText({ message }: { message: TranslationKey }) {
   return t(message);
 }
 
+export function LocalizedCopy({ source }: { source: string }) {
+  const { text } = useLocale();
+  return text(source);
+}
+
 export function LocalizedDate({ value }: { value: string }) {
   const { locale } = useLocale();
   const dateLocale = locale === "ar" ? "ar" : locale === "tr" ? "tr-TR" : "en-US";

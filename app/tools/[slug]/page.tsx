@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import ToolDetail, { type ToolSlug } from "../../../components/tools/tool-detail";
+import { LocalizedCopy } from "@/components/layout/localized-text";
 
 const toolMeta = {
   "json-formatter": {
@@ -82,7 +83,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           }).replace(/</g, "\\u003c"),
         }}
       />
-      <div className="mx-auto -mt-10 max-w-5xl px-5 pb-16 text-sm text-[var(--muted)]"><Link href="/tools" className="hover:text-[var(--gold)]">← Back to SLOW Tools</Link></div>
+      <div className="mx-auto -mt-10 max-w-5xl px-5 pb-16 text-sm text-[var(--muted)]"><Link href="/tools" className="hover:text-[var(--gold)]"><LocalizedCopy source="← Back to SLOW Tools" /></Link></div>
     </>
   );
 }
