@@ -7,18 +7,13 @@ export const siteConfig = {
   social: {
     github: "https://github.com/SLOW429",
     youtube: "https://www.youtube.com/@SLOW429",
-<<<<<<< HEAD
     kick: "https://kick.com/slow429",
-=======
-    kick: "https://kick.com/3azf-valo",
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
     discord: "https://discord.gg/MvVxreJXMq",
   },
   assets: { icon: "/avatar-poster.jpg", ogImage: "/banner-poster.jpg" },
 } as const;
 
 export const navigation = [
-<<<<<<< HEAD
   ["nav.about", "/about"],
   ["nav.projects", "/projects"],
   ["nav.services", "/services"],
@@ -28,22 +23,6 @@ export const navigation = [
   ["nav.gaming", "/gaming"],
 ] as const;
 
-=======
-  ["About", "/about"],
-  ["Projects", "/projects"],
-  ["Services", "/services"],
-  ["Tools", "/tools"],
-  ["Blog", "/blog"],
-  ["Creator", "/creator"],
-  ["Gaming", "/gaming"],
-] as const;
-
-export const navigationLabels = {
-  About: "About", Projects: "Projects", Services: "Services", Tools: "Tools", Blog: "Blog", Creator: "Creator", Gaming: "Gaming",
-  Contact: "Contact", Start: "Start a Project", Open: "Open navigation", Close: "Close navigation",
-} as const;
-
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 export const toolSlugs = [
   "json-formatter", "base64", "seo-preview", "meta-tag-generator", "image-compressor",
   "uuid-generator", "jwt-decoder", "url-encoder", "timestamp", "qr-generator",

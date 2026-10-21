@@ -36,15 +36,11 @@ const toolMeta = {
     title: "Unix Timestamp Converter",
     description: "Convert Unix timestamps between seconds, milliseconds, and ISO dates.",
   },
-<<<<<<< HEAD
 } as const satisfies Record<ToolSlug, { title: string; description: string }>;
 
 function isToolSlug(slug: string): slug is ToolSlug {
   return Object.hasOwn(toolMeta, slug);
 }
-=======
-} as const;
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 export function generateStaticParams() {
   return Object.keys(toolMeta).map((slug) => ({ slug }));
@@ -52,13 +48,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-<<<<<<< HEAD
   if (!isToolSlug(slug)) return {};
   const tool = toolMeta[slug];
-=======
-  const tool = toolMeta[slug as ToolSlug];
-  if (!tool) return {};
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   const url = `https://slows.dev/tools/${slug}`;
   return {
     title: `${tool.title} | SLOW Tools`,
@@ -70,19 +61,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-<<<<<<< HEAD
   if (!isToolSlug(slug)) notFound();
   const key = slug;
-=======
-  if (!(slug in toolMeta)) notFound();
-  const key = slug as ToolSlug;
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   const tool = toolMeta[key];
   const url = `https://slows.dev/tools/${slug}`;
   return (
     <>
       <ToolDetail slug={key} />
-<<<<<<< HEAD
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -97,17 +82,6 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           }).replace(/</g, "\\u003c"),
         }}
       />
-=======
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        name: tool.title,
-        applicationCategory: "DeveloperApplication",
-        operatingSystem: "Web",
-        url,
-        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      }) }} />
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
       <div className="mx-auto -mt-10 max-w-5xl px-5 pb-16 text-sm text-[var(--muted)]"><Link href="/tools" className="hover:text-[var(--gold)]">← Back to SLOW Tools</Link></div>
     </>
   );

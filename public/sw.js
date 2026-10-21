@@ -1,4 +1,4 @@
-const CACHE = "slow-dev-v3";
+const CACHE = "slow-dev-v4";
 const APP_SHELL = ["/", "/manifest.webmanifest", "/avatar-poster.jpg", "/banner-poster.jpg"];
 
 self.addEventListener("install", (event) => {

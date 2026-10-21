@@ -14,14 +14,11 @@ const GitHubCalendar = dynamic(
 
 const DISCORD_ID = "680035752461205524";
 const COUNTER_KEY = "slows-dev-abdellatif-shaheen-visits";
-<<<<<<< HEAD
 type DiscordActivity = { type: number; name: string; details?: string; state?: string };
 type DiscordPresence = {
   discord_status: "online" | "idle" | "dnd" | "offline";
   activities?: DiscordActivity[];
 };
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 const calendarTheme = {
   light: ["#e3eefb", "#a9d0f5", "#5fa3e0", "#2f7cc4", "#163f66"],
@@ -68,7 +65,6 @@ function VisitorBadge() {
 }
 
 function DiscordCard() {
-<<<<<<< HEAD
   const [data, setData] = useState<DiscordPresence | null>(null);
 
   useEffect(() => {
@@ -78,23 +74,11 @@ function DiscordCard() {
         return response.json() as Promise<{ data?: DiscordPresence }>;
       })
       .then((json) => setData(json.data ?? null))
-=======
-  const [data, setData] = useState<any>(null);
-
-  useEffect(() => {
-    fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
-      .then((res) => res.json())
-      .then((json) => setData(json.data))
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
       .catch(() => setData(null));
   }, []);
 
   const status = data?.discord_status || "offline";
-<<<<<<< HEAD
   const activity = data?.activities?.find((item) => item.type === 0);
-=======
-  const activity = data?.activities?.find((a: any) => a.type === 0);
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
   return (
     <section className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 pt-24">

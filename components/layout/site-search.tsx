@@ -4,17 +4,10 @@ import Link from "next/link";
 import { Search, ArrowRight, Command, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { searchIndex } from "@/lib/search-index";
-<<<<<<< HEAD
 import { useLocale } from "./locale-provider";
 
 export function SiteSearch() {
   const { t } = useLocale();
-=======
-
-const copy = { button: "Search", placeholder: "Search projects, tools, articles...", empty: "No results", hint: "Type to search", close: "Close" } as const;
-
-export function SiteSearch() {
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
@@ -38,33 +31,19 @@ export function SiteSearch() {
 
   return (
     <>
-<<<<<<< HEAD
       <button type="button" onClick={() => setOpen(true)} aria-label={t("search.button")} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[var(--card-border-strong)] bg-[var(--card-bg-soft)] px-3 text-sm font-semibold text-[var(--foreground)] transition hover:border-[var(--gold)]">
         <Search size={16} />
         <span className="hidden lg:inline">{t("search.button")}</span>
-=======
-      <button type="button" onClick={() => setOpen(true)} aria-label={copy.button} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[var(--card-border-strong)] bg-[var(--card-bg-soft)] px-3 text-sm font-semibold text-[var(--foreground)] transition hover:border-[var(--gold)]">
-        <Search size={16} />
-        <span className="hidden lg:inline">{copy.button}</span>
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
         <kbd className="hidden rounded-md border border-[var(--card-border)] px-1.5 py-0.5 text-[10px] text-[var(--muted)] sm:inline-flex"><Command size={10} />K</kbd>
       </button>
 
       {open && (
         <div className="fixed inset-0 z-[2000] bg-black/65 p-4 backdrop-blur-sm" onMouseDown={() => setOpen(false)}>
-<<<<<<< HEAD
           <div role="dialog" aria-modal="true" aria-label={t("search.button")} className="mx-auto mt-[8vh] w-full max-w-2xl overflow-hidden rounded-3xl border border-[var(--card-border-strong)] bg-[var(--panel-bg-heavy)] shadow-2xl" onMouseDown={(event) => event.stopPropagation()}>
             <div className="flex items-center gap-3 border-b border-[var(--card-border)] p-4">
               <Search size={18} className="text-[var(--gold)]" />
               <input autoFocus aria-label={t("search.placeholder")} value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("search.placeholder")} className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--muted)]" />
               <button type="button" onClick={() => setOpen(false)} aria-label={t("search.close")} className="rounded-lg p-2 text-[var(--muted)] hover:bg-[var(--card-bg-hover)]"><X size={17} /></button>
-=======
-          <div className="mx-auto mt-[8vh] w-full max-w-2xl overflow-hidden rounded-3xl border border-[var(--card-border-strong)] bg-[var(--panel-bg-heavy)] shadow-2xl" onMouseDown={(event) => event.stopPropagation()}>
-            <div className="flex items-center gap-3 border-b border-[var(--card-border)] p-4">
-              <Search size={18} className="text-[var(--gold)]" />
-              <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.placeholder} className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--muted)]" />
-              <button type="button" onClick={() => setOpen(false)} aria-label={copy.close} className="rounded-lg p-2 text-[var(--muted)] hover:bg-[var(--card-bg-hover)]"><X size={17} /></button>
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
             </div>
             <div className="max-h-[65vh] overflow-y-auto p-2">
               {results.map((item) => (
@@ -74,13 +53,8 @@ export function SiteSearch() {
                   <ArrowRight size={15} className="mt-1 shrink-0 text-[var(--muted)] transition group-hover:translate-x-1 group-hover:text-[var(--gold)]" />
                 </Link>
               ))}
-<<<<<<< HEAD
               {!results.length && <p className="px-4 py-12 text-center text-sm text-[var(--muted)]">{t("search.empty")}</p>}
               {!query && <p className="px-4 pb-3 pt-2 text-center text-[11px] text-[var(--muted)]">{t("search.hint")} · Ctrl/Cmd + K</p>}
-=======
-              {!results.length && <p className="px-4 py-12 text-center text-sm text-[var(--muted)]">{copy.empty}</p>}
-              {!query && <p className="px-4 pb-3 pt-2 text-center text-[11px] text-[var(--muted)]">{copy.hint} · Ctrl/Cmd + K</p>}
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
             </div>
           </div>
         </div>

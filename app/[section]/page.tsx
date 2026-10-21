@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-<<<<<<< HEAD
 import { siteConfig } from "@/lib/site-config";
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 const projectItems = [
   { title: "HR-BOT", text: "Highrise automation and music bot work built with Python, Docker, and Coolify.", href: "https://github.com/SLOW429/HR-BOT" },
@@ -14,11 +11,7 @@ const projectItems = [
 
 const creatorLinks = [
   { title: "YouTube", value: "@SLOW429", href: "https://www.youtube.com/@SLOW429" },
-<<<<<<< HEAD
   { title: "Kick", value: "slow429", href: siteConfig.social.kick },
-=======
-  { title: "Kick", value: "3azf-valo", href: "https://kick.com/3azf-valo" },
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   { title: "Discord", value: "SLOW community", href: "https://discord.gg/MvVxreJXMq" },
 ];
 
@@ -82,11 +75,7 @@ const sections = {
       { title: "Official channels", items: creatorLinks.map((item) => `${item.title} — ${item.value}`) },
       { title: "Community", items: ["Discord community", "Gaming sessions", "Build and creator announcements"] },
     ],
-<<<<<<< HEAD
     links: [["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", siteConfig.social.kick], ["Discord", "https://discord.gg/MvVxreJXMq"], ["Gaming", "/gaming"]],
-=======
-    links: [["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", "https://kick.com/3azf-valo"], ["Discord", "https://discord.gg/MvVxreJXMq"], ["Gaming", "/gaming"]],
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   },
   gaming: {
     title: "Gaming",
@@ -97,11 +86,7 @@ const sections = {
       { title: "Community", items: ["Discord gaming sessions", "Stream announcements", "Community events"] },
       { title: "Future utilities", items: ["Minecraft server utilities", "Gaming helpers", "Configuration resources", "Small creator tools"] },
     ],
-<<<<<<< HEAD
     links: [["Watch on Kick", siteConfig.social.kick], ["Watch on YouTube", "https://www.youtube.com/@SLOW429"], ["Creator Hub", "/creator"]],
-=======
-    links: [["Watch on Kick", "https://kick.com/3azf-valo"], ["Watch on YouTube", "https://www.youtube.com/@SLOW429"], ["Creator Hub", "/creator"]],
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   },
   now: {
     title: "Now",
@@ -134,11 +119,7 @@ const sections = {
       { title: "Creator", items: creatorLinks.map((item) => `${item.title} — ${item.value}`) },
       { title: "Social & support", items: ["X — @SLOW_429", "Instagram — @m6.ydj", "Spotify — SLOW playlist/profile", "PayPal support"] },
     ],
-<<<<<<< HEAD
     links: [["GitHub", "https://github.com/SLOW429"], ["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", siteConfig.social.kick], ["Discord", "https://discord.gg/MvVxreJXMq"]],
-=======
-    links: [["GitHub", "https://github.com/SLOW429"], ["YouTube", "https://www.youtube.com/@SLOW429"], ["Kick", "https://kick.com/3azf-valo"], ["Discord", "https://discord.gg/MvVxreJXMq"]],
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   },
   contact: {
     title: "Start a Project",
@@ -154,24 +135,17 @@ const sections = {
 
 type Section = keyof typeof sections;
 
-<<<<<<< HEAD
 function getSection(section: string) {
   return Object.hasOwn(sections, section) ? sections[section as Section] : undefined;
 }
 
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 export function generateStaticParams() {
   return Object.keys(sections).map((section) => ({ section }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ section: string }> }): Promise<Metadata> {
   const { section } = await params;
-<<<<<<< HEAD
   const page = getSection(section);
-=======
-  const page = sections[section as Section];
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   if (!page) return {};
   return {
     title: page.title,
@@ -187,11 +161,7 @@ export async function generateMetadata({ params }: { params: Promise<{ section: 
 
 export default async function SectionPage({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;
-<<<<<<< HEAD
   const page = getSection(section);
-=======
-  const page = sections[section as Section];
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   if (!page) notFound();
 
   return (

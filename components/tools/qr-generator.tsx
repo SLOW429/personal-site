@@ -1,10 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-<<<<<<< HEAD
 import Image from "next/image";
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 const buttonClass = "rounded-xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:border-[var(--gold)] disabled:cursor-not-allowed disabled:opacity-40";
 
@@ -13,10 +10,7 @@ export default function QrGenerator() {
   const [size, setSize] = useState("360x360");
   const [generated, setGenerated] = useState(false);
   const [copied, setCopied] = useState(false);
-<<<<<<< HEAD
   const [copyError, setCopyError] = useState("");
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
   const qrUrl = useMemo(
     () => `https://api.qrserver.com/v1/create-qr-code/?size=${size}&margin=12&data=${encodeURIComponent(value)}`,
@@ -25,21 +19,14 @@ export default function QrGenerator() {
 
   async function copy() {
     if (!generated) return;
-<<<<<<< HEAD
     setCopyError("");
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
     try {
       await navigator.clipboard.writeText(qrUrl);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1200);
-<<<<<<< HEAD
     } catch {
       setCopyError("Clipboard access is unavailable. Copy the image URL manually.");
     }
-=======
-    } catch {}
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   }
 
   return (
@@ -62,7 +49,6 @@ export default function QrGenerator() {
           <option value="360x360">360 × 360</option>
           <option value="600x600">600 × 600</option>
         </select>
-<<<<<<< HEAD
         <button type="button" className={buttonClass} disabled={!value.trim()} onClick={() => setGenerated(true)}>Generate QR</button>
         <button type="button" className={buttonClass} disabled={!generated} onClick={copy}>{copied ? "Copied" : "Copy image URL"}</button>
       </div>
@@ -71,15 +57,6 @@ export default function QrGenerator() {
       {generated && (
         <div className="mt-6 flex flex-col items-center gap-4 rounded-3xl border border-[var(--card-border)] bg-white p-6">
           <Image src={qrUrl} width={360} height={360} unoptimized alt="Generated QR code" className="h-auto w-full max-w-[360px] rounded-xl" />
-=======
-        <button className={buttonClass} disabled={!value.trim()} onClick={() => setGenerated(true)}>Generate QR</button>
-        <button className={buttonClass} disabled={!generated} onClick={copy}>{copied ? "Copied" : "Copy image URL"}</button>
-      </div>
-
-      {generated && (
-        <div className="mt-6 flex flex-col items-center gap-4 rounded-3xl border border-[var(--card-border)] bg-white p-6">
-          <img src={qrUrl} width={360} height={360} alt="Generated QR code" className="h-auto w-full max-w-[360px] rounded-xl" />
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
           <a href={qrUrl} target="_blank" rel="noreferrer" download="slow-qr.png" className="rounded-xl bg-[var(--gold)] px-4 py-2 font-semibold text-[#071018]">Download QR</a>
         </div>
       )}

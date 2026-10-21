@@ -10,11 +10,7 @@ export const metadata: Metadata = {
     description: "Software, tools, automation, creator work and experiments from SLOW.DEV.",
     url: "https://slows.dev/",
     siteName: "SLOW.DEV",
-<<<<<<< HEAD
     images: [{ url: "/banner-poster.jpg", width: 680, height: 240, alt: "SLOW.DEV" }],
-=======
-    images: [{ url: "/banner-poster.jpg", width: 1600, height: 565, alt: "SLOW.DEV" }],
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
     type: "website",
   },
   twitter: {

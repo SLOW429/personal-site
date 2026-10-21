@@ -3,10 +3,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import PwaRegister from "@/components/layout/pwa-register";
-<<<<<<< HEAD
 import { LocaleProvider } from "@/components/layout/locale-provider";
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -47,13 +44,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: siteConfig.assets.ogImage,
-<<<<<<< HEAD
         width: 680,
         height: 240,
-=======
-        width: 1600,
-        height: 565,
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
         alt: siteConfig.name,
       },
     ],
@@ -71,11 +63,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-<<<<<<< HEAD
   themeColor: "#060a13",
-=======
-  themeColor: "#05070d",
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 };
 
 const structuredData = {
@@ -106,14 +94,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-<<<<<<< HEAD
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full bg-background font-sans text-foreground">
         <LocaleProvider>
-=======
-    <html lang="en" dir="ltr" className="h-full antialiased">
-      <body className="min-h-full bg-background font-sans text-foreground">
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
         <SiteHeader />
         <div className="flex min-h-screen flex-col pt-16">
           <div className="flex-1">{children}</div>
@@ -122,16 +105,11 @@ export default function RootLayout({
         <PwaRegister />
         <script
           type="application/ld+json"
-<<<<<<< HEAD
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
           }}
         />
         </LocaleProvider>
-=======
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
       </body>
     </html>
   );

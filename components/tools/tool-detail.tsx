@@ -1,18 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-<<<<<<< HEAD
 import Image from "next/image";
 import ImageCompressorTool from "./image-compressor";
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 const input = "mt-4 w-full rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)] p-4 font-mono text-sm outline-none focus:border-[var(--gold)]";
 const button = "rounded-xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:border-[var(--gold)] disabled:opacity-40";
 
 function Copy({ value }: { value: string }) {
   const [copied, setCopied] = useState(false);
-<<<<<<< HEAD
   const [error, setError] = useState("");
   async function copy() {
     setError("");
@@ -32,14 +28,6 @@ function Copy({ value }: { value: string }) {
       </button>
       {error && <p role="alert" className="mt-2 text-xs text-red-300">{error}</p>}
     </div>
-=======
-  return (
-    <button className={button} disabled={!value} onClick={async () => {
-      try { await navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1200); } catch {}
-    }}>
-      {copied ? "Copied" : "Copy"}
-    </button>
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   );
 }
 
@@ -84,33 +72,10 @@ function Seo() {
   const [image, setImage] = useState("https://slows.dev/banner-poster.jpg");
   return <>
     <div className="mt-4 grid gap-3"><input className={input} value={title} onChange={e => setTitle(e.target.value)} placeholder="Page title"/><textarea className={`${input} min-h-28`} value={description} onChange={e => setDescription(e.target.value)} placeholder="Meta description"/><input className={input} value={url} onChange={e => setUrl(e.target.value)} placeholder="Canonical URL"/><input className={input} value={image} onChange={e => setImage(e.target.value)} placeholder="Social image URL"/></div>
-<<<<<<< HEAD
     <div className="mt-5 grid gap-4 lg:grid-cols-2"><div className="rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)] p-5"><p className="text-xs uppercase tracking-[.25em] text-[var(--muted)]">Search preview</p><p className="mt-3 text-xl font-semibold text-[var(--gold-light)]">{title || "Untitled page"}</p><p className="mt-1 break-all text-xs text-emerald-300">{url}</p><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{description}</p><p className="mt-4 text-xs text-[var(--muted)]">{title.length} title chars · {description.length} description chars</p></div><div className="overflow-hidden rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)]">{image ? <Image src={image} alt="Social preview" width={1200} height={630} unoptimized className="h-44 w-full object-cover"/> : <div className="h-44"/>}<div className="p-5"><p className="font-semibold">{title || "Social title"}</p><p className="mt-2 text-sm text-[var(--muted)]">{description || "Social description"}</p></div></div></div>
   </>;
 }
 
-=======
-    <div className="mt-5 grid gap-4 lg:grid-cols-2"><div className="rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)] p-5"><p className="text-xs uppercase tracking-[.25em] text-[var(--muted)]">Search preview</p><p className="mt-3 text-xl font-semibold text-[var(--gold-light)]">{title || "Untitled page"}</p><p className="mt-1 break-all text-xs text-emerald-300">{url}</p><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{description}</p><p className="mt-4 text-xs text-[var(--muted)]">{title.length} title chars · {description.length} description chars</p></div><div className="overflow-hidden rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)]">{image ? <img src={image} alt="Social preview" className="h-44 w-full object-cover"/> : <div className="h-44"/>}<div className="p-5"><p className="font-semibold">{title || "Social title"}</p><p className="mt-2 text-sm text-[var(--muted)]">{description || "Social description"}</p></div></div></div>
-  </>;
-}
-
-function ImageCompressor() {
-  const [quality, setQuality] = useState(.8);
-  const [source, setSource] = useState<{url:string,size:number}|null>(null);
-  const [result, setResult] = useState<{url:string,size:number}|null>(null);
-  function compress(file: File) {
-    const url = URL.createObjectURL(file); setSource({url,size:file.size});
-    const img = new Image(); img.onload = () => {
-      const canvas = document.createElement("canvas"); canvas.width=img.naturalWidth; canvas.height=img.naturalHeight;
-      const ctx=canvas.getContext("2d"); if(!ctx)return; ctx.drawImage(img,0,0);
-      canvas.toBlob(blob => { if(blob) setResult({url:URL.createObjectURL(blob),size:blob.size}); },"image/webp",quality);
-    }; img.src=url;
-  }
-  const savings = source && result ? Math.max(0, Math.round((1-result.size/source.size)*100)) : 0;
-  return <><label className="mt-4 block cursor-pointer rounded-2xl border border-dashed border-[var(--card-border-strong)] p-6 text-center"><input type="file" accept="image/*" className="sr-only" onChange={e => { const f=e.target.files?.[0]; if(f) compress(f); }}/><span className="font-semibold">Choose an image</span><span className="mt-2 block text-sm text-[var(--muted)]">Everything stays in your browser.</span></label><label className="mt-5 block text-sm">Quality <strong>{Math.round(quality*100)}%</strong><input type="range" min="0.2" max="1" step="0.05" value={quality} onChange={e=>setQuality(Number(e.target.value))} className="mt-2 w-full"/></label>{source && <img src={source.url} alt="Original" className="mt-5 max-h-72 w-full rounded-2xl object-contain"/>}{source && result && <div className="mt-5 grid gap-3 text-sm sm:grid-cols-3"><div>Original<br/><b>{Math.round(source.size/1024)} KB</b></div><div>WebP<br/><b>{Math.round(result.size/1024)} KB</b></div><div>Saved<br/><b>{savings}%</b></div></div>}{result && <a href={result.url} download="slow-compressed.webp" className="mt-5 inline-flex rounded-xl bg-[var(--gold)] px-4 py-2 font-semibold text-[#071018]">Download WebP</a>}</>;
-}
-
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 function UUID() {
   const [value, setValue] = useState("");
   return <><button className={`${button} mt-4`} onClick={() => setValue(crypto.randomUUID())}>Generate UUID v4</button><div className="mt-4 rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)] p-5 font-mono text-sm break-all">{value || "Click generate to create a UUID."}</div><div className="mt-3"><Copy value={value}/></div></>;
@@ -138,7 +103,6 @@ function UrlCodec() {
 }
 
 function Timestamp() {
-<<<<<<< HEAD
   const [value, setValue] = useState("1700000000");
   const result = useMemo(() => {
     const n = Number(value);
@@ -147,10 +111,6 @@ function Timestamp() {
     if (Number.isNaN(date.getTime())) return "Invalid timestamp";
     return `${date.toISOString()}\n\nUnix seconds: ${Math.floor(date.getTime() / 1000)}\nUnix milliseconds: ${date.getTime()}`;
   }, [value]);
-=======
-  const [value, setValue] = useState(String(Math.floor(Date.now()/1000)));
-  const result = useMemo(() => { const n=Number(value); if(!Number.isFinite(n)) return "Invalid timestamp"; const date = new Date(n < 1e12 ? n*1000 : n); return `${date.toISOString()}\n\nUnix seconds: ${Math.floor(date.getTime()/1000)}\nUnix milliseconds: ${date.getTime()}`; }, [value]);
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   return <><input className={input} value={value} onChange={e=>setValue(e.target.value)} placeholder="Unix timestamp or milliseconds"/><pre className="mt-4 whitespace-pre-wrap rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)] p-4 text-sm">{result}</pre><div className="mt-3"><Copy value={result}/></div></>;
 }
 
@@ -158,11 +118,7 @@ const tools = {
   "json-formatter": { title: "JSON Formatter & Validator", description: "Format, validate, and inspect JSON locally without uploading your data.", Component: Json },
   base64: { title: "Base64 Encoder & Decoder", description: "Encode and decode UTF-8 text locally in your browser.", Component: Base64 },
   "seo-preview": { title: "SEO & Social Preview", description: "Preview titles, descriptions, URLs, and social images before publishing.", Component: Seo },
-<<<<<<< HEAD
   "image-compressor": { title: "Image Compressor", description: "Compress images to WebP locally and download the result without uploading files.", Component: ImageCompressorTool },
-=======
-  "image-compressor": { title: "Image Compressor", description: "Compress images to WebP locally and download the result without uploading files.", Component: ImageCompressor },
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   "uuid-generator": { title: "UUID Generator", description: "Generate UUID v4 identifiers locally in your browser.", Component: UUID },
   "jwt-decoder": { title: "JWT Decoder", description: "Decode JWT header and payload locally without sending tokens to a server.", Component: Jwt },
   "url-encoder": { title: "URL Encoder & Decoder", description: "Encode and decode URL components locally in your browser.", Component: UrlCodec },

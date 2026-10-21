@@ -9,15 +9,11 @@ export default function MetaTagGenerator() {
   const [siteName, setSiteName] = useState("My Site");
   const [image, setImage] = useState("");
   const [copied, setCopied] = useState(false);
-<<<<<<< HEAD
   const [copyError, setCopyError] = useState("");
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
   const code = useMemo(() => `export const metadata = {\n  title: ${JSON.stringify(title || "Your Page Title")},\n  description: ${JSON.stringify(description || "Your meta description")},\n  alternates: { canonical: ${JSON.stringify(url)} },\n  openGraph: {\n    title: ${JSON.stringify(title || "Your Page Title")},\n    description: ${JSON.stringify(description || "Your meta description")},\n    url: ${JSON.stringify(url)},\n    siteName: ${JSON.stringify(siteName)},\n    type: "website",${image ? `\n    images: [{ url: ${JSON.stringify(image)} }],` : ""}\n  },\n};`, [title, description, url, siteName, image]);
 
   async function copy() {
-<<<<<<< HEAD
     setCopyError("");
     try {
       await navigator.clipboard.writeText(code);
@@ -26,9 +22,6 @@ export default function MetaTagGenerator() {
     } catch {
       setCopyError("Clipboard access is unavailable. Copy the generated code manually.");
     }
-=======
-    try { await navigator.clipboard.writeText(code); setCopied(true); window.setTimeout(() => setCopied(false), 1200); } catch {}
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   }
 
   return <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 backdrop-blur-xl">
@@ -43,10 +36,7 @@ export default function MetaTagGenerator() {
       <input className="rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)] px-4 py-3 text-sm outline-none focus:border-[var(--gold)]" value={image} onChange={e => setImage(e.target.value)} placeholder="Optional OG image URL" />
     </div>
     <div className="mt-4 flex gap-2"><button type="button" onClick={copy} className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-4 py-2 text-sm font-semibold hover:border-[var(--gold)]">{copied ? "Copied" : "Copy metadata"}</button></div>
-<<<<<<< HEAD
     {copyError && <p role="alert" className="mt-3 text-xs text-red-300">{copyError}</p>}
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
     <pre className="mt-4 max-h-[32rem] overflow-auto whitespace-pre-wrap rounded-2xl border border-[var(--card-border)] bg-[var(--panel-bg-heavy)] p-4 font-mono text-xs leading-6">{code}</pre>
   </div>;
 }

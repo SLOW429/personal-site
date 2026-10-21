@@ -87,16 +87,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       </article>
 
-<<<<<<< HEAD
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
         }}
       />
-=======
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
     </main>
   );
 }

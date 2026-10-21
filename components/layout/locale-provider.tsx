@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { isLocale, translate, type Locale, type TranslationKey } from "@/lib/localization";
 
 type LocaleContextValue = {
@@ -11,47 +11,51 @@ type LocaleContextValue = {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 const STORAGE_KEY = "slow-locale";
-const LOCALE_EVENT = "slow-locale-change";
-let currentLocale: Locale = "en";
 let storageWarningShown = false;
 
-function readLocale(): Locale {
+function readSavedLocale(): Locale {
   try {
     const storedLocale = window.localStorage.getItem(STORAGE_KEY);
-    if (isLocale(storedLocale)) currentLocale = storedLocale;
+    if (isLocale(storedLocale)) return storedLocale;
   } catch (error) {
     if (!storageWarningShown) {
       console.warn("Could not read the saved language preference.", error);
       storageWarningShown = true;
     }
   }
-  return currentLocale;
-}
-
-function subscribeToLocaleChanges(onChange: () => void) {
-  window.addEventListener(LOCALE_EVENT, onChange);
-  window.addEventListener("storage", onChange);
-  return () => {
-    window.removeEventListener(LOCALE_EVENT, onChange);
-    window.removeEventListener("storage", onChange);
-  };
-}
-
-function saveLocale(locale: Locale) {
-  currentLocale = locale;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, locale);
-  } catch (error) {
-    if (!storageWarningShown) {
-      console.warn("Could not save the language preference for future visits.", error);
-      storageWarningShown = true;
-    }
-  }
-  window.dispatchEvent(new Event(LOCALE_EVENT));
+  return "en";
 }
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const locale = useSyncExternalStore(subscribeToLocaleChanges, readLocale, (): Locale => "en");
+  const [locale, setLocaleState] = useState<Locale>("en");
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setLocaleState(readSavedLocale()), 100);
+
+    function syncLocale(event: StorageEvent) {
+      if (event.key === STORAGE_KEY || event.key === null) {
+        setLocaleState(readSavedLocale());
+      }
+    }
+
+    window.addEventListener("storage", syncLocale);
+    return () => {
+      window.clearTimeout(timeout);
+      window.removeEventListener("storage", syncLocale);
+    };
+  }, []);
+
+  const setLocale = useCallback((nextLocale: Locale) => {
+    setLocaleState(nextLocale);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, nextLocale);
+    } catch (error) {
+      if (!storageWarningShown) {
+        console.warn("Could not save the language preference for future visits.", error);
+        storageWarningShown = true;
+      }
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -61,10 +65,10 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   const value = useMemo<LocaleContextValue>(
     () => ({
       locale,
-      setLocale: saveLocale,
+      setLocale,
       t: (key) => translate(locale, key),
     }),
-    [locale],
+    [locale, setLocale],
   );
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;

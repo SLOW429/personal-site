@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { ArrowUpRight, Music2 } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { SiGithub, SiInstagram, SiYoutube } from "react-icons/si";
-<<<<<<< HEAD
 import { siteConfig } from "@/lib/site-config";
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 export const metadata: Metadata = {
   title: "Links",
@@ -40,11 +37,7 @@ export default function LinksPage() {
         <div className="mt-8 rounded-3xl border border-[var(--card-border-strong)] bg-[var(--card-bg)] p-7">
           <p className="text-sm leading-7 text-[var(--muted)]">Community and live channels are available from the Creator Hub.</p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
-<<<<<<< HEAD
             <a href={siteConfig.social.kick} target="_blank" rel="noreferrer" className="rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">Kick</a>
-=======
-            <a href="https://kick.com/3azf-valo" target="_blank" rel="noreferrer" className="rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018]">Kick</a>
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
             <a href="https://discord.gg/MvVxreJXMq" target="_blank" rel="noreferrer" className="rounded-xl border border-[var(--card-border-strong)] px-5 py-3 font-semibold">Discord</a>
           </div>
         </div>

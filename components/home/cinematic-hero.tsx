@@ -1,13 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Mic2, Sparkles } from "lucide-react";
 import { TerminalIntro } from "./terminal-intro";
-<<<<<<< HEAD
 import { useLocale } from "@/components/layout/locale-provider";
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 const particles = Array.from({ length: 24 }, (_, index) => ({
   id: index,
@@ -18,11 +15,9 @@ const particles = Array.from({ length: 24 }, (_, index) => ({
 }));
 
 export function CinematicHero() {
-<<<<<<< HEAD
   const { t } = useLocale();
+  const reduceMotion = useReducedMotion() ?? false;
 
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   return (
     <section className="relative isolate flex min-h-[calc(100svh-4rem)] items-center overflow-hidden px-5 py-20 sm:px-8 lg:px-12">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(126,196,255,.15),transparent_28%),radial-gradient(circle_at_82%_35%,rgba(167,139,250,.12),transparent_30%),linear-gradient(180deg,rgba(6,10,19,.82),rgba(6,10,19,.96))]" />
@@ -33,62 +28,39 @@ export function CinematicHero() {
           key={particle.id}
           className="absolute rounded-full bg-[#d9edff]/70"
           style={{ left: particle.left, top: particle.top, width: particle.size, height: particle.size }}
+          initial={false}
           animate={{ y: [0, -18, 0], opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: 4 + particle.delay, repeat: Infinity, delay: particle.delay, ease: "easeInOut" }}
+          transition={reduceMotion ? { duration: 0, repeat: 0 } : { duration: 4 + particle.delay, repeat: Infinity, delay: particle.delay, ease: "easeInOut" }}
         />
       ))}
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_.9fr]">
         <div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white/60 backdrop-blur-xl">
+          <motion.div initial={false} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.35 }} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white/60 backdrop-blur-xl">
             <Sparkles size={13} className="text-[#7ec4ff]" />
-<<<<<<< HEAD
             {t("home.badge")}
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="mt-6 max-w-4xl font-display text-5xl font-black tracking-[-0.04em] text-white sm:text-6xl lg:text-8xl">
+          <motion.h1 initial={false} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.4, delay: reduceMotion ? 0 : 0.08 }} className="mt-6 max-w-4xl font-display text-5xl font-black tracking-[-0.04em] text-white sm:text-6xl lg:text-8xl">
             {t("home.headlineStart")} <span className="bg-gradient-to-r from-[#d9edff] via-[#7ec4ff] to-[#a78bfa] bg-clip-text text-transparent">{t("home.headlineAccent")}</span>
             <br /> {t("home.headlineEnd")}
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }} className="mt-7 max-w-2xl text-lg leading-8 text-white/55 sm:text-xl">
+          <motion.p initial={false} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.4, delay: reduceMotion ? 0 : 0.16 }} className="mt-7 max-w-2xl text-lg leading-8 text-white/55 sm:text-xl">
             {t("home.description")}
-=======
-            SLOW429 / DIGITAL WORKSHOP
-          </motion.div>
-
-          <motion.h1 initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="mt-6 max-w-4xl font-display text-5xl font-black tracking-[-0.04em] text-white sm:text-6xl lg:text-8xl">
-            I build <span className="bg-gradient-to-r from-[#d9edff] via-[#7ec4ff] to-[#a78bfa] bg-clip-text text-transparent">software</span>,
-            <br /> tools & experiences.
-          </motion.h1>
-
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }} className="mt-7 max-w-2xl text-lg leading-8 text-white/55 sm:text-xl">
-            Developer, creator, and voiceover artist building practical products, automation systems, experiments, and content from SLOW.DEV.
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
           </motion.p>
 
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }} className="mt-8 flex flex-wrap gap-3">
-            <Link href="/projects" className="group inline-flex items-center gap-2 rounded-2xl bg-[#d9edff] px-5 py-3.5 font-bold text-[#071018] transition hover:-translate-y-0.5 hover:shadow-[0_20px_60px_rgba(126,196,255,.2)]">
-<<<<<<< HEAD
-              {t("home.exploreProjects")} <ArrowUpRight size={17} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <motion.div initial={false} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.4, delay: reduceMotion ? 0 : 0.22 }} className="mt-8 flex flex-wrap gap-3">
+            <Link href="/projects" className={`group inline-flex items-center gap-2 rounded-2xl bg-[#d9edff] px-5 py-3.5 font-bold text-[#071018] transition hover:shadow-[0_20px_60px_rgba(126,196,255,.2)] ${reduceMotion ? "" : "hover:-translate-y-0.5"}`}>
+              {t("home.exploreProjects")} <ArrowUpRight size={17} className={`transition ${reduceMotion ? "" : "group-hover:translate-x-0.5 group-hover:-translate-y-0.5"}`} />
             </Link>
-            <Link href="/contact" className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3.5 font-semibold text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-white/20">
+            <Link href="/contact" className={`inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3.5 font-semibold text-white backdrop-blur-xl transition hover:border-white/20 ${reduceMotion ? "" : "hover:-translate-y-0.5"}`}>
               <Mic2 size={17} /> {t("home.workWithMe")}
-=======
-              Explore projects <ArrowUpRight size={17} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
-            <Link href="/contact" className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3.5 font-semibold text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-white/20">
-              <Mic2 size={17} /> Work with me
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
             </Link>
           </motion.div>
 
           <div className="mt-9 flex flex-wrap gap-2 text-xs text-white/40">
-<<<<<<< HEAD
             {[t("home.developer"), t("home.creator"), t("home.voice"), t("home.automation"), "AI", t("nav.gaming")].map((label) => (
-=======
-            {['Developer', 'Creator', 'Voiceover', 'Automation', 'AI', 'Gaming'].map((label) => (
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
               <span key={label} className="rounded-full border border-white/10 px-3 py-1.5">{label}</span>
             ))}
           </div>
@@ -99,11 +71,7 @@ export function CinematicHero() {
         </div>
       </div>
 
-<<<<<<< HEAD
-      <motion.a href="#projects" animate={{ y: [0, 8, 0] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-white/30 hover:text-white/70" aria-label={t("home.scroll")}>
-=======
-      <motion.a href="#projects" animate={{ y: [0, 8, 0] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-white/30 hover:text-white/70" aria-label="Scroll to projects">
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
+      <motion.a href="#projects" initial={false} animate={{ y: [0, 8, 0] }} transition={reduceMotion ? { duration: 0, repeat: 0 } : { duration: 1.8, repeat: Infinity }} className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-white/30 hover:text-white/70" aria-label={t("home.scroll")}>
         <ArrowDown size={18} />
       </motion.a>
     </section>

@@ -10,11 +10,7 @@ export type SectionContent = {
   links: SectionLink[];
 };
 
-<<<<<<< HEAD
 function ActionLink({ label, href }: { label: string; href: string }) {
-=======
-function ActionLink({ label, href }: SectionLink) {
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   const external = /^https?:\/\//.test(href);
   const className = "rounded-2xl bg-gradient-to-r from-[var(--gold-light)] to-[var(--gold)] px-5 py-3 font-semibold text-[#071018] transition hover:-translate-y-0.5";
 
@@ -29,11 +25,7 @@ function ActionLink({ label, href }: SectionLink) {
 
 export function SectionShell({ section, content }: { section: string; content: SectionContent }) {
   return (
-<<<<<<< HEAD
     <main className="min-h-[70vh] px-5 py-16 md:py-24">
-=======
-    <main dir="ltr" lang="en" className="min-h-[70vh] px-5 py-16 md:py-24">
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
       <section className="mx-auto w-full max-w-6xl">
         <div className="max-w-3xl">
           <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)]">SLOW.DEV / {section}</p>
@@ -48,11 +40,7 @@ export function SectionShell({ section, content }: { section: string; content: S
               <h2 className="font-display text-xl font-bold text-[var(--foreground)]">{group.title}</h2>
               <ul className="mt-5 space-y-3">
                 {group.items.map((item) => (
-<<<<<<< HEAD
                   <li key={item} className="border-s border-[var(--gold)]/40 ps-4 text-sm leading-6 text-[var(--muted)]">{item}</li>
-=======
-                  <li key={item} className="border-l border-[var(--gold)]/40 pl-4 text-sm leading-6 text-[var(--muted)]">{item}</li>
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
                 ))}
               </ul>
             </article>
@@ -60,13 +48,9 @@ export function SectionShell({ section, content }: { section: string; content: S
         </div>
 
         <div className="mt-10 flex flex-wrap gap-3">
-<<<<<<< HEAD
           {content.links.map(([label, href]) => (
             <ActionLink key={`${label}-${href}`} label={label} href={href} />
           ))}
-=======
-          {content.links.map(([label, href]) => <ActionLink key={`${label}-${href}`} label={label} href={href} />)}
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
         </div>
       </section>
     </main>

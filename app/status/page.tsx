@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-<<<<<<< HEAD
 import Link from "next/link";
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 export const metadata: Metadata = {
   title: "Status | SLOW.DEV",
@@ -41,11 +38,7 @@ export default function StatusPage() {
             </article>
           ))}
         </div>
-<<<<<<< HEAD
         <Link href="/api/health" className="mt-8 inline-flex rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-5 py-3 text-sm font-semibold hover:border-[var(--gold)]">View health JSON →</Link>
-=======
-        <a href="/api/health" className="mt-8 inline-flex rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] px-5 py-3 text-sm font-semibold hover:border-[var(--gold)]">View health JSON →</a>
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
       </section>
     </main>
   );

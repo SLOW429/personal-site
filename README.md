@@ -49,7 +49,7 @@ KICK_ACCESS_TOKEN=YOUR_KICK_ACCESS_TOKEN
 KICK_BROADCASTER_USER_ID=YOUR_KICK_BROADCASTER_USER_ID
 ```
 
-Keep both values server-side only. Never expose them with `NEXT_PUBLIC_` variables or in client-side code. Kick's current API documentation exposes livestream endpoints under `/public/v2/livestreams`; the integration is intentionally optional so the site remains fully functional without Kick credentials. citeturn605560search1turn112file0
+Keep both values server-side only. Never expose them with `NEXT_PUBLIC_` variables or in client-side code. Kick's current API documentation exposes livestream endpoints under `/public/v2/livestreams`; the integration is intentionally optional so the site remains fully functional without Kick credentials.
 
 The official Kick channel is [kick.com/slow429](https://kick.com/slow429). The Creator and Gaming pages use Kick's responsive embedded player with an external watch link and retry behavior for connection drops.
 

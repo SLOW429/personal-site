@@ -41,11 +41,8 @@ const RATE_WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 8;
 const MAX_MESSAGES = 12;
 const MAX_MESSAGE_LENGTH = 2_000;
-<<<<<<< HEAD
 const MAX_RATE_BUCKETS = 5_000;
 const MAX_BODY_BYTES = 128_000;
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
 
 // Simple in-memory protection. This is intentionally lightweight and zero-cost;
 // a shared external rate limiter can replace it later if traffic requires it.
@@ -53,13 +50,8 @@ const rateBuckets = new Map<string, { startedAt: number; count: number }>();
 
 function getClientKey(req: NextRequest) {
   return (
-<<<<<<< HEAD
     req.headers.get("x-real-ip") ||
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-=======
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
     "unknown"
   );
 }
@@ -68,7 +60,6 @@ function isRateLimited(key: string) {
   const now = Date.now();
   const bucket = rateBuckets.get(key);
 
-<<<<<<< HEAD
   if (bucket && now - bucket.startedAt < RATE_WINDOW_MS) {
     bucket.count += 1;
     return bucket.count > MAX_REQUESTS_PER_WINDOW;
@@ -107,19 +98,6 @@ function getAssistantText(data: unknown): string | null {
 export async function POST(req: NextRequest) {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-=======
-  if (!bucket || now - bucket.startedAt >= RATE_WINDOW_MS) {
-    rateBuckets.set(key, { startedAt: now, count: 1 });
-    return false;
-  }
-
-  bucket.count += 1;
-  return bucket.count > MAX_REQUESTS_PER_WINDOW;
-}
-
-export async function POST(req: NextRequest) {
-  if (!process.env.GROQ_API_KEY) {
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
     return NextResponse.json(
       { error: "The assistant isn't configured yet — add GROQ_API_KEY to the server environment." },
       { status: 500 }
@@ -133,14 +111,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-<<<<<<< HEAD
   const contentLength = Number(req.headers.get("content-length"));
   if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
     return NextResponse.json({ error: "Request body is too large." }, { status: 413 });
   }
 
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
   let messages: Array<{ role: "user" | "assistant"; content: string }>;
 
   try {
@@ -181,10 +156,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
       },
-<<<<<<< HEAD
       signal: AbortSignal.timeout(20_000),
-=======
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         max_tokens: 350,
@@ -196,7 +168,6 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-<<<<<<< HEAD
     if (!response.ok) {
       return NextResponse.json(
         { error: "The assistant service is temporarily unavailable." },
@@ -212,18 +183,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-=======
-    const data = await response.json();
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: data?.error?.message || "The AI service returned an error." },
-        { status: response.status }
-      );
-    }
-
-    const text = data.choices?.[0]?.message?.content?.trim() ?? "";
->>>>>>> b9f0c72aee7db334f2a2f0fe520cea678ccfce84
     return NextResponse.json({ text });
   } catch {
     return NextResponse.json(
