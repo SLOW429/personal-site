@@ -75,6 +75,33 @@
 
     .connection[hidden] { display: none; }
 
+    .video-overlay {
+      position: fixed;
+      z-index: 2;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 4vw;
+      background: rgb(0 0 0 / 94%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s ease, visibility .25s ease;
+    }
+
+    .video-overlay.visible { opacity: 1; visibility: visible; }
+
+    .video-frame {
+      width: min(100%, 1280px);
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      border: 1px solid rgb(190 131 255 / 80%);
+      border-radius: 20px;
+      background: #000;
+      box-shadow: 0 0 60px rgb(167 98 255 / 42%);
+    }
+
+    .video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+
     @keyframes enter {
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
@@ -97,6 +124,9 @@
   </style>
 </head>
 <body>
+  <div class="video-overlay" id="video-overlay" aria-hidden="true">
+    <div class="video-frame" id="video-frame"></div>
+  </div>
   <main class="alert" id="donation-alert" role="status" aria-live="polite">
     <div class="avatar"><img src="slow429-profile.webp" alt=""></div>
     <div class="copy">
@@ -141,20 +171,20 @@
       const text = dictionary[locale];
       const alertElement = document.getElementById("donation-alert");
       const connection = document.getElementById("connection-status");
+      const videoOverlay = document.getElementById("video-overlay");
+      const videoFrame = document.getElementById("video-frame");
       const seen = new Set();
       const queue = [];
       let initialized = false;
       let hidingTimer;
       let isShowing = false;
       let errorLogged = false;
+      let youtubeApiPromise;
 
       document.documentElement.lang = locale === "tr" ? "tr" : locale;
       document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
 
-      function displayNext() {
-        if (isShowing || queue.length === 0) return;
-        const donation = queue.shift();
-        isShowing = true;
+      function showDonationAlert(donation) {
         document.getElementById("alert-eyebrow").textContent = text.eyebrow;
         document.getElementById("donor-name").textContent = donation.name || text.anonymous;
         document.getElementById("alert-message").textContent = donation.message || text.message;
@@ -176,6 +206,92 @@
             displayNext();
           }, 450);
         }, 7000);
+      }
+
+      function loadYouTubeApi() {
+        if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+        if (youtubeApiPromise) return youtubeApiPromise;
+
+        youtubeApiPromise = new Promise((resolve, reject) => {
+          const timeout = window.setTimeout(() => reject(new Error("YouTube player API timed out.")), 15000);
+          window.onYouTubeIframeAPIReady = () => {
+            window.clearTimeout(timeout);
+            resolve(window.YT);
+          };
+          const script = document.createElement("script");
+          script.src = "https://www.youtube.com/iframe_api";
+          script.async = true;
+          script.onerror = () => {
+            window.clearTimeout(timeout);
+            reject(new Error("YouTube player API could not be loaded."));
+          };
+          document.head.append(script);
+        });
+
+        return youtubeApiPromise;
+      }
+
+      function playLargeDonationVideo() {
+        videoOverlay.classList.add("visible");
+        videoOverlay.setAttribute("aria-hidden", "false");
+
+        return loadYouTubeApi().then((youtube) => new Promise((resolve) => {
+          let completed = false;
+          let player;
+          const watchdog = window.setTimeout(() => finish(), 10 * 60 * 1000);
+
+          function finish() {
+            if (completed) return;
+            completed = true;
+            window.clearTimeout(watchdog);
+            if (player) player.destroy();
+            videoFrame.replaceChildren();
+            videoOverlay.classList.remove("visible");
+            videoOverlay.setAttribute("aria-hidden", "true");
+            resolve();
+          }
+
+          const playerElement = document.createElement("div");
+          videoFrame.replaceChildren(playerElement);
+          player = new youtube.Player(playerElement, {
+            videoId: "J9r2XCvxhuA",
+            host: "https://www.youtube-nocookie.com",
+            playerVars: {
+              autoplay: 1,
+              controls: 0,
+              playsinline: 1,
+              rel: 0,
+              origin: window.location.origin,
+            },
+            events: {
+              onReady: (event) => event.target.playVideo(),
+              onStateChange: (event) => {
+                if (event.data === youtube.PlayerState.ENDED) finish();
+              },
+              onError: (event) => {
+                console.warn("Donation video could not be played.", event.data);
+                finish();
+              },
+            },
+          });
+        })).catch((error) => {
+          console.warn("Donation video could not be loaded; showing the alert instead.", error);
+          videoFrame.replaceChildren();
+          videoOverlay.classList.remove("visible");
+          videoOverlay.setAttribute("aria-hidden", "true");
+        });
+      }
+
+      async function displayNext() {
+        if (isShowing || queue.length === 0) return;
+        const donation = queue.shift();
+        isShowing = true;
+
+        if (donation.currency === "USD" && Number(donation.amount) >= 100) {
+          await playLargeDonationVideo();
+        }
+
+        showDonationAlert(donation);
       }
 
       async function pollDonations() {

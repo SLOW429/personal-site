@@ -70,7 +70,7 @@ UPSTASH_REDIS_REST_TOKEN=YOUR_UPSTASH_REST_TOKEN
 
 Create a Redis database in Upstash and copy its REST URL and token into Vercel. In the PayPal Developer Dashboard, register `https://slows.dev/api/paypal/webhook` for the same Live app, subscribe to `PAYMENT.CAPTURE.COMPLETED`, and set its webhook ID above. Keep the Client Secret and Redis token server-only; never use a `NEXT_PUBLIC_` prefix or commit real credentials.
 
-Add `https://slows.dev/donation-alert.html` as an OBS Browser Source. The overlay uses a transparent background and polls the verified donation feed. The donation page is available at `/donate.html` and is linked from Creator Hub.
+Add `https://slows.dev/donation-alert.html` as an OBS Browser Source. The overlay uses a transparent background and polls the verified donation feed. For USD donations of $100 or more, it plays the supplied YouTube video before showing the donor name, message, and amount; smaller donations show the alert directly. Make sure the Browser Source is allowed to play audio in OBS. The donation page is available at `/donate.html` and is linked from Creator Hub.
 
 For sandbox testing, use matching Sandbox client credentials and webhook ID, set `PAYPAL_ENV=sandbox`, and configure the same webhook event type. Restore the Live values before accepting real payments.
 
