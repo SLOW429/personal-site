@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { saveDonationOrderDetails } from "@/lib/donation-alerts";
 import { getPayPalAccessToken, getPayPalConfig, isRecord, paypalRequest } from "@/lib/paypal-server";
 
 export async function POST(request: Request) {
@@ -23,6 +24,9 @@ export async function POST(request: Request) {
   const donorName = typeof input.donorName === "string"
     ? input.donorName.trim().slice(0, 80) || "متبرع مجهول"
     : "متبرع مجهول";
+  const donorMessage = typeof input.donorMessage === "string"
+    ? input.donorMessage.trim().slice(0, 200)
+    : "";
 
   try {
     const accessToken = await getPayPalAccessToken(config);
@@ -43,6 +47,8 @@ export async function POST(request: Request) {
       console.error("PayPal order response did not include an order ID.");
       return NextResponse.json({ error: "تعذر إنشاء طلب الدفع." }, { status: 502 });
     }
+
+    await saveDonationOrderDetails(order.id, { name: donorName, message: donorMessage });
 
     return NextResponse.json({ id: order.id }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {

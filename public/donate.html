@@ -48,6 +48,8 @@
     .toast-copy { min-width: 0; flex: 1; }
     .toast-title { margin: 0; color: var(--purple-bright); font-size: .8rem; font-weight: 800; }
     .toast-details { overflow: hidden; margin: 1px 0 0; color: var(--text); font-size: .88rem; text-overflow: ellipsis; white-space: nowrap; }
+    .toast-message { overflow: hidden; margin: 1px 0 0; color: var(--muted); font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
+    .toast-message[hidden] { display: none; }
     .toast-amount { flex: 0 0 auto; color: var(--green); direction: ltr; font-weight: 800; }
 
     * { box-sizing: border-box; }
@@ -868,6 +870,7 @@
     <div class="toast-copy">
       <p class="toast-title" id="toast-title"></p>
       <p class="toast-details" id="toast-details"></p>
+      <p class="toast-message" id="toast-message" hidden></p>
     </div>
     <span class="toast-amount" id="toast-amount"></span>
   </aside>
@@ -890,7 +893,7 @@
           amountHint: "الحد الأدنى 1$.", donorTitle: "بياناتك (اختياري)",
           donorName: "الاسم", donorNamePlaceholder: "اسمك أو اتركه فارغًا للتبرع كمجهول",
           donorMessage: "رسالة قصيرة", donorMessagePlaceholder: "اكتب رسالة تشجيع (اختياري)",
-          messagePrivacy: "الرسالة اختيارية ولا تُحفظ في هذه الصفحة.",
+          messagePrivacy: "الرسالة اختيارية وتظهر مع التنبيه بعد إتمام الدفع.",
           secureNote: "الدفع يتم عبر PayPal، ولا نطلب بيانات بطاقتك هنا.",
           paypalTip: "لديك حساب؟ أدخل بريده واضغط «التالي» لتسجيل الدخول. إنشاء حساب خيار بديل.",
           sideKicker: "من قلب المجتمع", sideTitle: "وجودك هو المكسب.",
@@ -927,7 +930,7 @@
           amountHint: "En az 1$.", donorTitle: "Bilgilerin (isteğe bağlı)",
           donorName: "Ad", donorNamePlaceholder: "Adını yaz veya anonim kalmak için boş bırak",
           donorMessage: "Kısa mesaj", donorMessagePlaceholder: "Bir destek mesajı yaz (isteğe bağlı)",
-          messagePrivacy: "Mesaj isteğe bağlıdır ve bu sayfada saklanmaz.",
+          messagePrivacy: "Mesaj isteğe bağlıdır ve ödeme tamamlandığında bağış uyarısında gösterilir.",
           secureNote: "Ödeme PayPal üzerinden yapılır; kart bilgilerini burada istemiyoruz.",
           paypalTip: "Hesabın var mı? E-posta adresini girip «İleri»ye basarak giriş yap. Hesap oluşturma alternatif bir seçenektir.",
           sideKicker: "Topluluğun kalbinden", sideTitle: "Burada olman yeter.",
@@ -964,7 +967,7 @@
           amountHint: "Minimum $1.", donorTitle: "Your details (optional)",
           donorName: "Name", donorNamePlaceholder: "Your name, or leave blank to donate anonymously",
           donorMessage: "Short message", donorMessagePlaceholder: "Write an encouraging message (optional)",
-          messagePrivacy: "Your message is optional and is not stored on this page.",
+          messagePrivacy: "Your optional message is stored temporarily and shown with the alert after payment.",
           secureNote: "Payments are handled by PayPal. We never ask for your card details here.",
           paypalTip: "Already have an account? Enter your email and select “Next” to sign in. Creating an account is an alternative.",
           sideKicker: "From the community", sideTitle: "Having you here is what matters.",
@@ -1109,6 +1112,9 @@
         const numberLocale = locale === "tr" ? "tr-TR" : locale === "ar" ? "ar-EG" : "en-US";
         document.getElementById("toast-title").textContent = translate("alertTitle");
         document.getElementById("toast-details").textContent = donation.name || translate("anonymous");
+        const toastMessage = document.getElementById("toast-message");
+        toastMessage.textContent = donation.message || "";
+        toastMessage.hidden = !donation.message;
         document.getElementById("toast-amount").textContent = new Intl.NumberFormat(numberLocale, {
           style: "currency",
           currency: donation.currency,
@@ -1166,7 +1172,11 @@
             return fetch("/api/paypal/create-order", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ amount, donorName: donorName.value.trim() }),
+              body: JSON.stringify({
+                amount,
+                donorName: donorName.value.trim(),
+                donorMessage: donorMessage.value.trim(),
+              }),
             }).then(async (response) => {
               const data = await response.json();
               if (!response.ok || typeof data.id !== "string") throw new Error(translate("orderError"));

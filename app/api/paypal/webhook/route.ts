@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { publishDonationAlert } from "@/lib/donation-alerts";
+import { getDonationOrderDetails, publishDonationAlert } from "@/lib/donation-alerts";
 import {
   getPayPalAccessToken,
   getPayPalConfig,
@@ -71,20 +71,26 @@ export async function POST(request: Request) {
     }
 
     let donorName = "متبرع مجهول";
+    let donorMessage = "";
     const supplementaryData = capture.supplementary_data;
     if (isRecord(supplementaryData) && isRecord(supplementaryData.related_ids)
       && typeof supplementaryData.related_ids.order_id === "string") {
+      const orderId = supplementaryData.related_ids.order_id;
+      const orderDetails = await getDonationOrderDetails(orderId);
+      if (orderDetails?.name) donorName = orderDetails.name;
+      if (orderDetails?.message) donorMessage = orderDetails.message;
+
       const order = await paypalRequest(
         config,
         accessToken,
-        `/v2/checkout/orders/${encodeURIComponent(supplementaryData.related_ids.order_id)}`
+        `/v2/checkout/orders/${encodeURIComponent(orderId)}`
       );
       const purchaseUnits = isRecord(order) && Array.isArray(order.purchase_units)
         ? order.purchase_units
         : [];
       const firstPurchaseUnit = purchaseUnits[0];
       const customName = isRecord(firstPurchaseUnit) ? firstPurchaseUnit.custom_id : null;
-      if (typeof customName === "string" && customName.trim()) {
+      if (donorName === "متبرع مجهول" && typeof customName === "string" && customName.trim()) {
         donorName = customName.trim().slice(0, 80);
       }
     }
@@ -92,6 +98,7 @@ export async function POST(request: Request) {
     const result = await publishDonationAlert({
       id: capture.id,
       name: donorName,
+      message: donorMessage,
       amount: amountValue,
       currency,
       createdAt: typeof event.create_time === "string" ? event.create_time : new Date().toISOString(),

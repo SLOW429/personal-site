@@ -62,7 +62,7 @@
     .copy { min-width: 0; flex: 1; }
     .eyebrow { margin: 0 0 4px; color: var(--green); font-size: .83rem; font-weight: 800; letter-spacing: .06em; }
     .name { overflow: hidden; margin: 0; font-size: clamp(1.3rem, 4vw, 2rem); font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
-    .message { margin: 3px 0 0; color: var(--muted); font-size: .95rem; }
+    .message { overflow-wrap: anywhere; margin: 3px 0 0; color: var(--muted); font-size: .95rem; }
     .amount { flex: 0 0 auto; color: var(--green); direction: ltr; font-size: clamp(1.5rem, 4.2vw, 2.2rem); font-weight: 900; text-shadow: 0 0 20px rgb(189 255 114 / 35%); }
 
     .connection {
@@ -157,7 +157,7 @@
         isShowing = true;
         document.getElementById("alert-eyebrow").textContent = text.eyebrow;
         document.getElementById("donor-name").textContent = donation.name || text.anonymous;
-        document.getElementById("alert-message").textContent = text.message;
+        document.getElementById("alert-message").textContent = donation.message || text.message;
 
         const formattedAmount = new Intl.NumberFormat(locale === "tr" ? "tr-TR" : locale === "ar" ? "ar-EG" : "en-US", {
           style: "currency",

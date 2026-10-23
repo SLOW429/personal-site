@@ -55,7 +55,7 @@ The official Kick channel is [kick.com/slow429](https://kick.com/slow429). The C
 
 ## PayPal donation alerts
 
-The donation page uses server-side PayPal order creation and capture. A verified PayPal `PAYMENT.CAPTURE.COMPLETED` webhook publishes the donor name and amount to an Upstash Redis list for the donation page and OBS browser overlay.
+The donation page uses server-side PayPal order creation and capture. Donor names and optional messages are stored temporarily against the PayPal order until its verified `PAYMENT.CAPTURE.COMPLETED` webhook publishes the donor name, message, and amount to an Upstash Redis list for the donation page and OBS browser overlay.
 
 Configure these server-side Vercel environment variables:
 

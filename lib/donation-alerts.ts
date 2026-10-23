@@ -3,9 +3,15 @@ import { isRecord } from "@/lib/paypal-server";
 export type DonationAlert = {
   id: string;
   name: string;
+  message?: string;
   amount: string;
   currency: string;
   createdAt: string;
+};
+
+export type DonationOrderDetails = {
+  name: string;
+  message: string;
 };
 
 type RedisResponse = {
@@ -48,9 +54,37 @@ export function isDonationAlert(value: unknown): value is DonationAlert {
   return isRecord(value)
     && typeof value.id === "string"
     && typeof value.name === "string"
+    && (value.message === undefined || typeof value.message === "string")
     && typeof value.amount === "string"
     && typeof value.currency === "string"
     && typeof value.createdAt === "string";
+}
+
+export async function saveDonationOrderDetails(orderId: string, details: DonationOrderDetails) {
+  await executeRedis([
+    "SET",
+    `donation:order:${orderId}`,
+    JSON.stringify(details),
+    "EX",
+    "86400",
+  ]);
+}
+
+export async function getDonationOrderDetails(orderId: string): Promise<DonationOrderDetails | null> {
+  const result = await executeRedis<unknown>(["GET", `donation:order:${orderId}`]);
+  if (typeof result !== "string") return null;
+
+  try {
+    const details: unknown = JSON.parse(result);
+    if (!isRecord(details)) return null;
+    return {
+      name: typeof details.name === "string" ? details.name.slice(0, 80) : "",
+      message: typeof details.message === "string" ? details.message.slice(0, 200) : "",
+    };
+  } catch (error) {
+    console.error("Stored donation order details could not be parsed.", error);
+    return null;
+  }
 }
 
 export async function publishDonationAlert(alert: DonationAlert) {
