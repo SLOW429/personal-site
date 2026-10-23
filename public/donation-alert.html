@@ -178,7 +178,9 @@
           connection: "Connecting to donation alerts…",
         },
       };
-      const queryLocale = new URLSearchParams(window.location.search).get("lang");
+      const query = new URLSearchParams(window.location.search);
+      const queryLocale = query.get("lang");
+      const previewMode = query.get("preview");
       let locale = ["ar", "tr", "en"].includes(queryLocale) ? queryLocale : "ar";
       try {
         const savedLocale = window.localStorage.getItem("slow-locale");
@@ -359,9 +361,22 @@
         }
       }
 
-      pollDonations();
-      window.setInterval(pollDonations, 4000);
-      document.addEventListener("visibilitychange", pollDonations);
+      if (previewMode === "small" || previewMode === "large") {
+        initialized = true;
+        queue.push({
+          id: `preview-${previewMode}`,
+          name: "اختبار التنبيه",
+          message: "معاينة الفيديو والرسالة",
+          amount: previewMode === "large" ? "100.00" : "10.00",
+          currency: "USD",
+          createdAt: new Date().toISOString(),
+        });
+        displayNext();
+      } else {
+        pollDonations();
+        window.setInterval(pollDonations, 4000);
+        document.addEventListener("visibilitychange", pollDonations);
+      }
     })();
   </script>
 </body>
