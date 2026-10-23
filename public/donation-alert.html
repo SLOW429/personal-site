@@ -192,7 +192,9 @@
       const connection = document.getElementById("connection-status");
       const videoOverlay = document.getElementById("video-overlay");
       const donationVideo = document.getElementById("donation-video");
-      const seen = new Set();
+      const seenStorageKey = "slow-donation-alert-seen-v1";
+      const seen = new Set(readSeenDonationIds());
+      let canPersistSeenIds = true;
       const queue = [];
       let initialized = false;
       let isShowing = false;
@@ -201,14 +203,37 @@
       document.documentElement.lang = locale === "tr" ? "tr" : locale;
       document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
 
+      function readSeenDonationIds() {
+        try {
+          const stored = window.localStorage.getItem(seenStorageKey);
+          if (!stored) return [];
+          const ids = JSON.parse(stored);
+          return Array.isArray(ids) ? ids.filter((id) => typeof id === "string") : [];
+        } catch (error) {
+          console.warn("Could not restore processed donation alerts.", error);
+          return [];
+        }
+      }
+
+      function persistSeenDonationIds() {
+        if (!canPersistSeenIds) return;
+        try {
+          window.localStorage.setItem(seenStorageKey, JSON.stringify([...seen].slice(-100)));
+        } catch (error) {
+          canPersistSeenIds = false;
+          console.warn("Could not persist processed donation alerts.", error);
+        }
+      }
+
       function showDonationAlert(donation) {
         document.getElementById("alert-eyebrow").textContent = text.eyebrow;
         document.getElementById("donor-name").textContent = donation.name || text.anonymous;
         document.getElementById("alert-message").textContent = donation.message || text.message;
 
-        const formattedAmount = new Intl.NumberFormat(locale === "tr" ? "tr-TR" : locale === "ar" ? "ar-EG" : "en-US", {
+        const formattedAmount = new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: donation.currency,
+          numberingSystem: "latn",
         }).format(Number(donation.amount));
         document.getElementById("donation-amount").textContent = formattedAmount;
 
@@ -298,8 +323,22 @@
           errorLogged = false;
 
           if (!initialized) {
-            data.donations.forEach((donation) => seen.add(donation.id));
+            const unseen = data.donations
+              .filter((donation) => typeof donation.id === "string" && !seen.has(donation.id))
+              .reverse();
+
+            if (seen.size === 0 && unseen.length > 0) {
+              queue.push(unseen[unseen.length - 1]);
+            } else {
+              queue.push(...unseen);
+            }
+
+            data.donations.forEach((donation) => {
+              if (typeof donation.id === "string") seen.add(donation.id);
+            });
+            persistSeenDonationIds();
             initialized = true;
+            displayNext();
             return;
           }
 
@@ -308,6 +347,7 @@
             seen.add(donation.id);
             queue.push(donation);
           });
+          persistSeenDonationIds();
           displayNext();
         } catch (error) {
           if (!initialized) connection.hidden = false;

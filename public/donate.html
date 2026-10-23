@@ -1109,15 +1109,15 @@
       });
 
       function showDonationToast(donation) {
-        const numberLocale = locale === "tr" ? "tr-TR" : locale === "ar" ? "ar-EG" : "en-US";
         document.getElementById("toast-title").textContent = translate("alertTitle");
         document.getElementById("toast-details").textContent = donation.name || translate("anonymous");
         const toastMessage = document.getElementById("toast-message");
         toastMessage.textContent = donation.message || "";
         toastMessage.hidden = !donation.message;
-        document.getElementById("toast-amount").textContent = new Intl.NumberFormat(numberLocale, {
+        document.getElementById("toast-amount").textContent = new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: donation.currency,
+          numberingSystem: "latn",
         }).format(Number(donation.amount));
         donationToast.classList.add("visible");
         window.clearTimeout(toastTimer);
