@@ -144,6 +144,7 @@
   <div class="video-overlay" id="video-overlay" aria-hidden="true">
     <div class="video-frame">
       <video id="donation-video" playsinline preload="auto"></video>
+      <audio id="donation-audio" preload="auto"></audio>
     </div>
   </div>
   <main class="alert" id="donation-alert" role="status" aria-live="polite">
@@ -194,6 +195,7 @@
       const connection = document.getElementById("connection-status");
       const videoOverlay = document.getElementById("video-overlay");
       const donationVideo = document.getElementById("donation-video");
+      const donationAudio = document.getElementById("donation-audio");
       const seenStorageKey = "slow-donation-alert-seen-v1";
       const seen = new Set(readSeenDonationIds());
       let canPersistSeenIds = true;
@@ -252,17 +254,20 @@
         });
       }
 
-      function playDonationVideo(src, mode) {
+      function playDonationVideo(src, audioSrc, mode) {
         videoOverlay.classList.toggle("compact", mode === "side");
         videoOverlay.classList.add("visible");
         videoOverlay.setAttribute("aria-hidden", "false");
         donationVideo.src = src;
         donationVideo.muted = false;
+        donationAudio.src = audioSrc;
+        donationAudio.muted = false;
 
         return new Promise((resolve) => {
           let completed = false;
           let retryTimer;
           let playAttempts = 0;
+          let audioStarted = false;
           const watchdog = window.setTimeout(() => finish(), 10 * 60 * 1000);
 
           function finish() {
@@ -272,12 +277,33 @@
             window.clearTimeout(watchdog);
             document.removeEventListener("visibilitychange", resumePlayback);
             donationVideo.pause();
+            donationAudio.pause();
             donationVideo.removeAttribute("src");
+            donationAudio.removeAttribute("src");
             donationVideo.onloadeddata = null;
+            donationAudio.oncanplay = null;
             donationVideo.load();
+            donationAudio.load();
             videoOverlay.classList.remove("visible", "compact");
             videoOverlay.setAttribute("aria-hidden", "true");
             resolve();
+          }
+
+          async function startAudio() {
+            if (completed || audioStarted || document.hidden) return;
+            if (donationAudio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) {
+              donationAudio.oncanplay = startAudio;
+              return;
+            }
+
+            audioStarted = true;
+            try {
+              await donationAudio.play();
+            } catch (error) {
+              audioStarted = false;
+              if (error instanceof Error && error.name === "AbortError") return;
+              console.error("Donation alert soundtrack could not be played. Check the OBS browser-source audio settings.", error);
+            }
           }
 
           async function startPlayback() {
@@ -286,6 +312,7 @@
 
             try {
               await donationVideo.play();
+              startAudio();
             } catch (error) {
               if (error instanceof Error && error.name === "NotAllowedError" && !donationVideo.muted) {
                 donationVideo.muted = true;
@@ -312,9 +339,13 @@
             console.error(`Donation video failed to load: ${src}`);
             finish();
           };
+          donationAudio.onerror = () => {
+            console.error(`Donation alert soundtrack failed to load: ${audioSrc}`);
+          };
           donationVideo.onloadeddata = startPlayback;
           document.addEventListener("visibilitychange", resumePlayback);
           donationVideo.load();
+          donationAudio.load();
         });
       }
 
@@ -325,11 +356,11 @@
 
         const amount = Number(donation.amount);
         if (donation.currency === "USD" && amount >= 100) {
-          await playDonationVideo("/donation-video-large.mp4", "fullscreen");
+          await playDonationVideo("/donation-video-large.mp4", "/donation-audio-large.mp3", "fullscreen");
           await showDonationAlert(donation);
         } else if (donation.currency === "USD" && amount >= 1 && amount < 100) {
           await Promise.all([
-            playDonationVideo("/donation-video-small.mp4", "side"),
+            playDonationVideo("/donation-video-small.mp4", "/donation-audio-small.mp3", "side"),
             showDonationAlert(donation),
           ]);
         } else {
