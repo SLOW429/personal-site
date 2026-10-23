@@ -143,7 +143,7 @@
 <body>
   <div class="video-overlay" id="video-overlay" aria-hidden="true">
     <div class="video-frame">
-      <video id="donation-video" playsinline preload="none"></video>
+      <video id="donation-video" playsinline preload="auto"></video>
     </div>
   </div>
   <main class="alert" id="donation-alert" role="status" aria-live="polite">
@@ -261,18 +261,50 @@
 
         return new Promise((resolve) => {
           let completed = false;
+          let retryTimer;
+          let playAttempts = 0;
           const watchdog = window.setTimeout(() => finish(), 10 * 60 * 1000);
 
           function finish() {
             if (completed) return;
             completed = true;
+            window.clearTimeout(retryTimer);
             window.clearTimeout(watchdog);
+            document.removeEventListener("visibilitychange", resumePlayback);
             donationVideo.pause();
             donationVideo.removeAttribute("src");
+            donationVideo.onloadeddata = null;
             donationVideo.load();
             videoOverlay.classList.remove("visible", "compact");
             videoOverlay.setAttribute("aria-hidden", "true");
             resolve();
+          }
+
+          async function startPlayback() {
+            if (completed || document.hidden) return;
+            playAttempts += 1;
+
+            try {
+              await donationVideo.play();
+            } catch (error) {
+              if (error instanceof Error && error.name === "NotAllowedError" && !donationVideo.muted) {
+                donationVideo.muted = true;
+                retryTimer = window.setTimeout(startPlayback, 0);
+                return;
+              }
+
+              if (error instanceof Error && error.name === "AbortError" && playAttempts < 20) {
+                retryTimer = window.setTimeout(startPlayback, 500);
+                return;
+              }
+
+              console.error("Donation video playback failed.", error);
+              finish();
+            }
+          }
+
+          function resumePlayback() {
+            if (!document.hidden) startPlayback();
           }
 
           donationVideo.onended = finish;
@@ -280,14 +312,9 @@
             console.error(`Donation video failed to load: ${src}`);
             finish();
           };
-
-          const playback = donationVideo.play();
-          if (playback) {
-            playback.catch((error) => {
-              console.error("Donation video playback was blocked.", error);
-              finish();
-            });
-          }
+          donationVideo.onloadeddata = startPlayback;
+          document.addEventListener("visibilitychange", resumePlayback);
+          donationVideo.load();
         });
       }
 
