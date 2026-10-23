@@ -875,7 +875,6 @@
   <!-- معرّف PayPal علني، بينما Client Secret يبقى في متغيرات الخادم فقط. -->
   <script>
     (() => {
-      const clientId = "AYRPQnEbI_KsDCQyxFKDng9aSOwokN2fyiYhwQf0lsFVi0vm06wNVVqjH55j-731Dg_2xCErH5-YHg2M";
       const translations = {
         ar: {
           brandCaption: "مجتمع القناة", homeLink: "الموقع الرئيسي", heroEyebrow: "مساحة دعم القناة",
@@ -1209,12 +1208,29 @@
         });
       }
 
-      const sdk = document.createElement("script");
-      sdk.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=USD&intent=capture&locale=${paypalLocales[locale]}`;
-      sdk.async = true;
-      sdk.onload = renderPayPalButtons;
-      sdk.onerror = () => showStatus("paypalLoadError", "error");
-      document.head.append(sdk);
+      async function loadPayPalSdk() {
+        const response = await fetch("/api/paypal/client-config", { cache: "no-store" });
+        const config = await response.json();
+        if (!response.ok || typeof config.clientId !== "string" || !config.clientId) {
+          throw new Error("PayPal client configuration is unavailable.");
+        }
+
+        await new Promise((resolve, reject) => {
+          const sdk = document.createElement("script");
+          sdk.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(config.clientId)}&currency=USD&intent=capture&locale=${paypalLocales[locale]}`;
+          sdk.async = true;
+          sdk.onload = resolve;
+          sdk.onerror = () => reject(new Error("PayPal SDK could not be loaded."));
+          document.head.append(sdk);
+        });
+
+        renderPayPalButtons();
+      }
+
+      loadPayPalSdk().catch((error) => {
+        console.error("PayPal could not be initialized.", error);
+        showStatus("paypalLoadError", "error");
+      });
 
       pollDonationAlerts();
       window.setInterval(pollDonationAlerts, 8000);
