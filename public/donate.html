@@ -369,6 +369,7 @@
 
     .welcome {
       position: relative;
+      isolation: isolate;
       display: grid;
       min-height: 250px;
       grid-template-columns: 1.15fr .85fr;
@@ -379,13 +380,31 @@
       padding: 32px 38px;
       border: 1px solid rgb(185 137 255 / 14%);
       border-radius: 26px;
-      background:
-        radial-gradient(ellipse at 18% 90%, rgb(65 166 100 / 12%), transparent 36%),
-        linear-gradient(115deg, #171824, #1b1728 68%, #201932);
+      background: #171824;
       box-shadow: 0 24px 70px rgb(0 0 0 / 22%);
     }
 
-    .welcome-copy { position: relative; z-index: 1; }
+    .welcome::after {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgb(9 7 18 / 92%) 0%, rgb(12 9 22 / 76%) 53%, rgb(13 8 24 / 38%) 100%),
+        radial-gradient(ellipse at 18% 90%, rgb(65 166 100 / 12%), transparent 36%);
+      content: "";
+    }
+
+    .welcome-background {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 43%;
+    }
+
+    .welcome-copy, .welcome-art { position: relative; z-index: 1; }
     .welcome .eyebrow { margin-bottom: 11px; }
 
     .welcome h1 {
@@ -426,20 +445,19 @@
     .welcome-art::before { width: 190px; height: 190px; }
     .welcome-art::after { width: 145px; height: 145px; border-color: rgb(189 140 255 / 27%); }
 
-    .art-core {
+    .profile-frame {
       display: grid;
-      width: 94px;
-      height: 94px;
+      width: 164px;
+      height: 164px;
       place-items: center;
-      border: 1px solid rgb(211 178 255 / 45%);
-      border-radius: 30px;
-      background: linear-gradient(145deg, rgb(169 112 255 / 36%), rgb(97 57 148 / 30%));
-      box-shadow: 0 0 65px rgb(169 112 255 / 30%), inset 0 1px rgb(255 255 255 / 14%);
-      color: #f0ddff;
-      transform: rotate(-8deg);
+      overflow: hidden;
+      border: 2px solid rgb(221 190 255 / 70%);
+      border-radius: 50%;
+      background: #17121f;
+      box-shadow: 0 0 44px rgb(169 112 255 / 40%), 0 0 0 7px rgb(169 112 255 / 10%);
     }
 
-    .art-core svg { width: 45px; height: 45px; transform: rotate(8deg); }
+    .profile-frame img { width: 100%; height: 100%; object-fit: cover; }
 
     .art-tag {
       position: absolute;
@@ -468,7 +486,24 @@
       box-shadow: 0 24px 75px rgb(0 0 0 / 29%);
     }
 
-    .donation-card { padding: 27px; }
+    .donation-card { padding: 0; }
+
+    .donation-banner {
+      height: 112px;
+      overflow: hidden;
+      border-bottom: 1px solid rgb(185 137 255 / 18%);
+      background: #110a1e;
+    }
+
+    .donation-banner img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .donation-card-body { padding: 24px 27px 27px; }
 
     .card-heading {
       display: flex;
@@ -519,6 +554,13 @@
       justify-content: center;
       gap: 7px;
       margin-top: 13px;
+    }
+
+    .paypal-tip {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .75rem;
+      text-align: center;
     }
 
     .side-card {
@@ -598,8 +640,7 @@
       .welcome { min-height: 220px; padding: 27px; }
       .welcome-art::before { width: 155px; height: 155px; }
       .welcome-art::after { width: 120px; height: 120px; }
-      .art-core { width: 76px; height: 76px; border-radius: 25px; }
-      .art-core svg { width: 36px; height: 36px; }
+      .profile-frame { width: 138px; height: 138px; }
       .donation-layout { grid-template-columns: 1fr; }
       .side-card { min-height: 280px; }
       .thanks-note { margin-top: 24px; }
@@ -623,10 +664,11 @@
       .welcome-art { min-height: 118px; }
       .welcome-art::before { width: 115px; height: 115px; }
       .welcome-art::after { width: 87px; height: 87px; }
-      .art-core { width: 60px; height: 60px; border-radius: 20px; }
-      .art-core svg { width: 30px; height: 30px; }
+      .profile-frame { width: 112px; height: 112px; }
       .art-tag { inset: auto auto 0 50%; }
-      .donation-card { padding: 20px 16px; border-radius: 19px; }
+      .donation-card { border-radius: 19px; }
+      .donation-banner { height: 82px; }
+      .donation-card-body { padding: 19px 16px 20px; }
       .card-heading { margin-bottom: 18px; }
       .amount-section { padding: 13px; }
       .amounts { gap: 6px; }
@@ -650,17 +692,15 @@
     </header>
 
     <section class="welcome" aria-labelledby="page-title">
+      <img class="welcome-background" src="slow429-banner.webp" alt="" aria-hidden="true" fetchpriority="high">
       <div class="welcome-copy">
         <p class="eyebrow">مساحة دعم القناة</p>
         <h1 id="page-title">خلّي البث الجاي <span>أحلى</span></h1>
         <p>كل دعم بيساعدنا نكمل ونقدم محتوى أحلى. شكرًا من القلب إنك جزء من مجتمعنا!</p>
       </div>
       <div class="welcome-art" aria-hidden="true">
-        <div class="art-core">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.8 4.8 0 0 1 8.8-2.6 4.8 4.8 0 0 1 8.8 2.6Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
-            <path d="m8.7 12.1 2.1 2.1 4.5-4.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
-          </svg>
+        <div class="profile-frame">
+          <img src="slow429-profile.webp" alt="الصورة الشخصية لصاحب قناة SLOW429" fetchpriority="high">
         </div>
         <span class="art-tag">دعمك بيفرق 💜</span>
       </div>
@@ -668,7 +708,11 @@
 
     <div class="donation-layout">
       <section class="card donation-card" aria-labelledby="donation-title">
-        <header class="card-heading">
+        <div class="donation-banner">
+          <img src="slow429-donate.gif" alt="بانر دعم البث والتبرع">
+        </div>
+        <div class="donation-card-body">
+          <header class="card-heading">
           <div class="badge" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
               <path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.8 4.8 0 0 1 8.8-2.6 4.8 4.8 0 0 1 8.8 2.6Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
@@ -679,7 +723,7 @@
             <h2 id="donation-title">اختار دعمك</h2>
             <p>حدد المبلغ المناسب ليك، وكل مساهمة محل تقدير.</p>
           </div>
-        </header>
+          </header>
 
         <div class="content">
           <section class="amount-section" aria-labelledby="amount-title">
@@ -697,6 +741,7 @@
                 <span class="currency" aria-hidden="true">$</span>
               </div>
               <p class="hint" id="amount-hint">الحد الأدنى 1$.</p>
+            </div>
             </div>
           </section>
 
@@ -720,6 +765,7 @@
             <div id="paypal-button-container" aria-label="الدفع عبر باي بال"></div>
           </div>
           <p class="secure-note">الدفع يتم عبر PayPal، ولا نطلب بيانات بطاقتك هنا.</p>
+          <p class="paypal-tip">لديك حساب؟ أدخل بريده واضغط «التالي» لتسجيل الدخول. إنشاء حساب خيار بديل.</p>
           <p class="status" id="status-message" role="status" aria-live="polite"></p>
         </div>
       </section>
