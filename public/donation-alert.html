@@ -90,6 +90,19 @@
 
     .video-overlay.visible { opacity: 1; visibility: visible; }
 
+    .video-overlay.compact {
+      inset: auto 3vw 4vh auto;
+      display: block;
+      width: min(32vw, 480px);
+      padding: 0;
+      background: transparent;
+      opacity: 0;
+      transform: translateY(12px) scale(.97);
+      transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
+    }
+
+    .video-overlay.compact.visible { opacity: 1; transform: translateY(0) scale(1); }
+
     .video-frame {
       width: min(100%, 1280px);
       overflow: hidden;
@@ -101,6 +114,10 @@
     }
 
     .video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+    @media (max-width: 700px) {
+      .video-overlay.compact { right: 12px; bottom: 12px; width: min(44vw, 300px); }
+    }
 
     @keyframes enter {
       to { opacity: 1; transform: translateY(0) scale(1); }
@@ -176,7 +193,6 @@
       const seen = new Set();
       const queue = [];
       let initialized = false;
-      let hidingTimer;
       let isShowing = false;
       let errorLogged = false;
       let youtubeApiPromise;
@@ -197,15 +213,15 @@
 
         alertElement.classList.remove("leaving");
         alertElement.classList.add("visible");
-        window.clearTimeout(hidingTimer);
-        hidingTimer = window.setTimeout(() => {
-          alertElement.classList.add("leaving");
+        return new Promise((resolve) => {
           window.setTimeout(() => {
-            alertElement.classList.remove("visible", "leaving");
-            isShowing = false;
-            displayNext();
-          }, 450);
-        }, 7000);
+            alertElement.classList.add("leaving");
+            window.setTimeout(() => {
+              alertElement.classList.remove("visible", "leaving");
+              resolve();
+            }, 450);
+          }, 7000);
+        });
       }
 
       function loadYouTubeApi() {
@@ -231,7 +247,8 @@
         return youtubeApiPromise;
       }
 
-      function playLargeDonationVideo() {
+      function playDonationVideo(videoId, mode) {
+        videoOverlay.classList.toggle("compact", mode === "side");
         videoOverlay.classList.add("visible");
         videoOverlay.setAttribute("aria-hidden", "false");
 
@@ -246,7 +263,7 @@
             window.clearTimeout(watchdog);
             if (player) player.destroy();
             videoFrame.replaceChildren();
-            videoOverlay.classList.remove("visible");
+            videoOverlay.classList.remove("visible", "compact");
             videoOverlay.setAttribute("aria-hidden", "true");
             resolve();
           }
@@ -254,7 +271,7 @@
           const playerElement = document.createElement("div");
           videoFrame.replaceChildren(playerElement);
           player = new youtube.Player(playerElement, {
-            videoId: "J9r2XCvxhuA",
+            videoId,
             host: "https://www.youtube-nocookie.com",
             playerVars: {
               autoplay: 1,
@@ -277,7 +294,7 @@
         })).catch((error) => {
           console.warn("Donation video could not be loaded; showing the alert instead.", error);
           videoFrame.replaceChildren();
-          videoOverlay.classList.remove("visible");
+          videoOverlay.classList.remove("visible", "compact");
           videoOverlay.setAttribute("aria-hidden", "true");
         });
       }
@@ -287,11 +304,21 @@
         const donation = queue.shift();
         isShowing = true;
 
-        if (donation.currency === "USD" && Number(donation.amount) >= 100) {
-          await playLargeDonationVideo();
+        const amount = Number(donation.amount);
+        if (donation.currency === "USD" && amount >= 100) {
+          await playDonationVideo("J9r2XCvxhuA", "fullscreen");
+          await showDonationAlert(donation);
+        } else if (donation.currency === "USD" && amount >= 1 && amount < 100) {
+          await Promise.all([
+            playDonationVideo("mwhZPP6Kr04", "side"),
+            showDonationAlert(donation),
+          ]);
+        } else {
+          await showDonationAlert(donation);
         }
 
-        showDonationAlert(donation);
+        isShowing = false;
+        displayNext();
       }
 
       async function pollDonations() {
