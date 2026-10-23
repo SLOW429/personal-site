@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="transparent">
+  <title>تنبيه التبرعات | SLOW429</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --text: #fff;
+      --muted: #d4c7e9;
+      --purple: #be83ff;
+      --green: #bdff72;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+
+    body {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 20px;
+      background: transparent;
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+
+    .alert {
+      display: flex;
+      width: min(100%, 690px);
+      align-items: center;
+      gap: 20px;
+      padding: 18px 22px;
+      border: 1px solid rgb(205 164 255 / 72%);
+      border-radius: 23px;
+      background:
+        radial-gradient(ellipse at 0% 50%, rgb(136 65 205 / 38%), transparent 45%),
+        linear-gradient(125deg, rgb(15 10 24 / 96%), rgb(28 16 43 / 95%));
+      box-shadow: 0 0 35px rgb(167 98 255 / 42%), inset 0 1px rgb(255 255 255 / 13%);
+      opacity: 0;
+      transform: translateY(22px) scale(.96);
+      visibility: hidden;
+    }
+
+    .alert.visible { visibility: visible; animation: enter .5s cubic-bezier(.2,.8,.2,1) forwards; }
+    .alert.leaving { animation: leave .4s ease forwards; }
+
+    .avatar {
+      width: 82px;
+      height: 82px;
+      flex: 0 0 auto;
+      overflow: hidden;
+      border: 2px solid var(--purple);
+      border-radius: 50%;
+      box-shadow: 0 0 22px rgb(169 112 255 / 48%);
+    }
+
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .copy { min-width: 0; flex: 1; }
+    .eyebrow { margin: 0 0 4px; color: var(--green); font-size: .83rem; font-weight: 800; letter-spacing: .06em; }
+    .name { overflow: hidden; margin: 0; font-size: clamp(1.3rem, 4vw, 2rem); font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+    .message { margin: 3px 0 0; color: var(--muted); font-size: .95rem; }
+    .amount { flex: 0 0 auto; color: var(--green); direction: ltr; font-size: clamp(1.5rem, 4.2vw, 2.2rem); font-weight: 900; text-shadow: 0 0 20px rgb(189 255 114 / 35%); }
+
+    .connection {
+      position: fixed;
+      inset: auto 12px 10px;
+      color: rgb(255 255 255 / 55%);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .connection[hidden] { display: none; }
+
+    @keyframes enter {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes leave {
+      to { opacity: 0; transform: translateY(-12px) scale(.98); visibility: hidden; }
+    }
+
+    @media (max-width: 500px) {
+      body { padding: 12px; }
+      .alert { gap: 12px; padding: 13px; border-radius: 18px; }
+      .avatar { width: 60px; height: 60px; }
+      .eyebrow { font-size: .72rem; }
+      .message { font-size: .8rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .alert.visible, .alert.leaving { animation-duration: .01ms; }
+    }
+  </style>
+</head>
+<body>
+  <main class="alert" id="donation-alert" role="status" aria-live="polite">
+    <div class="avatar"><img src="slow429-profile.webp" alt=""></div>
+    <div class="copy">
+      <p class="eyebrow" id="alert-eyebrow">دعم جديد وصل للقناة!</p>
+      <p class="name" id="donor-name">متبرع مجهول</p>
+      <p class="message" id="alert-message">شكرًا من القلب على دعمك 💜</p>
+    </div>
+    <div class="amount" id="donation-amount">$5.00</div>
+  </main>
+  <p class="connection" id="connection-status" hidden>بانتظار اتصال تنبيهات التبرع…</p>
+  <script>
+    (() => {
+      const dictionary = {
+        ar: {
+          eyebrow: "دعم جديد وصل للقناة!",
+          anonymous: "متبرع مجهول",
+          message: "شكرًا من القلب على دعمك 💜",
+          connection: "بانتظار اتصال تنبيهات التبرع…",
+        },
+        tr: {
+          eyebrow: "Kanala yeni bir destek geldi!",
+          anonymous: "Anonim destekçi",
+          message: "Desteğin için çok teşekkürler 💜",
+          connection: "Bağış bildirimlerine bağlanılıyor…",
+        },
+        en: {
+          eyebrow: "New support for the channel!",
+          anonymous: "Anonymous supporter",
+          message: "Thank you so much for your support 💜",
+          connection: "Connecting to donation alerts…",
+        },
+      };
+      const queryLocale = new URLSearchParams(window.location.search).get("lang");
+      let locale = ["ar", "tr", "en"].includes(queryLocale) ? queryLocale : "ar";
+      try {
+        const savedLocale = window.localStorage.getItem("slow-locale");
+        if (!queryLocale && ["ar", "tr", "en"].includes(savedLocale)) locale = savedLocale;
+      } catch (error) {
+        console.warn("Could not read the saved language preference.", error);
+      }
+
+      const text = dictionary[locale];
+      const alertElement = document.getElementById("donation-alert");
+      const connection = document.getElementById("connection-status");
+      const seen = new Set();
+      const queue = [];
+      let initialized = false;
+      let hidingTimer;
+      let isShowing = false;
+      let errorLogged = false;
+
+      document.documentElement.lang = locale === "tr" ? "tr" : locale;
+      document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
+
+      function displayNext() {
+        if (isShowing || queue.length === 0) return;
+        const donation = queue.shift();
+        isShowing = true;
+        document.getElementById("alert-eyebrow").textContent = text.eyebrow;
+        document.getElementById("donor-name").textContent = donation.name || text.anonymous;
+        document.getElementById("alert-message").textContent = text.message;
+
+        const formattedAmount = new Intl.NumberFormat(locale === "tr" ? "tr-TR" : locale === "ar" ? "ar-EG" : "en-US", {
+          style: "currency",
+          currency: donation.currency,
+        }).format(Number(donation.amount));
+        document.getElementById("donation-amount").textContent = formattedAmount;
+
+        alertElement.classList.remove("leaving");
+        alertElement.classList.add("visible");
+        window.clearTimeout(hidingTimer);
+        hidingTimer = window.setTimeout(() => {
+          alertElement.classList.add("leaving");
+          window.setTimeout(() => {
+            alertElement.classList.remove("visible", "leaving");
+            isShowing = false;
+            displayNext();
+          }, 450);
+        }, 7000);
+      }
+
+      async function pollDonations() {
+        if (document.hidden) return;
+
+        try {
+          const response = await fetch("/api/donations", { cache: "no-store" });
+          if (!response.ok) throw new Error(`Donation alert service returned ${response.status}.`);
+          const data = await response.json();
+          if (!Array.isArray(data.donations)) throw new Error("Donation alert response was invalid.");
+          connection.hidden = true;
+          errorLogged = false;
+
+          if (!initialized) {
+            data.donations.forEach((donation) => seen.add(donation.id));
+            initialized = true;
+            return;
+          }
+
+          data.donations.slice().reverse().forEach((donation) => {
+            if (typeof donation.id !== "string" || seen.has(donation.id)) return;
+            seen.add(donation.id);
+            queue.push(donation);
+          });
+          displayNext();
+        } catch (error) {
+          if (!initialized) connection.hidden = false;
+          connection.textContent = text.connection;
+          if (!errorLogged) {
+            console.error("Could not check for donation alerts.", error);
+            errorLogged = true;
+          }
+        }
+      }
+
+      pollDonations();
+      window.setInterval(pollDonations, 4000);
+      document.addEventListener("visibilitychange", pollDonations);
+    })();
+  </script>
+</body>
+</html>

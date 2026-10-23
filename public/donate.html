@@ -23,6 +23,33 @@
       --purple-soft: rgb(169 112 255 / 12%);
     }
 
+    .donation-toast {
+      position: fixed;
+      z-index: 10;
+      inset: 18px 18px auto;
+      display: flex;
+      width: min(460px, calc(100% - 36px));
+      align-items: center;
+      gap: 12px;
+      margin-inline: auto;
+      padding: 13px 16px;
+      border: 1px solid rgb(189 140 255 / 55%);
+      border-radius: 16px;
+      background: rgb(20 15 31 / 96%);
+      box-shadow: 0 14px 50px rgb(0 0 0 / 38%), 0 0 25px rgb(169 112 255 / 18%);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-12px);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .donation-toast.visible { opacity: 1; transform: translateY(0); }
+    .toast-icon { color: var(--green); font-size: 1.3rem; }
+    .toast-copy { min-width: 0; flex: 1; }
+    .toast-title { margin: 0; color: var(--purple-bright); font-size: .8rem; font-weight: 800; }
+    .toast-details { overflow: hidden; margin: 1px 0 0; color: var(--text); font-size: .88rem; text-overflow: ellipsis; white-space: nowrap; }
+    .toast-amount { flex: 0 0 auto; color: var(--green); direction: ltr; font-weight: 800; }
+
     * { box-sizing: border-box; }
 
     body {
@@ -367,6 +394,39 @@
 
     .top-link:hover { border-color: var(--purple); color: var(--purple-bright); }
 
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+    .language-picker {
+      display: inline-flex;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgb(12 12 19 / 72%);
+    }
+
+    .language-button {
+      min-width: 34px;
+      padding: 5px 7px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+
+    .language-button[aria-pressed="true"] {
+      background: var(--purple-soft);
+      color: #e0caff;
+    }
+
+    .language-button:focus-visible {
+      outline: 2px solid var(--purple-bright);
+      outline-offset: 2px;
+    }
+
     .welcome {
       position: relative;
       isolation: isolate;
@@ -418,6 +478,8 @@
       color: var(--purple-bright);
       text-shadow: 0 0 35px rgb(169 112 255 / 24%);
     }
+
+    .welcome h1 span:first-child { color: var(--text); text-shadow: none; }
 
     .welcome-copy > p:last-child {
       max-width: 470px;
@@ -651,6 +713,8 @@
       .topbar { margin-bottom: 18px; }
       .brand-caption { display: none; }
       .top-link { padding: 7px 10px; font-size: .75rem; }
+      .topbar-actions { gap: 6px; }
+      .language-button { min-width: 30px; padding-inline: 5px; }
       .welcome {
         grid-template-columns: 1fr;
         gap: 3px;
@@ -684,32 +748,39 @@
 <body>
   <main class="page">
     <header class="topbar">
-      <a class="brand" href="https://slows.dev" aria-label="العودة إلى الموقع الرئيسي">
+      <a class="brand" href="https://slows.dev" aria-label="العودة إلى الموقع الرئيسي" data-i18n-aria="brandAria">
         <span class="brand-mark" aria-hidden="true">S</span>
-        <span class="brand-name">SLOW429<span class="brand-caption">مجتمع القناة</span></span>
+        <span class="brand-name">SLOW429<span class="brand-caption" data-i18n="brandCaption">مجتمع القناة</span></span>
       </a>
-      <a class="top-link" href="https://slows.dev">الموقع الرئيسي <span aria-hidden="true">↗</span></a>
+      <div class="topbar-actions">
+        <nav class="language-picker" aria-label="Language" data-i18n-aria="languageAria">
+          <button class="language-button" type="button" data-locale="ar" aria-pressed="true">ع</button>
+          <button class="language-button" type="button" data-locale="tr" aria-pressed="false">TR</button>
+          <button class="language-button" type="button" data-locale="en" aria-pressed="false">EN</button>
+        </nav>
+        <a class="top-link" href="https://slows.dev" aria-label="الموقع الرئيسي" data-i18n-aria="homeAria"><span data-i18n="homeLink">الموقع الرئيسي</span> <span aria-hidden="true">↗</span></a>
+      </div>
     </header>
 
     <section class="welcome" aria-labelledby="page-title">
       <img class="welcome-background" src="slow429-banner.webp" alt="" aria-hidden="true" fetchpriority="high">
       <div class="welcome-copy">
-        <p class="eyebrow">مساحة دعم القناة</p>
-        <h1 id="page-title">خلّي البث الجاي <span>أحلى</span></h1>
-        <p>كل دعم بيساعدنا نكمل ونقدم محتوى أحلى. شكرًا من القلب إنك جزء من مجتمعنا!</p>
+        <p class="eyebrow" data-i18n="heroEyebrow">مساحة دعم القناة</p>
+        <h1 id="page-title"><span data-i18n="heroLead">خلّي البث الجاي</span> <span data-i18n="heroHighlight">أحلى</span></h1>
+        <p data-i18n="heroDescription">كل دعم بيساعدنا نكمل ونقدم محتوى أحلى. شكرًا من القلب إنك جزء من مجتمعنا!</p>
       </div>
       <div class="welcome-art" aria-hidden="true">
         <div class="profile-frame">
-          <img src="slow429-profile.webp" alt="الصورة الشخصية لصاحب قناة SLOW429" fetchpriority="high">
+          <img src="slow429-profile.webp" alt="الصورة الشخصية لصاحب قناة SLOW429" data-i18n-alt="profileAlt" fetchpriority="high">
         </div>
-        <span class="art-tag">دعمك بيفرق 💜</span>
+        <span class="art-tag" data-i18n="artTag">دعمك بيفرق 💜</span>
       </div>
     </section>
 
     <div class="donation-layout">
       <section class="card donation-card" aria-labelledby="donation-title">
         <div class="donation-banner">
-          <img src="slow429-donate.gif" alt="بانر دعم البث والتبرع">
+          <img src="slow429-donate.gif" alt="بانر دعم البث والتبرع" data-i18n-alt="donationBannerAlt">
         </div>
         <div class="donation-card-body">
           <header class="card-heading">
@@ -720,96 +791,279 @@
             </svg>
           </div>
           <div>
-            <h2 id="donation-title">اختار دعمك</h2>
-            <p>حدد المبلغ المناسب ليك، وكل مساهمة محل تقدير.</p>
+            <h2 id="donation-title" data-i18n="donationTitle">اختار دعمك</h2>
+            <p data-i18n="donationDescription">حدد المبلغ المناسب ليك، وكل مساهمة محل تقدير.</p>
           </div>
           </header>
 
         <div class="content">
           <section class="amount-section" aria-labelledby="amount-title">
-            <h2 class="section-title" id="amount-title">اختار مبلغ التبرع</h2>
-            <div class="amounts" role="group" aria-label="مبالغ جاهزة للتبرع">
+            <h2 class="section-title" id="amount-title" data-i18n="amountTitle">اختار مبلغ التبرع</h2>
+            <div class="amounts" role="group" aria-label="مبالغ جاهزة للتبرع" data-i18n-aria="amountGroup">
               <button class="amount-button" type="button" data-amount="5" aria-pressed="true">5$</button>
               <button class="amount-button" type="button" data-amount="10" aria-pressed="false">10$</button>
               <button class="amount-button" type="button" data-amount="25" aria-pressed="false">25$</button>
               <button class="amount-button" type="button" data-amount="50" aria-pressed="false">50$</button>
             </div>
             <div class="field">
-              <label class="field-label" for="custom-amount">مبلغ آخر</label>
+              <label class="field-label" for="custom-amount" data-i18n="customAmount">مبلغ آخر</label>
               <div class="input-wrap">
-                <input class="amount-input" id="custom-amount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="اكتب المبلغ" aria-describedby="amount-hint">
+                <input class="amount-input" id="custom-amount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="اكتب المبلغ" data-i18n-placeholder="customAmountPlaceholder" aria-describedby="amount-hint">
                 <span class="currency" aria-hidden="true">$</span>
               </div>
-              <p class="hint" id="amount-hint">الحد الأدنى 1$.</p>
-            </div>
+              <p class="hint" id="amount-hint" data-i18n="amountHint">الحد الأدنى 1$.</p>
             </div>
           </section>
 
           <section class="donor-section" aria-labelledby="donor-title">
-            <h2 class="section-title" id="donor-title">بياناتك (اختياري)</h2>
+            <h2 class="section-title" id="donor-title" data-i18n="donorTitle">بياناتك (اختياري)</h2>
             <div class="donor-grid">
               <div class="field">
-                <label class="field-label" for="donor-name">الاسم</label>
-                <input id="donor-name" type="text" maxlength="80" autocomplete="name" placeholder="اسمك أو اتركه فارغًا للتبرع كمجهول">
+                <label class="field-label" for="donor-name" data-i18n="donorName">الاسم</label>
+                <input id="donor-name" type="text" maxlength="80" autocomplete="name" placeholder="اسمك أو اتركه فارغًا للتبرع كمجهول" data-i18n-placeholder="donorNamePlaceholder">
               </div>
               <div class="field message-field">
-                <label class="field-label" for="donor-message">رسالة قصيرة</label>
-                <textarea id="donor-message" maxlength="200" placeholder="اكتب رسالة تشجيع (اختياري)"></textarea>
+                <label class="field-label" for="donor-message" data-i18n="donorMessage">رسالة قصيرة</label>
+                <textarea id="donor-message" maxlength="200" placeholder="اكتب رسالة تشجيع (اختياري)" data-i18n-placeholder="donorMessagePlaceholder"></textarea>
                 <span class="counter" id="message-counter">0 / 200</span>
-                <p class="hint">الرسالة اختيارية ولا تُحفظ في هذه الصفحة.</p>
+                <p class="hint" data-i18n="messagePrivacy">الرسالة اختيارية ولا تُحفظ في هذه الصفحة.</p>
               </div>
             </div>
           </section>
 
           <div class="paypal-area">
-            <div id="paypal-button-container" aria-label="الدفع عبر باي بال"></div>
+            <div id="paypal-button-container" aria-label="الدفع عبر باي بال" data-i18n-aria="paypalAria"></div>
           </div>
-          <p class="secure-note">الدفع يتم عبر PayPal، ولا نطلب بيانات بطاقتك هنا.</p>
-          <p class="paypal-tip">لديك حساب؟ أدخل بريده واضغط «التالي» لتسجيل الدخول. إنشاء حساب خيار بديل.</p>
+          <p class="secure-note" data-i18n="secureNote">الدفع يتم عبر PayPal، ولا نطلب بيانات بطاقتك هنا.</p>
+          <p class="paypal-tip" data-i18n="paypalTip">لديك حساب؟ أدخل بريده واضغط «التالي» لتسجيل الدخول. إنشاء حساب خيار بديل.</p>
           <p class="status" id="status-message" role="status" aria-live="polite"></p>
         </div>
       </section>
 
       <aside class="side-card" aria-labelledby="support-title">
         <div class="side-mark" aria-hidden="true">✦</div>
-        <p class="side-kicker">من قلب المجتمع</p>
-        <h2 id="support-title">وجودك هو المكسب.</h2>
-        <p class="side-copy">مشاهدة البث والتفاعل معانا دعم كبير، والتبرع مجرد اختيار إضافي لو حابب.</p>
+        <p class="side-kicker" data-i18n="sideKicker">من قلب المجتمع</p>
+        <h2 id="support-title" data-i18n="sideTitle">وجودك هو المكسب.</h2>
+        <p class="side-copy" data-i18n="sideDescription">مشاهدة البث والتفاعل معانا دعم كبير، والتبرع مجرد اختيار إضافي لو حابب.</p>
         <ul class="benefits">
-          <li><span class="benefit-icon" aria-hidden="true">✓</span><span>اختار المبلغ اللي يناسبك، من غير أي إلزام.</span></li>
-          <li><span class="benefit-icon" aria-hidden="true">✓</span><span>بيتم الدفع على منصة PayPal بشكل مباشر.</span></li>
-          <li><span class="benefit-icon" aria-hidden="true">✓</span><span>تقدر تسيب اسمك أو تساهم كمجهول.</span></li>
+          <li><span class="benefit-icon" aria-hidden="true">✓</span><span data-i18n="benefitAmount">اختار المبلغ اللي يناسبك، من غير أي إلزام.</span></li>
+          <li><span class="benefit-icon" aria-hidden="true">✓</span><span data-i18n="benefitPayment">بيتم الدفع على منصة PayPal بشكل مباشر.</span></li>
+          <li><span class="benefit-icon" aria-hidden="true">✓</span><span data-i18n="benefitName">تقدر تسيب اسمك أو تساهم كمجهول.</span></li>
         </ul>
-        <div class="thanks-note"><p>شكرًا إنك بتدعم القناة وبتكبر مجتمعنا 💜</p></div>
+        <div class="thanks-note"><p data-i18n="thanksNote">شكرًا إنك بتدعم القناة وبتكبر مجتمعنا 💜</p></div>
       </aside>
     </div>
 
     <footer class="site-footer">
-      <p class="footer-label">تابعني على حساباتي</p>
-      <nav class="social-links" aria-label="حسابات التواصل الاجتماعي">
+      <p class="footer-label" data-i18n="socialLabel">تابعني على حساباتي</p>
+      <nav class="social-links" aria-label="حسابات التواصل الاجتماعي" data-i18n-aria="socialAria">
         <a href="https://kick.com/SLOW429" target="_blank" rel="noopener noreferrer">Kick</a>
         <a href="https://twitter.com/SLOW_429" target="_blank" rel="noopener noreferrer">Twitter</a>
         <a href="https://discord.gg/PKukN3apbV" target="_blank" rel="noopener noreferrer">Discord</a>
       </nav>
     </footer>
   </main>
+  <aside class="donation-toast" id="donation-toast" role="status" aria-live="polite">
+    <span class="toast-icon" aria-hidden="true">✦</span>
+    <div class="toast-copy">
+      <p class="toast-title" id="toast-title"></p>
+      <p class="toast-details" id="toast-details"></p>
+    </div>
+    <span class="toast-amount" id="toast-amount"></span>
+  </aside>
 
-  <!-- معرّف PayPal الموجود هنا هو Client ID علني، وليس كلمة مرور أو سرًا خاصًا. -->
-  <script src="https://www.paypal.com/sdk/js?client-id=AYRPQnEbI_KsDCQyxFKDng9aSOwokN2fyiYhwQf0lsFVi0vm06wNVVqjH55j-731Dg_2xCErH5-YHg2M&currency=USD&intent=capture"></script>
+  <!-- معرّف PayPal علني، بينما Client Secret يبقى في متغيرات الخادم فقط. -->
   <script>
     (() => {
+      const clientId = "AYRPQnEbI_KsDCQyxFKDng9aSOwokN2fyiYhwQf0lsFVi0vm06wNVVqjH55j-731Dg_2xCErH5-YHg2M";
+      const translations = {
+        ar: {
+          brandCaption: "مجتمع القناة", homeLink: "الموقع الرئيسي", heroEyebrow: "مساحة دعم القناة",
+          brandAria: "العودة إلى الموقع الرئيسي", homeAria: "الموقع الرئيسي", languageAria: "اختار اللغة",
+          profileAlt: "الصورة الشخصية لصاحب قناة SLOW429", donationBannerAlt: "بانر دعم البث والتبرع",
+          paypalAria: "الدفع عبر باي بال",
+          heroLead: "خلّي البث الجاي", heroHighlight: "أحلى",
+          heroDescription: "كل دعم بيساعدنا نكمل ونقدم محتوى أحلى. شكرًا من القلب إنك جزء من مجتمعنا!",
+          artTag: "دعمك بيفرق 💜", donationTitle: "اختار دعمك",
+          donationDescription: "حدد المبلغ المناسب ليك، وكل مساهمة محل تقدير.",
+          amountTitle: "اختار مبلغ التبرع", amountGroup: "مبالغ جاهزة للتبرع",
+          customAmount: "مبلغ آخر", customAmountPlaceholder: "اكتب المبلغ",
+          amountHint: "الحد الأدنى 1$.", donorTitle: "بياناتك (اختياري)",
+          donorName: "الاسم", donorNamePlaceholder: "اسمك أو اتركه فارغًا للتبرع كمجهول",
+          donorMessage: "رسالة قصيرة", donorMessagePlaceholder: "اكتب رسالة تشجيع (اختياري)",
+          messagePrivacy: "الرسالة اختيارية ولا تُحفظ في هذه الصفحة.",
+          secureNote: "الدفع يتم عبر PayPal، ولا نطلب بيانات بطاقتك هنا.",
+          paypalTip: "لديك حساب؟ أدخل بريده واضغط «التالي» لتسجيل الدخول. إنشاء حساب خيار بديل.",
+          sideKicker: "من قلب المجتمع", sideTitle: "وجودك هو المكسب.",
+          sideDescription: "مشاهدة البث والتفاعل معانا دعم كبير، والتبرع مجرد اختيار إضافي لو حابب.",
+          benefitAmount: "اختار المبلغ اللي يناسبك، من غير أي إلزام.",
+          benefitPayment: "بيتم الدفع على منصة PayPal بشكل مباشر.",
+          benefitName: "تقدر تسيب اسمك أو تساهم كمجهول.",
+          thanksNote: "شكرًا إنك بتدعم القناة وبتكبر مجتمعنا 💜",
+          socialLabel: "تابعني على حساباتي", socialAria: "حسابات التواصل الاجتماعي",
+          anonymous: "متبرع مجهول", invalidAmount: "اكتب مبلغًا صحيحًا، والحد الأدنى هو 1$.",
+          decimalAmount: "اكتب المبلغ بحد أقصى منزلتين عشريتين.",
+          paymentStarting: "جارٍ تجهيز الدفع عبر PayPal…",
+          paymentConfirming: "جارٍ تأكيد الدفع…",
+          paymentSuccess: "شكرًا يا {name} على دعمك الجميل للقناة! 💜",
+          paymentCancelled: "تم إلغاء عملية الدفع. لم يتم خصم أي مبلغ.",
+          paymentError: "حصلت مشكلة أثناء الدفع. حاول مرة تانية أو تواصل معنا.",
+          paypalLoadError: "تعذر تحميل PayPal. تأكد من اتصال الإنترنت وصحة Client ID.",
+          orderError: "تعذر إنشاء طلب الدفع. حاول مرة أخرى.",
+          captureError: "تعذر تأكيد الدفع. تواصل مع PayPal قبل إعادة المحاولة.",
+          alertTitle: "وصل دعم جديد للقناة!",
+          alertsUnavailable: "تنبيهات التبرع غير متاحة مؤقتًا.",
+        },
+        tr: {
+          brandCaption: "Kanal topluluğu", homeLink: "Ana sayfa", heroEyebrow: "Kanal destek alanı",
+          brandAria: "Ana sayfaya dön", homeAria: "Ana sayfa", languageAria: "Dil seçin",
+          profileAlt: "SLOW429 kanal sahibinin profil fotoğrafı", donationBannerAlt: "Yayın bağış görseli",
+          paypalAria: "PayPal ile ödeme",
+          heroLead: "Bir sonraki yayını", heroHighlight: "daha güzel yap",
+          heroDescription: "Her destek devam etmemize ve daha iyi içerikler üretmemize yardımcı oluyor. Topluluğumuzun bir parçası olduğun için teşekkürler!",
+          artTag: "Desteğin fark yaratıyor 💜", donationTitle: "Desteğini seç",
+          donationDescription: "Sana uygun tutarı seç; her katkı bizim için değerli.",
+          amountTitle: "Bağış miktarını seç", amountGroup: "Hazır bağış tutarları",
+          customAmount: "Başka bir tutar", customAmountPlaceholder: "Tutarı gir",
+          amountHint: "En az 1$.", donorTitle: "Bilgilerin (isteğe bağlı)",
+          donorName: "Ad", donorNamePlaceholder: "Adını yaz veya anonim kalmak için boş bırak",
+          donorMessage: "Kısa mesaj", donorMessagePlaceholder: "Bir destek mesajı yaz (isteğe bağlı)",
+          messagePrivacy: "Mesaj isteğe bağlıdır ve bu sayfada saklanmaz.",
+          secureNote: "Ödeme PayPal üzerinden yapılır; kart bilgilerini burada istemiyoruz.",
+          paypalTip: "Hesabın var mı? E-posta adresini girip «İleri»ye basarak giriş yap. Hesap oluşturma alternatif bir seçenektir.",
+          sideKicker: "Topluluğun kalbinden", sideTitle: "Burada olman yeter.",
+          sideDescription: "Yayınları izlemek ve bizimle etkileşimde olmak büyük destek. Bağış yapmak tamamen isteğe bağlıdır.",
+          benefitAmount: "Sana uygun miktarı seç; herhangi bir zorunluluk yok.",
+          benefitPayment: "Ödeme doğrudan PayPal üzerinden yapılır.",
+          benefitName: "Adını paylaşabilir veya anonim destek olabilirsin.",
+          thanksNote: "Kanala destek olduğun ve topluluğumuzu büyüttüğün için teşekkürler 💜",
+          socialLabel: "Sosyal hesaplarım", socialAria: "Sosyal medya hesapları",
+          anonymous: "Anonim destekçi", invalidAmount: "Geçerli bir tutar gir. Minimum tutar 1$.",
+          decimalAmount: "En fazla iki ondalık basamak kullan.",
+          paymentStarting: "PayPal ödemesi hazırlanıyor…",
+          paymentConfirming: "Ödeme onaylanıyor…",
+          paymentSuccess: "Desteğin için teşekkürler, {name}! 💜",
+          paymentCancelled: "Ödeme iptal edildi. Herhangi bir tutar alınmadı.",
+          paymentError: "Ödeme sırasında bir sorun oluştu. Tekrar dene veya bizimle iletişime geç.",
+          paypalLoadError: "PayPal yüklenemedi. İnternet bağlantını ve Client ID'yi kontrol et.",
+          orderError: "Ödeme isteği oluşturulamadı. Lütfen tekrar dene.",
+          captureError: "Ödeme doğrulanamadı. Tekrar denemeden önce PayPal hesabını kontrol et.",
+          alertTitle: "Kanala yeni destek geldi!",
+          alertsUnavailable: "Bağış bildirimleri şu anda kullanılamıyor.",
+        },
+        en: {
+          brandCaption: "Channel community", homeLink: "Main website", heroEyebrow: "Support the channel",
+          brandAria: "Return to the main website", homeAria: "Main website", languageAria: "Choose language",
+          profileAlt: "SLOW429 channel owner's profile photo", donationBannerAlt: "Stream donation banner",
+          paypalAria: "Pay with PayPal",
+          heroLead: "Make the next stream", heroHighlight: "even better",
+          heroDescription: "Every contribution helps us keep going and make better content. Thanks for being part of the community!",
+          artTag: "Your support matters 💜", donationTitle: "Choose your support",
+          donationDescription: "Pick an amount that works for you. Every contribution is appreciated.",
+          amountTitle: "Choose a donation amount", amountGroup: "Suggested donation amounts",
+          customAmount: "Other amount", customAmountPlaceholder: "Enter an amount",
+          amountHint: "Minimum $1.", donorTitle: "Your details (optional)",
+          donorName: "Name", donorNamePlaceholder: "Your name, or leave blank to donate anonymously",
+          donorMessage: "Short message", donorMessagePlaceholder: "Write an encouraging message (optional)",
+          messagePrivacy: "Your message is optional and is not stored on this page.",
+          secureNote: "Payments are handled by PayPal. We never ask for your card details here.",
+          paypalTip: "Already have an account? Enter your email and select “Next” to sign in. Creating an account is an alternative.",
+          sideKicker: "From the community", sideTitle: "Having you here is what matters.",
+          sideDescription: "Watching and joining the conversation is already a big support. Donating is always optional.",
+          benefitAmount: "Choose an amount that works for you—there is no obligation.",
+          benefitPayment: "Payment is processed directly by PayPal.",
+          benefitName: "Share your name or support the channel anonymously.",
+          thanksNote: "Thanks for supporting the channel and growing our community 💜",
+          socialLabel: "Follow my accounts", socialAria: "Social media accounts",
+          anonymous: "Anonymous supporter", invalidAmount: "Enter a valid amount. The minimum is $1.",
+          decimalAmount: "Use no more than two decimal places.",
+          paymentStarting: "Preparing PayPal checkout…",
+          paymentConfirming: "Confirming your payment…",
+          paymentSuccess: "Thank you for your support, {name}! 💜",
+          paymentCancelled: "Payment was cancelled. You were not charged.",
+          paymentError: "There was a problem with the payment. Try again or contact us.",
+          paypalLoadError: "PayPal could not load. Check your internet connection and Client ID.",
+          orderError: "Could not start the payment. Please try again.",
+          captureError: "Could not confirm the payment. Check PayPal before trying again.",
+          alertTitle: "New support for the channel!",
+          alertsUnavailable: "Donation alerts are temporarily unavailable.",
+        },
+      };
+      const paypalLocales = { ar: "ar_EG", tr: "tr_TR", en: "en_US" };
+      const validLocales = Object.keys(translations);
+
+      function getLocale() {
+        const queryLocale = new URLSearchParams(window.location.search).get("lang");
+        if (validLocales.includes(queryLocale)) return queryLocale;
+
+        try {
+          const savedLocale = window.localStorage.getItem("slow-locale");
+          if (validLocales.includes(savedLocale)) return savedLocale;
+        } catch (error) {
+          console.warn("Could not read the saved language preference.", error);
+        }
+
+        return "ar";
+      }
+
+      const locale = getLocale();
+      const dictionary = translations[locale];
+      document.documentElement.lang = locale === "tr" ? "tr" : locale;
+      document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
+      document.title = locale === "ar" ? "ادعم القناة | تبرع" : locale === "tr" ? "Kanala Destek Ol | Bağış" : "Support the Channel | Donate";
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        if (dictionary[key]) element.textContent = dictionary[key];
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+        const key = element.dataset.i18nPlaceholder;
+        if (dictionary[key]) element.setAttribute("placeholder", dictionary[key]);
+      });
+      document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
+        const key = element.dataset.i18nAria;
+        if (dictionary[key]) element.setAttribute("aria-label", dictionary[key]);
+      });
+      document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+        const key = element.dataset.i18nAlt;
+        if (dictionary[key]) element.setAttribute("alt", dictionary[key]);
+      });
+      document.querySelectorAll(".language-button").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.locale === locale));
+        button.addEventListener("click", () => {
+          if (!validLocales.includes(button.dataset.locale) || button.dataset.locale === locale) return;
+          try {
+            window.localStorage.setItem("slow-locale", button.dataset.locale);
+          } catch (error) {
+            console.warn("Could not save the language preference.", error);
+          }
+          window.location.search = `?lang=${button.dataset.locale}`;
+        });
+      });
+
       const amountButtons = document.querySelectorAll(".amount-button");
       const customAmount = document.getElementById("custom-amount");
       const donorName = document.getElementById("donor-name");
       const donorMessage = document.getElementById("donor-message");
       const messageCounter = document.getElementById("message-counter");
       const statusMessage = document.getElementById("status-message");
+      const donationToast = document.getElementById("donation-toast");
       let selectedAmount = 5;
       let invalidAmount = false;
+      let toastTimer;
+      let alertsInitialized = false;
+      let alertErrorLogged = false;
+      const seenDonationIds = new Set();
 
-      // عرض حالة واضحة للمستخدم من دون إخفاء أخطاء الدفع.
-      function showStatus(message, type) {
-        statusMessage.textContent = message;
+      function translate(key, values = {}) {
+        return Object.entries(values).reduce(
+          (message, [name, value]) => message.replaceAll(`{${name}}`, value),
+          dictionary[key] || key
+        );
+      }
+
+      function showStatus(key, type, values) {
+        statusMessage.textContent = translate(key, values);
         statusMessage.className = `status visible ${type}`;
       }
 
@@ -824,10 +1078,10 @@
           : Number(customAmount.value);
 
         if (!Number.isFinite(amount) || amount < 1) {
-          throw new Error("اكتب مبلغًا صحيحًا، والحد الأدنى هو 1$.");
+          throw new Error(translate("invalidAmount"));
         }
         if (Math.round(amount * 100) !== amount * 100) {
-          throw new Error("اكتب المبلغ بحد أقصى منزلتين عشريتين.");
+          throw new Error(translate("decimalAmount"));
         }
         return amount.toFixed(2);
       }
@@ -852,17 +1106,52 @@
         messageCounter.textContent = `${donorMessage.value.length} / 200`;
       });
 
-      // ينشئ زر PayPal الطلب بالمبلغ المحدد لحظة الضغط على زر الدفع.
-      if (window.paypal) {
+      function showDonationToast(donation) {
+        const numberLocale = locale === "tr" ? "tr-TR" : locale === "ar" ? "ar-EG" : "en-US";
+        document.getElementById("toast-title").textContent = translate("alertTitle");
+        document.getElementById("toast-details").textContent = donation.name || translate("anonymous");
+        document.getElementById("toast-amount").textContent = new Intl.NumberFormat(numberLocale, {
+          style: "currency",
+          currency: donation.currency,
+        }).format(Number(donation.amount));
+        donationToast.classList.add("visible");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => donationToast.classList.remove("visible"), 6000);
+      }
+
+      async function pollDonationAlerts() {
+        if (document.hidden) return;
+
+        try {
+          const response = await fetch("/api/donations", { cache: "no-store" });
+          if (!response.ok) throw new Error(`Donation alert endpoint returned ${response.status}.`);
+          const data = await response.json();
+          if (!Array.isArray(data.donations)) throw new Error("Donation alert response was invalid.");
+          alertErrorLogged = false;
+
+          if (!alertsInitialized) {
+            data.donations.forEach((donation) => seenDonationIds.add(donation.id));
+            alertsInitialized = true;
+            return;
+          }
+
+          data.donations.slice().reverse().forEach((donation) => {
+            if (typeof donation.id !== "string" || seenDonationIds.has(donation.id)) return;
+            seenDonationIds.add(donation.id);
+            showDonationToast(donation);
+          });
+        } catch (error) {
+          if (!alertErrorLogged) {
+            console.warn("Donation alerts could not be loaded.", error);
+            alertErrorLogged = true;
+          }
+        }
+      }
+
+      function renderPayPalButtons() {
         window.paypal.Buttons({
-          style: {
-            layout: "vertical",
-            color: "gold",
-            shape: "rect",
-            label: "donate",
-            height: 48
-          },
-          createOrder: (data, actions) => {
+          style: { layout: "vertical", color: "gold", shape: "rect", label: "donate", height: 48 },
+          createOrder: () => {
             invalidAmount = false;
             clearStatus();
             let amount;
@@ -874,38 +1163,62 @@
               return Promise.reject(error);
             }
 
-            return actions.order.create({
-              purchase_units: [{
-                amount: { currency_code: "USD", value: amount },
-                description: "دعم القناة"
-              }]
+            showStatus("paymentStarting", "info");
+            return fetch("/api/paypal/create-order", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ amount, donorName: donorName.value.trim() }),
+            }).then(async (response) => {
+              const data = await response.json();
+              if (!response.ok || typeof data.id !== "string") throw new Error(translate("orderError"));
+              return data.id;
+            }).catch((error) => {
+              console.error("Could not create a PayPal order.", error);
+              showStatus("orderError", "error");
+              throw error;
             });
           },
-          onApprove: (data, actions) => {
-            showStatus("جارٍ تأكيد الدفع...", "info");
-            return actions.order.capture().then(() => {
-              const name = donorName.value.trim() || "متبرع مجهول";
-              showStatus(`شكرًا يا ${name} على دعمك الجميل للقناة! 💜`, "success");
+          onApprove: (data) => {
+            showStatus("paymentConfirming", "info");
+            return fetch("/api/paypal/capture-order", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ orderID: data.orderID }),
+            }).then(async (response) => {
+              const result = await response.json();
+              if (!response.ok || result.status !== "COMPLETED") throw new Error(translate("captureError"));
+              showStatus("paymentSuccess", "success", { name: result.donorName || translate("anonymous") });
+            }).catch((error) => {
+              console.error("Could not capture the PayPal order.", error);
+              showStatus("captureError", "error");
+              throw error;
             });
           },
-          onCancel: () => {
-            showStatus("تم إلغاء عملية الدفع. لم يتم خصم أي مبلغ.", "error");
-          },
+          onCancel: () => showStatus("paymentCancelled", "error"),
           onError: (error) => {
-            console.error("PayPal payment error:", error);
+            console.error("PayPal checkout error.", error);
             if (invalidAmount) {
               invalidAmount = false;
               return;
             }
-            showStatus("حصلت مشكلة أثناء الدفع. حاول مرة تانية أو تواصل معنا.", "error");
-          }
+            showStatus("paymentError", "error");
+          },
         }).render("#paypal-button-container").catch((error) => {
-          console.error("PayPal button rendering error:", error);
-          showStatus("تعذر تحميل زر PayPal. راجع Client ID واتصال الإنترنت ثم أعد المحاولة.", "error");
+          console.error("PayPal buttons could not be rendered.", error);
+          showStatus("paypalLoadError", "error");
         });
-      } else {
-        showStatus("تعذر تحميل PayPal. تأكد من اتصال الإنترنت وصحة Client ID.", "error");
       }
+
+      const sdk = document.createElement("script");
+      sdk.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=USD&intent=capture&locale=${paypalLocales[locale]}`;
+      sdk.async = true;
+      sdk.onload = renderPayPalButtons;
+      sdk.onerror = () => showStatus("paypalLoadError", "error");
+      document.head.append(sdk);
+
+      pollDonationAlerts();
+      window.setInterval(pollDonationAlerts, 8000);
+      document.addEventListener("visibilitychange", pollDonationAlerts);
     })();
   </script>
 </body>

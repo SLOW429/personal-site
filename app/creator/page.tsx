@@ -110,6 +110,17 @@ export default async function CreatorPage() {
           <KickStreamPlayer />
         </section>
 
+        <section className="mt-8 flex flex-col justify-between gap-6 rounded-[2rem] border border-[var(--card-border-strong)] bg-[linear-gradient(115deg,var(--card-bg),var(--panel-bg-strong))] p-7 md:flex-row md:items-center md:p-9">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]"><LocalizedText message="creator.supportEyebrow" /></p>
+            <h2 className="mt-3 text-2xl font-bold md:text-3xl"><LocalizedText message="creator.supportTitle" /></h2>
+            <p className="mt-3 max-w-2xl leading-7 text-[var(--muted)]"><LocalizedText message="creator.supportDescription" /></p>
+          </div>
+          <Link href="/donate.html" className="inline-flex w-fit shrink-0 rounded-xl bg-[var(--gold)] px-5 py-3 font-semibold text-[#071018] transition hover:-translate-y-0.5">
+            <LocalizedText message="creator.supportButton" />
+          </Link>
+        </section>
+
         <section className="mt-12">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
