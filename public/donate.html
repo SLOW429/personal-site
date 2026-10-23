@@ -307,72 +307,445 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
     }
+
+    body {
+      display: block;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse at 78% 4%, rgb(117 66 185 / 20%), transparent 36%),
+        radial-gradient(ellipse at 10% 55%, rgb(66 142 91 / 7%), transparent 29%),
+        var(--background);
+    }
+
+    .page { width: min(100%, 1060px); }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 54px;
+      margin-bottom: 38px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 39px;
+      height: 39px;
+      place-items: center;
+      border: 1px solid rgb(189 140 255 / 36%);
+      border-radius: 13px;
+      background: var(--purple-soft);
+      color: var(--purple-bright);
+      font-size: 1.1rem;
+      font-weight: 900;
+    }
+
+    .brand-name { font-size: .9rem; font-weight: 800; letter-spacing: .4px; }
+    .brand-caption { display: block; color: var(--muted); font-size: .7rem; font-weight: 400; }
+
+    .top-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: #d5d2e0;
+      font-size: .8rem;
+      text-decoration: none;
+      transition: border-color .18s ease, color .18s ease;
+    }
+
+    .top-link:hover { border-color: var(--purple); color: var(--purple-bright); }
+
+    .welcome {
+      position: relative;
+      display: grid;
+      min-height: 250px;
+      grid-template-columns: 1.15fr .85fr;
+      align-items: center;
+      gap: 20px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      padding: 32px 38px;
+      border: 1px solid rgb(185 137 255 / 14%);
+      border-radius: 26px;
+      background:
+        radial-gradient(ellipse at 18% 90%, rgb(65 166 100 / 12%), transparent 36%),
+        linear-gradient(115deg, #171824, #1b1728 68%, #201932);
+      box-shadow: 0 24px 70px rgb(0 0 0 / 22%);
+    }
+
+    .welcome-copy { position: relative; z-index: 1; }
+    .welcome .eyebrow { margin-bottom: 11px; }
+
+    .welcome h1 {
+      max-width: 550px;
+      font-size: clamp(2.2rem, 5vw, 3.7rem);
+      letter-spacing: -2px;
+      line-height: 1.2;
+    }
+
+    .welcome h1 span {
+      color: var(--purple-bright);
+      text-shadow: 0 0 35px rgb(169 112 255 / 24%);
+    }
+
+    .welcome-copy > p:last-child {
+      max-width: 470px;
+      margin: 13px 0 0;
+      color: #b0afbf;
+      font-size: .96rem;
+    }
+
+    .welcome-art {
+      position: relative;
+      display: grid;
+      min-height: 185px;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .welcome-art::before, .welcome-art::after {
+      position: absolute;
+      z-index: -1;
+      border: 1px solid rgb(189 140 255 / 19%);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .welcome-art::before { width: 190px; height: 190px; }
+    .welcome-art::after { width: 145px; height: 145px; border-color: rgb(189 140 255 / 27%); }
+
+    .art-core {
+      display: grid;
+      width: 94px;
+      height: 94px;
+      place-items: center;
+      border: 1px solid rgb(211 178 255 / 45%);
+      border-radius: 30px;
+      background: linear-gradient(145deg, rgb(169 112 255 / 36%), rgb(97 57 148 / 30%));
+      box-shadow: 0 0 65px rgb(169 112 255 / 30%), inset 0 1px rgb(255 255 255 / 14%);
+      color: #f0ddff;
+      transform: rotate(-8deg);
+    }
+
+    .art-core svg { width: 45px; height: 45px; transform: rotate(8deg); }
+
+    .art-tag {
+      position: absolute;
+      inset: auto auto 4px 50%;
+      padding: 5px 12px;
+      border: 1px solid rgb(255 255 255 / 9%);
+      border-radius: 999px;
+      background: rgb(14 15 22 / 75%);
+      color: #d7c5f2;
+      font-size: .72rem;
+      white-space: nowrap;
+      transform: translateX(-50%);
+    }
+
+    .donation-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(255px, .65fr);
+      align-items: stretch;
+      gap: 20px;
+    }
+
+    .card {
+      border-color: rgb(255 255 255 / 8%);
+      border-radius: 22px;
+      background: linear-gradient(155deg, rgb(24 25 37 / 98%), rgb(16 17 25 / 98%));
+      box-shadow: 0 24px 75px rgb(0 0 0 / 29%);
+    }
+
+    .donation-card { padding: 27px; }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 22px;
+    }
+
+    .card-heading .badge {
+      width: 47px;
+      height: 47px;
+      flex: 0 0 auto;
+      margin: 0;
+      border-radius: 15px;
+    }
+
+    .card-heading .badge svg { width: 24px; height: 24px; }
+    .card-heading h2 { margin: 0; font-size: 1.12rem; }
+    .card-heading p { margin: 2px 0 0; color: var(--muted); font-size: .8rem; }
+    .content { padding: 0; }
+
+    .amount-section {
+      margin-bottom: 22px;
+      padding: 17px;
+      border-color: rgb(255 255 255 / 6%);
+      border-radius: 16px;
+      background: rgb(255 255 255 / 2%);
+    }
+
+    .amounts { gap: 8px; }
+    .amount-button { min-height: 47px; border-radius: 11px; }
+    .field { margin-top: 13px; }
+
+    .donor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 14px;
+    }
+
+    .donor-grid .message-field { grid-column: 1 / -1; }
+    .donor-section .section-title { margin-bottom: 4px; }
+    .donor-section .hint { line-height: 1.6; }
+    .paypal-area { margin-top: 21px; }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 13px;
+    }
+
+    .side-card {
+      display: flex;
+      flex-direction: column;
+      padding: 27px 23px;
+      border: 1px solid rgb(184 255 101 / 13%);
+      border-radius: 22px;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgb(184 255 101 / 8%), transparent 47%),
+        linear-gradient(160deg, #151b1b, #12141b 55%);
+      box-shadow: 0 24px 75px rgb(0 0 0 / 20%);
+    }
+
+    .side-mark {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      margin-bottom: 20px;
+      border: 1px solid rgb(184 255 101 / 23%);
+      border-radius: 15px;
+      background: rgb(184 255 101 / 8%);
+      color: var(--green);
+      font-size: 1.15rem;
+    }
+
+    .side-kicker { margin: 0 0 5px; color: var(--green); font-size: .75rem; font-weight: 700; }
+    .side-card h2 { margin: 0; font-size: 1.45rem; line-height: 1.45; }
+    .side-copy { margin: 9px 0 21px; color: var(--muted); font-size: .86rem; }
+    .benefits { display: grid; gap: 15px; margin: 0; padding: 0; list-style: none; }
+    .benefits li { display: flex; align-items: flex-start; gap: 10px; color: #d5d3df; font-size: .82rem; }
+
+    .benefit-icon {
+      display: grid;
+      width: 23px;
+      height: 23px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid rgb(184 255 101 / 19%);
+      border-radius: 8px;
+      background: rgb(184 255 101 / 7%);
+      color: var(--green);
+      font-size: .72rem;
+    }
+
+    .thanks-note {
+      margin-top: auto;
+      padding-top: 22px;
+    }
+
+    .thanks-note p {
+      margin: 0;
+      padding: 13px 14px;
+      border: 1px solid rgb(255 255 255 / 6%);
+      border-radius: 13px;
+      background: rgb(255 255 255 / 3%);
+      color: #d8c8ef;
+      font-size: .8rem;
+    }
+
+    .site-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 22px 2px 4px;
+    }
+
+    .site-footer .footer-label { margin: 0; }
+    .site-footer .social-links { justify-content: flex-start; }
+    .site-footer .social-links a { min-width: auto; padding: 6px 13px; }
+
+    @media (max-width: 760px) {
+      body { padding: 18px; }
+      .topbar { margin-bottom: 24px; }
+      .welcome { min-height: 220px; padding: 27px; }
+      .welcome-art::before { width: 155px; height: 155px; }
+      .welcome-art::after { width: 120px; height: 120px; }
+      .art-core { width: 76px; height: 76px; border-radius: 25px; }
+      .art-core svg { width: 36px; height: 36px; }
+      .donation-layout { grid-template-columns: 1fr; }
+      .side-card { min-height: 280px; }
+      .thanks-note { margin-top: 24px; }
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 13px; }
+      .topbar { margin-bottom: 18px; }
+      .brand-caption { display: none; }
+      .top-link { padding: 7px 10px; font-size: .75rem; }
+      .welcome {
+        grid-template-columns: 1fr;
+        gap: 3px;
+        margin-bottom: 15px;
+        padding: 25px 21px 17px;
+        border-radius: 21px;
+      }
+
+      .welcome h1 { font-size: clamp(2rem, 10vw, 2.65rem); }
+      .welcome-copy > p:last-child { margin-top: 9px; font-size: .88rem; }
+      .welcome-art { min-height: 118px; }
+      .welcome-art::before { width: 115px; height: 115px; }
+      .welcome-art::after { width: 87px; height: 87px; }
+      .art-core { width: 60px; height: 60px; border-radius: 20px; }
+      .art-core svg { width: 30px; height: 30px; }
+      .art-tag { inset: auto auto 0 50%; }
+      .donation-card { padding: 20px 16px; border-radius: 19px; }
+      .card-heading { margin-bottom: 18px; }
+      .amount-section { padding: 13px; }
+      .amounts { gap: 6px; }
+      .amount-button { min-height: 44px; font-size: .9rem; }
+      .donor-grid { grid-template-columns: 1fr; }
+      .donor-grid .message-field { grid-column: auto; }
+      .side-card { min-height: 0; padding: 22px 19px; }
+      .site-footer { flex-direction: column; align-items: center; padding-top: 20px; }
+      .site-footer .social-links { justify-content: center; }
+    }
   </style>
 </head>
 <body>
   <main class="page">
-    <section class="card" aria-labelledby="page-title">
-      <header class="hero">
-        <div class="badge" aria-hidden="true">
+    <header class="topbar">
+      <a class="brand" href="https://slows.dev" aria-label="العودة إلى الموقع الرئيسي">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span class="brand-name">SLOW429<span class="brand-caption">مجتمع القناة</span></span>
+      </a>
+      <a class="top-link" href="https://slows.dev">الموقع الرئيسي <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <section class="welcome" aria-labelledby="page-title">
+      <div class="welcome-copy">
+        <p class="eyebrow">مساحة دعم القناة</p>
+        <h1 id="page-title">خلّي البث الجاي <span>أحلى</span></h1>
+        <p>كل دعم بيساعدنا نكمل ونقدم محتوى أحلى. شكرًا من القلب إنك جزء من مجتمعنا!</p>
+      </div>
+      <div class="welcome-art" aria-hidden="true">
+        <div class="art-core">
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.8 4.8 0 0 1 8.8-2.6 4.8 4.8 0 0 1 8.8 2.6Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
             <path d="m8.7 12.1 2.1 2.1 4.5-4.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
           </svg>
         </div>
-        <p class="eyebrow">مساحة دعم القناة</p>
-        <h1 id="page-title">ادعم القناة</h1>
-        <p class="intro">كل دعم بيساعدنا نكمل ونقدم محتوى أحلى. شكرًا من القلب إنك جزء من مجتمعنا!</p>
-      </header>
-
-      <div class="content">
-        <section class="amount-section" aria-labelledby="amount-title">
-          <h2 class="section-title" id="amount-title">اختار مبلغ التبرع</h2>
-          <div class="amounts" role="group" aria-label="مبالغ جاهزة للتبرع">
-            <button class="amount-button" type="button" data-amount="5" aria-pressed="true">5$</button>
-            <button class="amount-button" type="button" data-amount="10" aria-pressed="false">10$</button>
-            <button class="amount-button" type="button" data-amount="25" aria-pressed="false">25$</button>
-            <button class="amount-button" type="button" data-amount="50" aria-pressed="false">50$</button>
-          </div>
-          <div class="field">
-            <label class="field-label" for="custom-amount">مبلغ آخر</label>
-            <div class="input-wrap">
-              <input class="amount-input" id="custom-amount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="اكتب المبلغ" aria-describedby="amount-hint">
-              <span class="currency" aria-hidden="true">$</span>
-            </div>
-            <p class="hint" id="amount-hint">الحد الأدنى 1$.</p>
-          </div>
-        </section>
-
-        <section aria-labelledby="donor-title">
-          <h2 class="section-title" id="donor-title">بياناتك (اختياري)</h2>
-          <div class="field">
-            <label class="field-label" for="donor-name">الاسم</label>
-            <input id="donor-name" type="text" maxlength="80" autocomplete="name" placeholder="اسمك أو اتركه فارغًا للتبرع كمجهول">
-          </div>
-          <div class="field">
-            <label class="field-label" for="donor-message">رسالة قصيرة</label>
-            <textarea id="donor-message" maxlength="200" placeholder="اكتب رسالة تشجيع (اختياري)"></textarea>
-            <span class="counter" id="message-counter">0 / 200</span>
-            <p class="hint">لأن الصفحة ثابتة بدون خادم، الرسالة لا تُحفظ ولا تُرسل لصاحب القناة.</p>
-          </div>
-        </section>
-
-        <div class="paypal-area">
-          <div id="paypal-button-container" aria-label="الدفع عبر باي بال"></div>
-        </div>
-        <p class="secure-note">الدفع آمن عبر PayPal. لن نطلب منك بيانات بطاقتك هنا.</p>
-        <p class="status" id="status-message" role="status" aria-live="polite"></p>
+        <span class="art-tag">دعمك بيفرق 💜</span>
       </div>
-
-      <footer>
-        <p class="footer-label">تابعني على حساباتي</p>
-        <nav class="social-links" aria-label="حسابات التواصل الاجتماعي">
-          <a href="https://kick.com/SLOW429" target="_blank" rel="noopener noreferrer">Kick</a>
-          <a href="https://twitter.com/SLOW_429" target="_blank" rel="noopener noreferrer">Twitter</a>
-          <a href="https://discord.gg/PKukN3apbV" target="_blank" rel="noopener noreferrer">Discord</a>
-        </nav>
-      </footer>
     </section>
+
+    <div class="donation-layout">
+      <section class="card donation-card" aria-labelledby="donation-title">
+        <header class="card-heading">
+          <div class="badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.8 4.8 0 0 1 8.8-2.6 4.8 4.8 0 0 1 8.8 2.6Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+              <path d="m8.7 12.1 2.1 2.1 4.5-4.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div>
+            <h2 id="donation-title">اختار دعمك</h2>
+            <p>حدد المبلغ المناسب ليك، وكل مساهمة محل تقدير.</p>
+          </div>
+        </header>
+
+        <div class="content">
+          <section class="amount-section" aria-labelledby="amount-title">
+            <h2 class="section-title" id="amount-title">اختار مبلغ التبرع</h2>
+            <div class="amounts" role="group" aria-label="مبالغ جاهزة للتبرع">
+              <button class="amount-button" type="button" data-amount="5" aria-pressed="true">5$</button>
+              <button class="amount-button" type="button" data-amount="10" aria-pressed="false">10$</button>
+              <button class="amount-button" type="button" data-amount="25" aria-pressed="false">25$</button>
+              <button class="amount-button" type="button" data-amount="50" aria-pressed="false">50$</button>
+            </div>
+            <div class="field">
+              <label class="field-label" for="custom-amount">مبلغ آخر</label>
+              <div class="input-wrap">
+                <input class="amount-input" id="custom-amount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="اكتب المبلغ" aria-describedby="amount-hint">
+                <span class="currency" aria-hidden="true">$</span>
+              </div>
+              <p class="hint" id="amount-hint">الحد الأدنى 1$.</p>
+            </div>
+          </section>
+
+          <section class="donor-section" aria-labelledby="donor-title">
+            <h2 class="section-title" id="donor-title">بياناتك (اختياري)</h2>
+            <div class="donor-grid">
+              <div class="field">
+                <label class="field-label" for="donor-name">الاسم</label>
+                <input id="donor-name" type="text" maxlength="80" autocomplete="name" placeholder="اسمك أو اتركه فارغًا للتبرع كمجهول">
+              </div>
+              <div class="field message-field">
+                <label class="field-label" for="donor-message">رسالة قصيرة</label>
+                <textarea id="donor-message" maxlength="200" placeholder="اكتب رسالة تشجيع (اختياري)"></textarea>
+                <span class="counter" id="message-counter">0 / 200</span>
+                <p class="hint">الرسالة اختيارية ولا تُحفظ في هذه الصفحة.</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="paypal-area">
+            <div id="paypal-button-container" aria-label="الدفع عبر باي بال"></div>
+          </div>
+          <p class="secure-note">الدفع يتم عبر PayPal، ولا نطلب بيانات بطاقتك هنا.</p>
+          <p class="status" id="status-message" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <aside class="side-card" aria-labelledby="support-title">
+        <div class="side-mark" aria-hidden="true">✦</div>
+        <p class="side-kicker">من قلب المجتمع</p>
+        <h2 id="support-title">وجودك هو المكسب.</h2>
+        <p class="side-copy">مشاهدة البث والتفاعل معانا دعم كبير، والتبرع مجرد اختيار إضافي لو حابب.</p>
+        <ul class="benefits">
+          <li><span class="benefit-icon" aria-hidden="true">✓</span><span>اختار المبلغ اللي يناسبك، من غير أي إلزام.</span></li>
+          <li><span class="benefit-icon" aria-hidden="true">✓</span><span>بيتم الدفع على منصة PayPal بشكل مباشر.</span></li>
+          <li><span class="benefit-icon" aria-hidden="true">✓</span><span>تقدر تسيب اسمك أو تساهم كمجهول.</span></li>
+        </ul>
+        <div class="thanks-note"><p>شكرًا إنك بتدعم القناة وبتكبر مجتمعنا 💜</p></div>
+      </aside>
+    </div>
+
+    <footer class="site-footer">
+      <p class="footer-label">تابعني على حساباتي</p>
+      <nav class="social-links" aria-label="حسابات التواصل الاجتماعي">
+        <a href="https://kick.com/SLOW429" target="_blank" rel="noopener noreferrer">Kick</a>
+        <a href="https://twitter.com/SLOW_429" target="_blank" rel="noopener noreferrer">Twitter</a>
+        <a href="https://discord.gg/PKukN3apbV" target="_blank" rel="noopener noreferrer">Discord</a>
+      </nav>
+    </footer>
   </main>
 
   <!-- معرّف PayPal الموجود هنا هو Client ID علني، وليس كلمة مرور أو سرًا خاصًا. -->
