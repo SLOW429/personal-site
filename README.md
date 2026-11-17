@@ -74,6 +74,17 @@ Add `https://slows.dev/donation-alert.html` as an OBS Browser Source. The overla
 
 For sandbox testing, use matching Sandbox client credentials and webhook ID, set `PAYPAL_ENV=sandbox`, and configure the same webhook event type. Restore the Live values before accepting real payments.
 
+## Contact form email
+
+The contact form sends submissions through the Resend Email API to `abdellatifshaheen617@gmail.com`. Create a Resend API key, verify the sender domain in Resend, and set these server-only environment variables locally and in Vercel:
+
+```env
+RESEND_API_KEY=re_your_api_key
+CONTACT_FROM_EMAIL="SLOW.DEV <contact@your-verified-domain.com>"
+```
+
+The sender address must belong to a domain verified in your Resend account. Never expose the API key with a `NEXT_PUBLIC_` prefix or commit its real value.
+
 ## Main routes
 
 ```text
@@ -94,3 +105,5 @@ For sandbox testing, use matching Sandbox client credentials and webhook ID, set
 ## Deployment
 
 The production site is deployed from the `main` branch through Vercel.
+
+The Next.js response configuration adds baseline browser security headers and only allows optimized remote images from YouTube's thumbnail host.

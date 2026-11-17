@@ -24,13 +24,17 @@ export function CinematicHero() {
       <div className="absolute inset-0 opacity-60 [background-image:linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] [background-size:64px_64px] [mask-image:radial-gradient(circle_at_center,black,transparent_82%)]" />
 
       {particles.map((particle) => (
-        <motion.span
+        <span
           key={particle.id}
-          className="absolute rounded-full bg-[#d9edff]/70"
-          style={{ left: particle.left, top: particle.top, width: particle.size, height: particle.size }}
-          initial={false}
-          animate={{ y: [0, -18, 0], opacity: [0.2, 0.8, 0.2] }}
-          transition={reduceMotion ? { duration: 0, repeat: 0 } : { duration: 4 + particle.delay, repeat: Infinity, delay: particle.delay, ease: "easeInOut" }}
+          className="hero-particle absolute rounded-full bg-[#d9edff]/70"
+          style={{
+            left: particle.left,
+            top: particle.top,
+            width: particle.size,
+            height: particle.size,
+            animationDelay: `${particle.delay}s`,
+            animationDuration: `${4 + particle.delay}s`,
+          }}
         />
       ))}
 

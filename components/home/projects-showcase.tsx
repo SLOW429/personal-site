@@ -70,6 +70,16 @@ function ProjectCard({
         >
           <SiGithub size={15} /> GitHub
         </a>
+        {project.demoUrl && (
+          <a
+            href={project.demoUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-white/75 transition hover:border-white/20 hover:text-white"
+          >
+            {t("projects.liveDemo")} <ArrowUpRight size={14} />
+          </a>
+        )}
       </div>
     </motion.article>
   );
@@ -238,7 +248,7 @@ export function ProjectsShowcase() {
     () => (filter === "All" ? projects : projects.filter((project) => project.techStack.includes(filter))),
     [filter],
   );
-  const featured = projects.find((project) => project.featured) ?? projects[0];
+  const featured = filtered.find((project) => project.featured) ?? filtered[0];
   const closeCaseStudy = useCallback(() => setSelected(null), []);
 
   function handleFilterKeyDown(event: ReactKeyboardEvent<HTMLButtonElement>, index: number) {
@@ -297,7 +307,9 @@ export function ProjectsShowcase() {
 
         <motion.div layout={!reduceMotion} className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_.85fr]">
           <div className="rounded-[2rem] border border-[#7ec4ff]/15 bg-[radial-gradient(circle_at_75%_20%,rgba(126,196,255,.12),transparent_32%),rgba(255,255,255,.025)] p-7 backdrop-blur-xl sm:p-9">
-            <p className="text-xs uppercase tracking-[0.3em] text-[#7ec4ff]">{t("home.featuredBuild")}</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-[#7ec4ff]">
+              {t(featured.featured ? "home.featuredBuild" : "projects.project")}
+            </p>
             <h3 className="mt-3 font-display text-4xl font-bold text-white">{featured.title}</h3>
             <p className="mt-4 max-w-2xl text-base leading-7 text-white/55">{featured.description}</p>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -323,6 +335,26 @@ export function ProjectsShowcase() {
             >
               {t("home.caseStudy")} <ArrowUpRight size={15} />
             </button>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a
+                href={featured.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-white/75 transition hover:border-white/20 hover:text-white"
+              >
+                <SiGithub size={15} /> GitHub <ArrowUpRight size={14} />
+              </a>
+              {featured.demoUrl && (
+                <a
+                  href={featured.demoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-white/75 transition hover:border-white/20 hover:text-white"
+                >
+                  {t("projects.liveDemo")} <ArrowUpRight size={14} />
+                </a>
+              )}
+            </div>
           </div>
           <div className="grid gap-6">
             {filtered

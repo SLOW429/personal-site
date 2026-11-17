@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Start a Project",
-  description: "Prepare a clear project brief for SLOW: what you need, timeline, current setup, and budget.",
+  title: "Contact",
+  description: "Contact SLOW about freelance development, full-stack projects, automation, and web experiences.",
   alternates: { canonical: "/contact" },
 };
 

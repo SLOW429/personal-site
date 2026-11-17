@@ -52,6 +52,7 @@ export default function ProjectsPage() {
               <div className="mt-7 flex gap-3">
                 <Link href={`/projects/${project.slug}`} className="rounded-xl bg-[var(--gold)] px-4 py-2 text-sm font-semibold text-[#071018]">{t("projects.caseStudy")}</Link>
                 <a href={project.githubUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-[var(--card-border)] px-4 py-2 text-sm font-semibold">GitHub</a>
+                {project.demoUrl && <a href={project.demoUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-[var(--card-border)] px-4 py-2 text-sm font-semibold">{t("projects.liveDemo")}</a>}
               </div>
             </article>
           ))}
