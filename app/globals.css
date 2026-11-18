@@ -121,7 +121,7 @@ main:not(.home-page)::before {
 
 main :is(
   article[class*="rounded-"][class*="border"],
-  section[class*="rounded-"][class*="border"],
+  section[class*="rounded-"][class*="border"]:not(.slowos-window),
   [data-spotlight]
 ) {
   position: relative;
@@ -142,7 +142,7 @@ main a[class*="rounded-"][class*="border"] {
 
 main :is(
   article[class*="rounded-"][class*="border"],
-  section[class*="rounded-"][class*="border"],
+  section[class*="rounded-"][class*="border"]:not(.slowos-window),
   [data-spotlight]
 )::before {
   position: absolute;
@@ -163,7 +163,7 @@ main :is(
 @media (hover: hover) and (pointer: fine) {
   main :is(
     article[class*="rounded-"][class*="border"],
-    section[class*="rounded-"][class*="border"],
+    section[class*="rounded-"][class*="border"]:not(.slowos-window),
     [data-spotlight]
   ):hover {
     border-color: rgba(143, 211, 255, 0.24);
@@ -173,7 +173,7 @@ main :is(
 
   main :is(
     article[class*="rounded-"][class*="border"],
-    section[class*="rounded-"][class*="border"],
+    section[class*="rounded-"][class*="border"]:not(.slowos-window),
     [data-spotlight]
   ):hover::before {
     opacity: 1;
@@ -181,7 +181,7 @@ main :is(
 
   main :is(
     article[class*="rounded-"][class*="border"],
-    section[class*="rounded-"][class*="border"],
+    section[class*="rounded-"][class*="border"]:not(.slowos-window),
     [data-spotlight]
   ):focus-within {
     border-color: rgba(143, 211, 255, 0.28);
@@ -237,6 +237,133 @@ main a[class*="rounded-"]:active {
   animation: hero-particle-float 5s ease-in-out infinite;
 }
 
+.slowos-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, #000 10%, transparent 85%);
+}
+
+.slowos-window-positioned {
+  transform: none;
+}
+
+.slowos-window-maximized {
+  transform: none;
+}
+
+.slowos-activity-window > section {
+  padding: 1.25rem;
+}
+
+.slowos-activity-window > section > div {
+  max-width: none;
+}
+
+.slowos-matrix {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  color: rgba(110, 231, 183, 0.7);
+  font-size: 10px;
+  line-height: 2.2;
+  mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent);
+}
+
+.slowos-matrix span {
+  writing-mode: vertical-rl;
+  animation: matrix-fall 6s linear infinite;
+}
+
+.slowos-cursor {
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.slowos-cursor-visible {
+  opacity: 1;
+}
+
+.slowos-cursor-ring,
+.slowos-cursor-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  transition:
+    width 180ms ease,
+    height 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.slowos-cursor-ring {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(186, 230, 253, 0.48);
+  background: rgba(143, 211, 255, 0.035);
+  box-shadow: 0 0 20px rgba(143, 211, 255, 0.13);
+}
+
+.slowos-cursor-dot {
+  width: 4px;
+  height: 4px;
+  background: rgba(224, 242, 254, 0.95);
+  box-shadow: 0 0 12px rgba(143, 211, 255, 0.75);
+}
+
+.slowos-cursor-interactive .slowos-cursor-ring {
+  width: 3rem;
+  height: 3rem;
+  border-color: rgba(186, 230, 253, 0.85);
+  background: rgba(143, 211, 255, 0.09);
+  box-shadow: 0 0 30px rgba(143, 211, 255, 0.28);
+}
+
+.slowos-cursor-interactive .slowos-cursor-dot {
+  width: 6px;
+  height: 6px;
+}
+
+@keyframes matrix-fall {
+  from {
+    transform: translateY(-45%);
+  }
+
+  to {
+    transform: translateY(45%);
+  }
+}
+
+@media (min-width: 768px) {
+  .slowos-window-positioned {
+    transform: translate(
+      calc(-50% + var(--window-x, 0px)),
+      calc(-50% + var(--window-y, 0px))
+    );
+  }
+
+  .slowos-menubar {
+    border-color: rgba(255, 255, 255, 0.055);
+    background-color: rgba(6, 10, 19, 0.72);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .slowos-home,
+  .slowos-home * {
+    cursor: none !important;
+  }
+
+  .slowos-home input,
+  .slowos-home textarea {
+    cursor: text !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -253,12 +380,32 @@ main a[class*="rounded-"]:active {
 
   main :is(
     article[class*="rounded-"][class*="border"],
-    section[class*="rounded-"][class*="border"],
+    section[class*="rounded-"][class*="border"]:not(.slowos-window),
     [data-spotlight]
   ):hover,
   button:active,
   [role="button"]:active,
   main a[class*="rounded-"]:active {
     transform: none !important;
+  }
+
+  .slowos-matrix span {
+    animation: none !important;
+  }
+
+  .slowos-cursor-ring,
+  .slowos-cursor-dot {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .slowos-home,
+  .slowos-home * {
+    cursor: auto !important;
+  }
+
+  .slowos-cursor {
+    display: none !important;
   }
 }
