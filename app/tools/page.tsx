@@ -11,6 +11,7 @@ export const metadata: Metadata = {
     title: "SLOW Tools | Free Developer Utilities",
     description: "Fast, privacy-friendly browser tools for formatting, encoding, timestamps, QR codes, and more.",
     url: "https://slows.dev/tools",
+    images: ["/banner-poster.jpg"],
   },
 };
 

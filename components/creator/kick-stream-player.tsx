@@ -52,7 +52,7 @@ export function KickStreamPlayer() {
   }, [attempt, loading, online]);
 
   return (
-    <div className="relative mt-7 overflow-hidden rounded-2xl border border-[var(--card-border)] bg-black">
+    <div data-spotlight className="relative mt-7 overflow-hidden rounded-2xl border border-[var(--card-border)] bg-black">
       <div className="aspect-video w-full">
         <iframe
           key={attempt}

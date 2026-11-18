@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProject, projects } from "@/lib/projects-content";
 import { LocalizedCopy } from "@/components/layout/localized-text";
+import { siteConfig } from "@/lib/site-config";
 
 export function generateStaticParams() {
   return projects.map(({ slug }) => ({ slug }));
@@ -14,15 +15,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!project) return {};
 
   return {
-    title: `${project.title} | Projects | SLOW`,
+    title: `${project.title} | Projects`,
     description: project.description,
     keywords: project.techStack,
     alternates: { canonical: `/projects/${slug}` },
     openGraph: {
-      title: `${project.title} | SLOW`,
+      title: `${project.title} | SLOW.DEV`,
       description: project.description,
-      url: `https://slows.dev/projects/${slug}`,
+      url: `${siteConfig.url}/projects/${slug}`,
       type: "article",
+      images: [siteConfig.assets.ogImage],
     },
   };
 }
@@ -32,7 +34,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const project = getProject(slug);
   if (!project) notFound();
 
-  const url = `https://slows.dev/projects/${slug}`;
+  const url = `${siteConfig.url}/projects/${slug}`;
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",

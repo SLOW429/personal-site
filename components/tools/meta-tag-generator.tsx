@@ -27,7 +27,7 @@ export default function MetaTagGenerator() {
     }
   }
 
-  return <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 backdrop-blur-xl">
+  return <div data-spotlight className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 backdrop-blur-xl">
     <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]"><LocalizedCopy source="SEO" /></p>
     <h2 className="mt-2 text-2xl font-semibold"><LocalizedCopy source="Next.js Meta Tag Generator" /></h2>
     <p className="mt-2 text-sm leading-6 text-[var(--muted)]"><LocalizedCopy source="Generate a copy-ready metadata object for a Next.js App Router page." /></p>

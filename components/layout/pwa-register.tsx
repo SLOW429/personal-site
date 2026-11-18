@@ -19,11 +19,16 @@ export default function PwaRegister() {
   const [installEvent, setInstallEvent] = useState<InstallPromptEvent | null>(null);
   const [iosHintDismissed, setIosHintDismissed] = useState(false);
   const [installError, setInstallError] = useState("");
-  const [locale, setLocale] = useState<"en" | "ar">("en");
+  const [locale, setLocale] = useState<"en" | "ar" | "tr">("en");
   const showIosHint = useSyncExternalStore(subscribeToNothing, shouldShowIosInstallHint, () => false);
+  const ar = locale === "ar";
+  const tr = locale === "tr";
 
   useEffect(() => {
-    const syncLocale = () => setLocale(document.documentElement.lang === "ar" ? "ar" : "en");
+    const syncLocale = () => {
+      const language = document.documentElement.lang;
+      setLocale(language === "ar" || language === "tr" ? language : "en");
+    };
     const observer = new MutationObserver(syncLocale);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 
@@ -53,29 +58,34 @@ export default function PwaRegister() {
       await installEvent.userChoice;
       setInstallEvent(null);
     } catch {
-      setInstallError(ar ? "تعذر تثبيت التطبيق. حاول مرة أخرى." : "The app could not be installed. Please try again.");
+      setInstallError(
+        ar
+          ? "تعذر تثبيت التطبيق. حاول مرة أخرى."
+          : tr
+            ? "Uygulama yüklenemedi. Lütfen tekrar deneyin."
+            : "The app could not be installed. Please try again.",
+      );
     }
   }
 
   if (!installEvent && (!showIosHint || iosHintDismissed)) return null;
-  const ar = locale === "ar";
 
   return (
-    <div dir={ar ? "rtl" : "ltr"} className="fixed bottom-20 start-4 z-[1200] max-w-[calc(100vw-2rem)] sm:bottom-5 sm:start-5">
+    <div dir={ar ? "rtl" : "ltr"} className="fixed bottom-20 start-4 z-[1200] max-w-[calc(100vw_-_2rem)] sm:bottom-5 sm:start-5">
       {installEvent && (
         <div>
           <button type="button" onClick={install} className="inline-flex items-center gap-2 rounded-2xl border border-[var(--card-border-strong)] bg-[var(--panel-bg-heavy)] px-4 py-3 text-sm font-semibold shadow-2xl backdrop-blur-xl hover:border-[var(--gold)]">
             <Download size={17} />
-            {ar ? "تثبيت SLOW.DEV" : "Install SLOW.DEV"}
+            {ar ? "تثبيت SLOW.DEV" : tr ? "SLOW.DEV'i yükle" : "Install SLOW.DEV"}
           </button>
           {installError && <p role="alert" className="mt-2 max-w-xs text-xs text-red-300">{installError}</p>}
         </div>
       )}
       {showIosHint && !iosHintDismissed && !installEvent && (
         <div className="max-w-xs rounded-2xl border border-[var(--card-border-strong)] bg-[var(--panel-bg-heavy)] p-4 text-sm leading-6 shadow-2xl backdrop-blur-xl">
-          <strong>{ar ? "أضف SLOW.DEV إلى الشاشة الرئيسية" : "Add SLOW.DEV to your Home Screen"}</strong>
-          <p className="mt-1 text-[var(--muted)]">{ar ? "من Safari اضغط مشاركة، ثم «إضافة إلى الشاشة الرئيسية»." : "In Safari, tap Share, then “Add to Home Screen”."}</p>
-          <button type="button" onClick={() => setIosHintDismissed(true)} className="mt-3 text-xs font-semibold text-[var(--gold-light)]">{ar ? "إخفاء" : "Dismiss"}</button>
+          <strong>{ar ? "أضف SLOW.DEV إلى الشاشة الرئيسية" : tr ? "SLOW.DEV'i ana ekranınıza ekleyin" : "Add SLOW.DEV to your Home Screen"}</strong>
+          <p className="mt-1 text-[var(--muted)]">{ar ? "من Safari اضغط مشاركة، ثم «إضافة إلى الشاشة الرئيسية»." : tr ? "Safari'de Paylaş'a, ardından Ana Ekrana Ekle'ye dokunun." : "In Safari, tap Share, then “Add to Home Screen”."}</p>
+          <button type="button" onClick={() => setIosHintDismissed(true)} className="mt-3 text-xs font-semibold text-[var(--gold-light)]">{ar ? "إخفاء" : tr ? "Kapat" : "Dismiss"}</button>
         </div>
       )}
     </div>

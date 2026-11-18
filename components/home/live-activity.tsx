@@ -202,7 +202,7 @@ export function LiveActivity() {
         </div>
 
         <div className="mt-10 grid gap-5 lg:grid-cols-[1.1fr_.9fr]">
-          <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+          <div data-spotlight className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <span className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-[#7ec4ff]">
@@ -241,7 +241,7 @@ export function LiveActivity() {
           </div>
 
           <div className="grid gap-5">
-            <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <div data-spotlight className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
               <div className="flex items-center gap-3">
                 <span className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-[#a78bfa]">
                   <Users size={18} />
@@ -269,7 +269,7 @@ export function LiveActivity() {
               </a>
             </div>
 
-            <div className="rounded-[2rem] border border-[#7ec4ff]/10 bg-[linear-gradient(135deg,rgba(126,196,255,.08),rgba(167,139,250,.05))] p-6 sm:p-8">
+            <div data-spotlight className="rounded-[2rem] border border-[#7ec4ff]/10 bg-[linear-gradient(135deg,rgba(126,196,255,.08),rgba(167,139,250,.05))] p-6 sm:p-8">
               <p className="text-xs uppercase tracking-[0.25em] text-[#7ec4ff]">{t("live.systemNote")}</p>
               <p className="mt-3 text-sm leading-7 text-white/55">
                 {t("live.systemDescription")}

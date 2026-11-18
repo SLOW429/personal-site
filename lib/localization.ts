@@ -3,6 +3,7 @@ export const locales = ["en", "ar", "tr"] as const;
 export type Locale = (typeof locales)[number];
 
 const english = {
+  "accessibility.skipToContent": "Skip to content",
   "language.label": "Language",
   "language.english": "English",
   "language.arabic": "العربية",
@@ -185,6 +186,7 @@ type MessageKey = keyof typeof english;
 
 const translations: Record<Exclude<Locale, "en">, Record<MessageKey, string>> = {
   ar: {
+    "accessibility.skipToContent": "انتقل إلى المحتوى",
     "language.label": "اللغة",
     "language.english": "English",
     "language.arabic": "العربية",
@@ -363,6 +365,7 @@ const translations: Record<Exclude<Locale, "en">, Record<MessageKey, string>> = 
     "contact.seeProjects": "عرض المشاريع",
   },
   tr: {
+    "accessibility.skipToContent": "İçeriğe geç",
     "language.label": "Dil",
     "language.english": "English",
     "language.arabic": "العربية",

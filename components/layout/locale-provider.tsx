@@ -32,7 +32,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("en");
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => setLocaleState(readSavedLocale()), 100);
+    const timeout = window.setTimeout(() => setLocaleState(readSavedLocale()), 0);
 
     function syncLocale(event: StorageEvent) {
       if (event.key === STORAGE_KEY || event.key === null) {
@@ -48,6 +48,8 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setLocale = useCallback((nextLocale: Locale) => {
+    document.documentElement.lang = nextLocale;
+    document.documentElement.dir = nextLocale === "ar" ? "rtl" : "ltr";
     setLocaleState(nextLocale);
     try {
       window.localStorage.setItem(STORAGE_KEY, nextLocale);

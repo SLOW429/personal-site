@@ -306,7 +306,7 @@ export function ProjectsShowcase() {
         </div>
 
         <motion.div layout={!reduceMotion} className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_.85fr]">
-          <div className="rounded-[2rem] border border-[#7ec4ff]/15 bg-[radial-gradient(circle_at_75%_20%,rgba(126,196,255,.12),transparent_32%),rgba(255,255,255,.025)] p-7 backdrop-blur-xl sm:p-9">
+          <div data-spotlight className="rounded-[2rem] border border-[#7ec4ff]/15 bg-[radial-gradient(circle_at_75%_20%,rgba(126,196,255,.12),transparent_32%),rgba(255,255,255,.025)] p-7 backdrop-blur-xl sm:p-9">
             <p className="text-xs uppercase tracking-[0.3em] text-[#7ec4ff]">
               {t(featured.featured ? "home.featuredBuild" : "projects.project")}
             </p>

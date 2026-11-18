@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     title: "QR Code Generator | SLOW Tools",
     description: "Generate downloadable QR codes for URLs and text.",
     url: "https://slows.dev/tools/qr-generator",
+    images: ["/banner-poster.jpg"],
   },
 };
 

@@ -19,7 +19,7 @@ export function CinematicHero() {
   const reduceMotion = useReducedMotion() ?? false;
 
   return (
-    <section className="relative isolate flex min-h-[calc(100svh-4rem)] items-center overflow-hidden px-5 py-20 sm:px-8 lg:px-12">
+    <section className="relative isolate flex min-h-[calc(100svh_-_4rem)] items-center overflow-hidden px-5 py-20 sm:px-8 lg:px-12">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(126,196,255,.15),transparent_28%),radial-gradient(circle_at_82%_35%,rgba(167,139,250,.12),transparent_30%),linear-gradient(180deg,rgba(6,10,19,.82),rgba(6,10,19,.96))]" />
       <div className="absolute inset-0 opacity-60 [background-image:linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] [background-size:64px_64px] [mask-image:radial-gradient(circle_at_center,black,transparent_82%)]" />
 

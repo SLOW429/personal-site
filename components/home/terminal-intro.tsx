@@ -58,6 +58,7 @@ export function TerminalIntro() {
       initial={false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.7, delay: shouldReduceMotion ? 0 : 0.15 }}
+      data-spotlight
       className="w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 bg-black/40 shadow-[0_25px_80px_rgba(0,0,0,.45)] backdrop-blur-2xl"
     >
       <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">

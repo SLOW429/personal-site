@@ -4,7 +4,7 @@ import { blogPosts, getReadingTime } from "@/lib/blog-content";
 import { LocalizedCopy, LocalizedDate } from "@/components/layout/localized-text";
 
 export const metadata: Metadata = {
-  title: "Blog | SLOW",
+  title: "Blog",
   description: "Build logs, technical notes, tutorials, and experiments from SLOW.DEV.",
   alternates: { canonical: "/blog" },
 };

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import ToolDetail, { type ToolSlug } from "../../../components/tools/tool-detail";
 import { LocalizedCopy } from "@/components/layout/localized-text";
+import { siteConfig } from "@/lib/site-config";
 
 const toolMeta = {
   "json-formatter": {
@@ -51,12 +52,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   if (!isToolSlug(slug)) return {};
   const tool = toolMeta[slug];
-  const url = `https://slows.dev/tools/${slug}`;
+  const url = `${siteConfig.url}/tools/${slug}`;
   return {
-    title: `${tool.title} | SLOW Tools`,
+    title: `${tool.title} | Tools`,
     description: tool.description,
     alternates: { canonical: url },
-    openGraph: { title: `${tool.title} | SLOW Tools`, description: tool.description, url, type: "website" },
+    openGraph: {
+      title: `${tool.title} | SLOW Tools`,
+      description: tool.description,
+      url,
+      type: "website",
+      images: [siteConfig.assets.ogImage],
+    },
   };
 }
 
@@ -65,7 +72,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   if (!isToolSlug(slug)) notFound();
   const key = slug;
   const tool = toolMeta[key];
-  const url = `https://slows.dev/tools/${slug}`;
+  const url = `${siteConfig.url}/tools/${slug}`;
   return (
     <>
       <ToolDetail slug={key} />

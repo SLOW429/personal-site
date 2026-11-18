@@ -124,7 +124,7 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden px-5 py-14 sm:px-8 sm:py-20 lg:px-12">
+    <main className="relative min-h-[calc(100vh_-_4rem)] overflow-hidden px-5 py-14 sm:px-8 sm:py-20 lg:px-12">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_10%_0%,rgba(143,211,255,.11),transparent_34rem),radial-gradient(ellipse_at_90%_15%,rgba(173,140,255,.09),transparent_30rem)]"

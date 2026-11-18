@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import PwaRegister from "@/components/layout/pwa-register";
 import { LocaleProvider } from "@/components/layout/locale-provider";
 import { siteConfig } from "@/lib/site-config";
+import { SpotlightEffects } from "@/components/layout/spotlight-effects";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -97,18 +98,21 @@ export default function RootLayout({
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full bg-background font-sans text-foreground">
         <LocaleProvider>
-        <SiteHeader />
-        <div className="flex min-h-screen flex-col pt-16">
-          <div className="flex-1">{children}</div>
-        </div>
-        <SiteFooter />
-        <PwaRegister />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-          }}
-        />
+          <SiteHeader />
+          <SpotlightEffects />
+          <div className="flex min-h-screen flex-col pt-16">
+            <div id="site-main-content" className="flex-1 scroll-mt-20">
+              {children}
+            </div>
+          </div>
+          <SiteFooter />
+          <PwaRegister />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+            }}
+          />
         </LocaleProvider>
       </body>
     </html>

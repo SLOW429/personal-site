@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBlogPost, getReadingTime, blogPosts } from "@/lib/blog-content";
 import { LocalizedCopy, LocalizedDate } from "@/components/layout/localized-text";
+import { siteConfig } from "@/lib/site-config";
 
 export function generateStaticParams() {
   return blogPosts.map(({ slug }) => ({ slug }));
@@ -19,13 +20,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     keywords: post.tags,
     alternates: { canonical: `/blog/${slug}` },
     openGraph: {
-      title: `${post.title} | SLOW`,
+      title: `${post.title} | SLOW.DEV`,
       description: post.description,
-      url: `https://slows.dev/blog/${slug}`,
+      url: `${siteConfig.url}/blog/${slug}`,
       type: "article",
       publishedTime: post.date,
       modifiedTime: post.date,
       tags: post.tags,
+      images: [siteConfig.assets.ogImage],
     },
   };
 }
@@ -35,7 +37,7 @@ export default async function BlogArticle({ params }: { params: Promise<{ slug: 
   const post = getBlogPost(slug);
   if (!post) notFound();
 
-  const url = `https://slows.dev/blog/${slug}`;
+  const url = `${siteConfig.url}/blog/${slug}`;
   const readingTime = getReadingTime(post);
   const structuredData = {
     "@context": "https://schema.org",

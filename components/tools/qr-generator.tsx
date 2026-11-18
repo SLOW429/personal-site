@@ -33,7 +33,7 @@ export default function QrGenerator() {
   }
 
   return (
-    <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 backdrop-blur-xl">
+    <div data-spotlight className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 backdrop-blur-xl">
       <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]"><LocalizedCopy source="Creator / Utility" /></p>
       <h2 className="mt-2 text-2xl font-semibold"><LocalizedCopy source="QR Code Generator" /></h2>
       <p className="mt-2 text-sm leading-6 text-[var(--muted)]"><LocalizedCopy source="Generate a QR code for a URL or text and download it as an image." /></p>

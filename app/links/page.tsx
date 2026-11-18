@@ -28,7 +28,7 @@ export default function LinksPage() {
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]"><LocalizedCopy source="Use this page for profiles, creator bios, and community links. No link shortener or tracking layer in the middle." /></p>
         <div className="mx-auto mt-10 max-w-2xl space-y-3 text-start">
           {links.map(([Icon, title, handle, href]) => (
-            <a key={title} href={href} target="_blank" rel="noreferrer" className="group flex items-center gap-4 rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-4 transition hover:-translate-y-0.5 hover:border-[var(--gold)]">
+            <a key={title} href={href} target="_blank" rel="noreferrer" data-spotlight className="group flex items-center gap-4 rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-4 transition hover:-translate-y-0.5 hover:border-[var(--gold)]">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--card-border)] bg-[var(--panel-bg)] text-[var(--gold)]"><Icon size={19} /></span>
               <span className="min-w-0 flex-1"><span className="block font-semibold">{title}</span><span className="mt-0.5 block truncate text-sm text-[var(--muted)]">{handle}</span></span>
               <ArrowUpRight size={17} className="text-[var(--muted)] transition group-hover:-translate-y-0.5 group-hover:text-[var(--gold)]" />

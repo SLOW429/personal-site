@@ -153,9 +153,10 @@ export async function generateMetadata({ params }: { params: Promise<{ section: 
     description: page.description,
     alternates: { canonical: `/${section}` },
     openGraph: {
-      title: `${page.title} | SLOW`,
+      title: `${page.title} | SLOW.DEV`,
       description: page.description,
-      url: `https://slows.dev/${section}`,
+      url: `${siteConfig.url}/${section}`,
+      images: [siteConfig.assets.ogImage],
     },
   };
 }
@@ -191,7 +192,7 @@ export default async function SectionPage({ params }: { params: Promise<{ sectio
         {section === "projects" && (
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {projectItems.map((project) => (
-              <a key={project.title} href={project.href} target="_blank" rel="noreferrer" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]">
+              <a key={project.title} href={project.href} target="_blank" rel="noreferrer" data-spotlight className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]">
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--gold)]">GitHub</p>
                 <h2 className="mt-3 text-xl font-bold text-[var(--foreground)]">{project.title}</h2>
                 <p className="mt-3 text-sm leading-6 text-[var(--muted)]"><LocalizedCopy source={project.text} /></p>
@@ -203,7 +204,7 @@ export default async function SectionPage({ params }: { params: Promise<{ sectio
         {(section === "creator" || section === "gaming" || section === "links") && (
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {creatorLinks.map((creator) => (
-              <a key={creator.href} href={creator.href} target="_blank" rel="noreferrer" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]">
+              <a key={creator.href} href={creator.href} target="_blank" rel="noreferrer" data-spotlight className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-6 transition hover:-translate-y-1 hover:border-[var(--gold)]">
                 <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--gold)]">{creator.title}</p>
                 <h2 className="mt-3 text-xl font-bold text-[var(--foreground)]">{creator.value}</h2>
                 <p className="mt-3 text-sm text-[var(--muted)]"><LocalizedCopy source="Open official channel →" /></p>

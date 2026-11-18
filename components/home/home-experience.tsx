@@ -20,7 +20,7 @@ export function HomeExperience() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <main className="overflow-hidden bg-[#060a13] text-white">
+      <main className="home-page overflow-hidden bg-[#060a13] text-white">
         <CinematicHero />
 
         <section className="border-y border-white/[0.06] bg-white/[0.015] px-5 py-7 sm:px-8 lg:px-12">

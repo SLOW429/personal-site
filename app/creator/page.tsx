@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     description: "Gaming, live streams, videos, clips, and community from SLOW.",
     url: "https://slows.dev/creator",
     type: "website",
+    images: ["/banner-poster.jpg"],
   },
 };
 
@@ -85,7 +86,7 @@ export default async function CreatorPage() {
 
         <section className="mt-12 grid gap-5 md:grid-cols-3">
           {channels.map((channel) => (
-            <a key={channel.title} href={channel.href} target="_blank" rel="noreferrer" className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 backdrop-blur-xl transition hover:-translate-y-1 hover:border-[var(--card-border-strong)]">
+            <a key={channel.title} href={channel.href} target="_blank" rel="noreferrer" data-spotlight className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] p-7 backdrop-blur-xl transition hover:-translate-y-1 hover:border-[var(--card-border-strong)]">
               <p className="text-xs uppercase tracking-[0.25em] text-[var(--gold)]"><LocalizedText message="creator.channel" /></p>
               <h2 className="mt-4 text-2xl font-bold">{channel.title}</h2>
               <p className="mt-3 text-sm leading-6 text-[var(--muted)]"><LocalizedText message={channel.descriptionKey} /></p>
@@ -134,7 +135,7 @@ export default async function CreatorPage() {
           {latestVideos.length > 0 ? (
             <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {latestVideos.map((video) => (
-                <a key={video.id} href={video.url} target="_blank" rel="noreferrer" className="group overflow-hidden rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] transition hover:-translate-y-1 hover:border-[var(--card-border-strong)]">
+                <a key={video.id} href={video.url} target="_blank" rel="noreferrer" data-spotlight className="group overflow-hidden rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg-soft)] transition hover:-translate-y-1 hover:border-[var(--card-border-strong)]">
                   <Image src={video.thumbnail} alt={video.title} width={480} height={270} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="aspect-video w-full object-cover" />
                   <div className="p-5">
                     <h3 className="line-clamp-2 font-semibold leading-6 text-[var(--foreground)]">{video.title}</h3>
